@@ -50,7 +50,7 @@ class CmsTablePreviewText extends StatelessWidget {
       child: GestureDetector(
         onTap: () async {
           if (text != null) {
-            await Clipboard.setData(ClipboardData(text: text)).then((value) => ScaffoldMessenger.of(context)
+            await Clipboard.setData(ClipboardData(text: text!)).then((value) => ScaffoldMessenger.of(context)
                 .showSnackBar(_buildSnackBar(snackbarTextStyle, snackbarBackgroundColor, screenWidth)));
           }
         },
