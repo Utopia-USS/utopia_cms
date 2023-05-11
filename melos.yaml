@@ -1,0 +1,4 @@
+name: utopia_cms
+
+packages:
+  - packages/*
