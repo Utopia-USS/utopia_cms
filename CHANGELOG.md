@@ -3,6 +3,37 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-05-11
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`utopia_cms_firebase` - `v0.0.2+4`](#utopia_cms_firebase---v0024)
+ - [`utopia_cms_graphql` - `v0.0.2+4`](#utopia_cms_graphql---v0024)
+ - [`utopia_cms_hasura` - `v0.0.2+5`](#utopia_cms_hasura---v0025)
+
+---
+
+#### `utopia_cms_firebase` - `v0.0.2+4`
+
+ - **FIX**(utopia_cms_firebase): change pubspec.lock.
+
+#### `utopia_cms_graphql` - `v0.0.2+4`
+
+ - **FIX**(utopia_cms_firebase): change pubspec.lock.
+
+#### `utopia_cms_hasura` - `v0.0.2+5`
+
+ - **FIX**(utopia_cms_firebase): change pubspec.lock.
+
+
 ## 2023-05-09
 
 ### Changes
