@@ -499,18 +499,16 @@ packages:
   utopia_cms:
     dependency: "direct main"
     description:
-      name: utopia_cms
-      sha256: "99dc90fb5a3b68fb768e991d53805ed9acf086ff88c44238a5918f06a251f304"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../core"
+      relative: true
+    source: path
     version: "0.0.2+2"
   utopia_cms_graphql:
     dependency: "direct main"
     description:
-      name: utopia_cms_graphql
-      sha256: b88be3a1a083278ba19cb0a5efa5ed65601fd8c2614a3e8a8e3dbe2e6010a060
-      url: "https://pub.dev"
-    source: hosted
+      path: "../graphql"
+      relative: true
+    source: path
     version: "0.0.2+3"
   utopia_hooks:
     dependency: transitive

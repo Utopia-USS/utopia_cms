@@ -499,10 +499,9 @@ packages:
   utopia_cms:
     dependency: "direct main"
     description:
-      name: utopia_cms
-      sha256: "99dc90fb5a3b68fb768e991d53805ed9acf086ff88c44238a5918f06a251f304"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../core"
+      relative: true
+    source: path
     version: "0.0.2+2"
   utopia_hooks:
     dependency: transitive
