@@ -3,6 +3,46 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-05-13
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`utopia_cms` - `v0.0.2+3`](#utopia_cms---v0023)
+ - [`utopia_cms_firebase` - `v0.0.2+5`](#utopia_cms_firebase---v0025)
+ - [`utopia_cms_graphql` - `v0.0.2+5`](#utopia_cms_graphql---v0025)
+ - [`utopia_cms_hasura` - `v0.0.2+6`](#utopia_cms_hasura---v0026)
+
+---
+
+#### `utopia_cms` - `v0.0.2+3`
+
+ - **FIX**: ReadMe files finished.
+ - **FIX**(utopia_cms_core): ReadMe adjusted.
+ - **FIX**(utopia_cms_core): ReadMe added.
+ - **FIX**(utopia_cms_core): fix table refresh on sorting & edit/creat item.
+
+#### `utopia_cms_firebase` - `v0.0.2+5`
+
+ - **FIX**: ReadMe files finished.
+
+#### `utopia_cms_graphql` - `v0.0.2+5`
+
+ - **FIX**: ReadMe files finished.
+
+#### `utopia_cms_hasura` - `v0.0.2+6`
+
+ - **FIX**: ReadMe files finished.
+ - **FIX**(utopia_cms_hasura): cms_hasura_service insertOne body fixed.
+
+
 ## 2023-05-11
 
 ### Changes

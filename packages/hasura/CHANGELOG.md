@@ -1,3 +1,8 @@
+## 0.0.2+6
+
+ - **FIX**: ReadMe files finished.
+ - **FIX**(utopia_cms_hasura): cms_hasura_service insertOne body fixed.
+
 ## 0.0.2+5
 
  - **FIX**(utopia_cms_firebase): change pubspec.lock.
