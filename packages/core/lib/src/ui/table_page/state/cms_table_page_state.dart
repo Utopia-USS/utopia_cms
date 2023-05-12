@@ -75,6 +75,11 @@ CmsTablePageState useCmsTablePageState({
   void updateItem(JsonMap value, int index) {
     itemsState.value = itemsState.value.replace(index, value);
   }
+  void resetState (){
+    pagingOffsetState.value = 0;
+    pagingEnabledState.value = true;
+    itemsState.value = IList();
+  }
 
   Future<void> onCreate() async {
     final result = await navigator.push<bool?>(
@@ -91,6 +96,7 @@ CmsTablePageState useCmsTablePageState({
       ),
     );
     if (result != null) {
+      resetState();
       await state.refresh();
     }
   }
@@ -124,12 +130,17 @@ CmsTablePageState useCmsTablePageState({
         ),
       ),
     );
-    if (result != null) await state.refresh();
+    if (result != null) {
+      resetState();
+      await state.refresh();
+    }
   }
 
   final scrollController = useScrollController();
 
-  void onSortPressed(CmsEntry entry) {
+
+
+  Future<void> onSortPressed(CmsEntry entry) async{
     final currentValue = sortingParamsState.value;
     final isCurrent = entry.key == currentValue?.fieldKey;
     if (currentValue == null || !isCurrent) {
@@ -137,6 +148,8 @@ CmsTablePageState useCmsTablePageState({
     } else {
       sortingParamsState.value = CmsFunctionsSortingParams(sortDesc: !currentValue.sortDesc, fieldKey: entry.key);
     }
+    resetState();
+
   }
 
   return CmsTablePageState(

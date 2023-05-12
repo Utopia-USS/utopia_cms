@@ -51,7 +51,7 @@ class CmsHasuraService {
     required JsonMap object,
     CmsGraphQLFields fields = const {},
   }) async =>
-      (await insert(client, table: table, objects: [object])).first;
+      (await insert(client, table: table, objects: [object], fields: fields)).first;
 
   Future<JsonMap> updateByPk(
     GraphQLClient client, {
