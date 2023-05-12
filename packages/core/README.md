@@ -85,13 +85,14 @@ creates edit and create subpages, and supports item removal. The data is provide
 This interface handles the display and management of data. There is a pre-created set of primitives for interacting with
 basic data types.
 
-| Name                                                                                                       | Description                                     |
-|------------------------------------------------------------------------------------------------------------|-------------------------------------------------|
-| [CmsTextEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsTextEntry-class.html)         | Handles generic String variables                |
-| [CmsNumEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsNumEntry-class.html)           | Handles numeric variables                       |
-| [CmsDropdownEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsDropdownEntry-class.html) | For managing set of options and singular choice |
-| [CmsBoolEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsBoolEntry-class.html)         | Handles bool variables                          |
-| [CmsDateEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsDateEntry-class.html)         | Handles Date variables                          |
+| Name                                                                                                         | Description                                     |
+|--------------------------------------------------------------------------------------------------------------|-------------------------------------------------|
+| [CmsTextEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsTextEntry-class.html)           | Handles generic String variables                |
+| [CmsNumEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsNumEntry-class.html)             | Handles numeric variables                       |
+| [CmsDropdownEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsDropdownEntry-class.html)   | For managing set of options and singular choice |
+| [CmsBoolEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsBoolEntry-class.html)           | Handles bool variables                          |
+| [CmsDateEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsDateEntry-class.html)           | Handles Date variables                          |
+| [CmsToManyDropdownEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsTextEntry-class.html) | M2M relationships multi selection dropdown      |
 
 You can create custom entries by referring to the implementation of any primitive and the
 [CmsEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsEntry-class.html)
@@ -119,7 +120,6 @@ the [CmsToManyDelegate](https://pub.dev/documentation/utopia_cms/latest/utopia_c
 and register additional callbacks to `CmsItemManagementBaseState` that is available via `Provider`
 
 ```
-
 final baseState = Provider.of<CmsItemManagementBaseState>(context);
 
 baseState.addOnSavedCallback(
@@ -131,13 +131,26 @@ baseState.addOnSavedCallback(
 
 The library provides the following existing solutions for relationships:
 
-| Existing solutions                                                                                                                                    | Description                                                    |
-|-------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------|
-| [CmsToManyDropdownEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsTextEntry-class.html)                                          | Multi selection picker                                         |
-| [cms_hasura_to_many_delegate](https://github.com/Utopia-USS/utopia_cms/blob/master/packages/hasura/lib/src/delegate/cms_hasura_to_many_delegate.dart) | Hasura one/many-to-many implementation of  `CmsToManyDelegate` |
+| Existing `CmsToManyDelegate` implementations                | Source                                                          |
+|-------------------------------------------------------------|-----------------------------------------------------------------|
+| `CmsHasuraOneToManyDelegate`, `CmsHasuraManyToManyDelegate` | [utopia_cms_hasura](https://pub.dev/packages/utopia_cms_hasura) |
+
+## Widgets
+
+The package exports its basic UI components in order to allow maintaining a coherent theme in your custom pages.
+
+* **CmsFieldWrapper**
+* **CmsTextField**
+* **CmsButton**
+* **CmsSwitch**
+* **CmsLoader**
+* **CmsMockLoadingBox**
+* **CmsHeader**
 
 ## Contributions
 
-Contributions are welcomed! If you want to support our project, feel free to open a pull-request.
+Contributions are welcomed! 
+
+If you want to support our project, feel free to open a pull-request.
 
 
