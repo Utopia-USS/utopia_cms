@@ -14,6 +14,9 @@ creating customizable panels.
 
 ## Example
 
+This is a simple example which integrates with GraphQL server and creates complete CMS layout with one page and
+management flow.
+
 ```dart
 class Example extends StatelessWidget {
   final String? pageId;
@@ -125,6 +128,7 @@ baseState.addOnSavedCallback(
     }
 );
 ```
+
 The library provides the following existing solutions for relationships:
 
 | Existing solutions                                                                                                                                    | Description                                                    |
