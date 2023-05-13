@@ -1,3 +1,11 @@
+## 0.0.2+5
+
+ - **FIX**: ReadMe files finished.
+
+## 0.0.2+4
+
+ - **FIX**(utopia_cms_firebase): change pubspec.lock.
+
 ## 0.0.2+3
 
  - **FIX**(utopia_cms_hasura): Fix dependencies.
