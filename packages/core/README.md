@@ -3,7 +3,7 @@
 The Utopia CMS Core package is a data visualization library written in Flutter for creating beautiful,
 animated, high-performance and flexible CMS panels, which are used to manage databases for mobile apps.
 
-<img src="video.gif" height="500px"/>
+<img src="https://github.com/Utopia-USS/utopia_cms/raw/master/packages/core/video.gif" height="500px"/>
 
 ## Motivation
 
@@ -85,14 +85,14 @@ creates edit and create subpages, and supports item removal. The data is provide
 This interface handles the display and management of data. There is a pre-created set of primitives for interacting with
 basic data types.
 
-| Name                                                                                                         | Description                                     |
-|--------------------------------------------------------------------------------------------------------------|-------------------------------------------------|
-| [CmsTextEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsTextEntry-class.html)           | Handles generic String variables                |
-| [CmsNumEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsNumEntry-class.html)             | Handles numeric variables                       |
-| [CmsDropdownEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsDropdownEntry-class.html)   | For managing set of options and singular choice |
-| [CmsBoolEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsBoolEntry-class.html)           | Handles bool variables                          |
-| [CmsDateEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsDateEntry-class.html)           | Handles Date variables                          |
-| [CmsToManyDropdownEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsTextEntry-class.html) | M2M relationships multi selection dropdown      |
+| Name                                                                                                                   | Description                                     |
+|------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------|
+| [CmsTextEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsTextEntry-class.html)                     | Handles generic String variables                |
+| [CmsNumEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsNumEntry-class.html)                       | Handles numeric variables                       |
+| [CmsDropdownEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsDropdownEntry-class.html)             | For managing set of options and singular choice |
+| [CmsBoolEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsBoolEntry-class.html)                     | Handles bool variables                          |
+| [CmsDateEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsDateEntry-class.html)                     | Handles Date variables                          |
+| [CmsToManyDropdownEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsToManyDropdownEntry-class.html) | M2M relationships multi selection dropdown      |
 
 You can create custom entries by referring to the implementation of any primitive and the
 [CmsEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsEntry-class.html)
@@ -149,7 +149,7 @@ The package exports its basic UI components in order to allow maintaining a cohe
 
 ## Contributions
 
-Contributions are welcomed! 
+Contributions are welcomed!
 
 If you want to support our project, feel free to open a pull-request.
 
