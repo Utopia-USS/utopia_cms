@@ -1,3 +1,7 @@
+## 0.0.2+4
+
+ - **FIX**(utopia_cms_core): ReadMe gif fixed.
+
 ## 0.0.2+3
 
  - **FIX**: ReadMe files finished.
