@@ -15,6 +15,38 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`utopia_cms` - `v0.0.2+4`](#utopia_cms---v0024)
+ - [`utopia_cms_hasura` - `v0.0.2+7`](#utopia_cms_hasura---v0027)
+ - [`utopia_cms_firebase` - `v0.0.2+6`](#utopia_cms_firebase---v0026)
+ - [`utopia_cms_graphql` - `v0.0.2+6`](#utopia_cms_graphql---v0026)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `utopia_cms_hasura` - `v0.0.2+7`
+ - `utopia_cms_firebase` - `v0.0.2+6`
+ - `utopia_cms_graphql` - `v0.0.2+6`
+
+---
+
+#### `utopia_cms` - `v0.0.2+4`
+
+ - **FIX**(utopia_cms_core): ReadMe gif fixed.
+
+
+## 2023-05-13
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`utopia_cms` - `v0.0.2+3`](#utopia_cms---v0023)
  - [`utopia_cms_firebase` - `v0.0.2+5`](#utopia_cms_firebase---v0025)
  - [`utopia_cms_graphql` - `v0.0.2+5`](#utopia_cms_graphql---v0025)
