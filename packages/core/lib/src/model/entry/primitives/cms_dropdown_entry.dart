@@ -7,12 +7,14 @@ import 'package:utopia_cms/src/ui/common/table/cms_table_preview_text.dart';
 /// [CmsEntry] for handling offline items picker
 class CmsDropdownEntry<T> extends CmsEntry<T> {
   final List<T> values;
+  final T? defaultValue;
   final String Function(T? value) valueLabelBuilder;
 
   CmsDropdownEntry({
     required this.key,
     required this.values,
     required this.valueLabelBuilder,
+    this.defaultValue,
     this.label,
     this.modifier = const CmsEntryModifier(),
     this.flex = 2,
@@ -23,6 +25,7 @@ class CmsDropdownEntry<T> extends CmsEntry<T> {
     required this.values,
     required this.valueLabelBuilder,
     this.label,
+    this.defaultValue,
     this.modifier = const CmsEntryModifier(),
     this.flex = 1,
   });
@@ -48,12 +51,15 @@ class CmsDropdownEntry<T> extends CmsEntry<T> {
     required T? value,
     required void Function(T value) onChanged,
   }) {
-    return CmsDropdownField<T>(
-      value: value,
-      onChanged: onChanged,
-      values: values,
-      label: fixedLabel,
-      valueLabelBuilder: valueLabelBuilder,
+    return IgnorePointer(
+      ignoring: !modifier.editable,
+      child: CmsDropdownField<T>(
+        value: value ?? defaultValue,
+        onChanged: onChanged,
+        values: values,
+        label: fixedLabel,
+        valueLabelBuilder: valueLabelBuilder,
+      ),
     );
   }
 

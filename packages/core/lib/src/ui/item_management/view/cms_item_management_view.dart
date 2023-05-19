@@ -30,9 +30,9 @@ class CmsItemManagementView extends HookWidget {
             final canNest = constraints.maxWidth > _itemWidth * 1.6;
             const maxWidth = _itemWidth * 2.2;
             final fixedWidth = min(maxWidth, constraints.maxWidth);
-            return Scaffold(
-              backgroundColor: Colors.transparent,
-              body: Stack(
+            return Material(
+              type: MaterialType.transparency,
+              child: Stack(
                 children: [
                   Positioned(
                     top: 0,

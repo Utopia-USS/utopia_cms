@@ -5,6 +5,8 @@ part 'cms_widget_item.freezed.dart';
 
 @freezed
 class CmsWidgetItem with _$CmsWidgetItem {
+  const CmsWidgetItem._();
+
   factory CmsWidgetItem.page({
     required Widget icon,
     required Widget title,
@@ -17,4 +19,13 @@ class CmsWidgetItem with _$CmsWidgetItem {
     required Widget title,
     required void Function() onPressed,
   }) = CmsWidgetItemAction;
+
+  factory CmsWidgetItem.custom({
+    int? flex,
+    @Default(SizedBox()) Widget child,
+  }) = CmsWidgetItemCustom;
+
+  Widget get title => map(page: (it) => it.title, action: (it) => it.title, custom: (_) => const SizedBox.shrink());
+  Widget get icon => map(page: (it) => it.icon, action: (it) => it.icon, custom: (_) => const SizedBox.shrink());
+
 }

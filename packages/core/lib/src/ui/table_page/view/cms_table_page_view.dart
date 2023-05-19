@@ -21,14 +21,13 @@ class CmsTablePageView extends HookWidget {
   final IList<CmsTableAction> customActions;
   final String title;
 
-  const CmsTablePageView({super.key, 
+  const CmsTablePageView({
+    super.key,
     required this.state,
     required this.entries,
     required this.title,
     required this.customActions,
   });
-
-  static const navHeight = 64.0;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +36,6 @@ class CmsTablePageView extends HookWidget {
         (child) => Scaffold(backgroundColor: context.colors.canvas, body: child),
         (child) => SizedBox.expand(child: child),
         (child) => _buildNotificationListener(child: child),
-
         (_) => _buildContent(context),
       ],
     );

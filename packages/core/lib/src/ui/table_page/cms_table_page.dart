@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:utopia_cms/src/delegate/cms_delegate.dart';
-import 'package:utopia_cms/src/model/cms_delegate_params.dart';
+import 'package:utopia_cms/src/model/cms_table_page_params.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry.dart';
 import 'package:utopia_cms/src/model/table_action/cms_table_action.dart';
 import 'package:utopia_cms/src/ui/common/dialog/cms_dialog.dart';
@@ -13,7 +13,7 @@ import 'package:utopia_utils/utopia_utils.dart';
 
 class CmsTablePage extends HookWidget {
   final CmsDelegate delegate;
-  final CmsDelegateParams? params;
+  final CmsTableParams? params;
 
   final String title;
   final List<CmsEntry<dynamic>> entries;
@@ -27,7 +27,7 @@ class CmsTablePage extends HookWidget {
     this.params,
     required this.entries,
     this.customActions,
-    this.pagingLimit = 15,
+    this.pagingLimit = 25,
   }) : assert(pagingLimit != 0);
 
   @override
@@ -35,7 +35,7 @@ class CmsTablePage extends HookWidget {
     final navigator = context.navigator;
     final state = useCmsTablePageState(
       delegate: delegate,
-      params: params ?? CmsDelegateParams.defaultParams,
+      params: params ?? CmsTableParams.defaultParams,
       navigator: navigator,
       entries: entries.lock,
       confirmDelete: () async => CmsConfirmDialog.show(context),

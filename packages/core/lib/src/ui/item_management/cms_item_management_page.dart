@@ -1,7 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:utopia_cms/src/model/cms_delegate_params.dart';
+import 'package:utopia_cms/src/model/cms_table_page_params.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry.dart';
 import 'package:utopia_cms/src/ui/item_management/state/cms_item_management_state.dart';
 import 'package:utopia_cms/src/ui/item_management/view/cms_item_management_view.dart';
@@ -13,7 +13,7 @@ class CmsItemManagementArgs {
   final JsonMap? initialValue;
   final Future<JsonMap> Function(JsonMap) uploadChanges;
   final Future<void> Function()? deleteItem;
-  final CmsDelegateParams params;
+  final CmsTableParams params;
   final IList<CmsEntry<dynamic>> entries;
 
   const CmsItemManagementArgs({

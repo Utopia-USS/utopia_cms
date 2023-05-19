@@ -4,7 +4,7 @@ import 'package:utopia_cms/src/ui/common/table/cms_table_item.dart';
 import 'package:utopia_cms/src/ui/item_management/cms_item_management_page.dart';
 
 /// Modifies basic actions' behavior in the [CmsTable]
-class CmsDelegateParams {
+class CmsTableParams {
   /// Defines whether new objects can be created by user
   ///
   /// If true button appears that navigates for generic creation flow in the [CmsItemManagement]
@@ -20,11 +20,12 @@ class CmsDelegateParams {
   /// If true [CmsTableAction] appears in the [CmsTableItem]
   final bool canEdit;
 
-  CmsDelegateParams({
+
+  CmsTableParams({
     this.canEdit = true,
     this.canCreate = true,
     this.canDelete = true,
   });
 
-  static final CmsDelegateParams defaultParams = CmsDelegateParams();
+  static final CmsTableParams defaultParams = CmsTableParams();
 }

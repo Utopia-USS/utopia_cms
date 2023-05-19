@@ -14,6 +14,8 @@ export 'src/ui/cms_widget/cms_widget.dart';
 export 'src/ui/cms_widget/cms_widget_item.dart';
 export 'src/ui/table_page/cms_table_page.dart';
 export 'src/util/json_map.dart';
+export 'src/model/menu/cms_widget_menu_params.dart';
+export 'src/model/cms_table_page_params.dart';
 
 export 'src/ui/common/button/cms_button.dart';
 export 'src/ui/common/header/cms_header.dart';

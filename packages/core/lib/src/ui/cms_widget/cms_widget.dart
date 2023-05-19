@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:utopia_cms/src/model/menu/cms_widget_menu_params.dart';
 import 'package:utopia_cms/src/theme/cms_theme_data.dart';
 import 'package:utopia_cms/src/ui/cms_widget/cms_widget_item.dart';
 import 'package:utopia_cms/src/ui/menu/cms_menu.dart';
@@ -12,20 +13,22 @@ class CmsWidget extends HookWidget {
   final List<CmsWidgetItem> items;
   final CmsThemeData? theme;
   final MutableValue<String>? selectedPageId;
+  final CmsWidgetMenuParams menuParams;
 
   const CmsWidget({
     super.key,
     required this.items,
     this.theme,
     this.selectedPageId,
+    this.menuParams = const CmsWidgetMenuParams(),
   });
 
   static const double contentWidth = 600;
 
   @override
   Widget build(BuildContext context) {
-    final selectedPageIdState = selectedPageId ??
-        useState(useMemoized(() => items.whereType<CmsWidgetItemPage>().first.id)).asMutableValue();
+    final selectedPageIdState =
+        selectedPageId ?? useState(useMemoized(() => items.whereType<CmsWidgetItemPage>().first.id)).asMutableValue();
 
     return Provider.value(
       value: theme ?? CmsThemeData.defaultTheme,
@@ -37,12 +40,14 @@ class CmsWidget extends HookWidget {
             return Row(
               children: [
                 CmsMenu(
-                  isExpandable: width > contentWidth * 1.3,
+                  canExpand: width > contentWidth * 1.3,
                   items: items,
                   selectedPageId: selectedPageIdState.value,
+                  menuParams: menuParams,
                   onPressed: (index) => items[index].map(
                     page: (it) => selectedPageIdState.value = it.id,
                     action: (it) => it.onPressed(),
+                    custom: (it) {},
                   ),
                 ),
                 Expanded(
@@ -57,6 +62,7 @@ class CmsWidget extends HookWidget {
                           item.map(
                             page: (it) => it.content,
                             action: (_) => const SizedBox.shrink(),
+                            custom: (_) => const SizedBox.shrink(),
                           ),
                       ],
                     ),

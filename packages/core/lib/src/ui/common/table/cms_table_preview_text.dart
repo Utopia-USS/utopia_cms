@@ -14,9 +14,7 @@ class CmsTablePreviewText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final style = context.textStyles.text;
-    final snackbarTextStyle = context.textStyles.button;
-    final snackbarBackgroundColor = context.colors.accent;
-    final screenWidth = MediaQuery.of(context).size.width;
+
     return Align(
       alignment: Alignment.centerLeft,
       child: MultiWidget(
@@ -26,13 +24,7 @@ class CmsTablePreviewText extends StatelessWidget {
                   message: text!,
                   child: child,
                 ),
-          (_) => _buildContent(
-                style: style,
-                snackbarTextStyle: snackbarTextStyle,
-                snackbarBackgroundColor: snackbarBackgroundColor,
-                screenWidth: screenWidth,
-                context: context,
-              )
+          (_) => _buildContent(style: style)
         ],
       ),
     );
@@ -40,11 +32,18 @@ class CmsTablePreviewText extends StatelessWidget {
 
   Widget _buildContent({
     required TextStyle style,
-    required TextStyle snackbarTextStyle,
-    required Color snackbarBackgroundColor,
-    required double screenWidth,
-    required BuildContext context,
   }) {
+    return Text(
+      text ?? '-',
+      style: style,
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+
+  Widget _buildGestureDetector({required Widget child, required BuildContext context}) {
+    final snackbarTextStyle = context.textStyles.button;
+    final snackbarBackgroundColor = context.colors.accent;
+    final screenWidth = MediaQuery.of(context).size.width;
     return MouseRegion(
       cursor: text != null ? SystemMouseCursors.copy : SystemMouseCursors.basic,
       child: GestureDetector(
@@ -54,11 +53,7 @@ class CmsTablePreviewText extends StatelessWidget {
                 .showSnackBar(_buildSnackBar(snackbarTextStyle, snackbarBackgroundColor, screenWidth)));
           }
         },
-        child: Text(
-          text ?? '-',
-          style: style,
-          overflow: TextOverflow.ellipsis,
-        ),
+        child: child,
       ),
     );
   }

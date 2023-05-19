@@ -1,7 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:utopia_cms/src/delegate/cms_delegate.dart';
-import 'package:utopia_cms/src/model/cms_delegate_params.dart';
+import 'package:utopia_cms/src/model/cms_table_page_params.dart';
 import 'package:utopia_cms/src/model/cms_functions_params.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry.dart';
 import 'package:utopia_cms/src/ui/item_management/cms_item_management_page.dart';
@@ -11,7 +11,7 @@ import 'package:utopia_hooks/utopia_hooks.dart';
 class CmsTablePageState {
   final MutableComputedState<void> computedState;
   final IList<JsonMap> items;
-  final CmsDelegateParams params;
+  final CmsTableParams params;
   final ScrollController scrollController;
   final CmsFunctionsSortingParams? currentSortingParams;
   final bool pagingEnabled;
@@ -41,7 +41,7 @@ class CmsTablePageState {
 
 CmsTablePageState useCmsTablePageState({
   required CmsDelegate delegate,
-  required CmsDelegateParams params,
+  required CmsTableParams params,
   required NavigatorState navigator,
   required IList<CmsEntry<dynamic>> entries,
   required Future<bool?> Function() confirmDelete,

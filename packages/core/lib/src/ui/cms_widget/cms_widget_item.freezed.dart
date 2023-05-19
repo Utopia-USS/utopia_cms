@@ -16,8 +16,6 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$CmsWidgetItem {
-  Widget get icon => throw _privateConstructorUsedError;
-  Widget get title => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -26,6 +24,7 @@ mixin _$CmsWidgetItem {
     required TResult Function(
             Widget icon, Widget title, void Function() onPressed)
         action,
+    required TResult Function(int? flex, Widget child) custom,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -34,6 +33,7 @@ mixin _$CmsWidgetItem {
         page,
     TResult? Function(Widget icon, Widget title, void Function() onPressed)?
         action,
+    TResult? Function(int? flex, Widget child)? custom,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -42,6 +42,7 @@ mixin _$CmsWidgetItem {
         page,
     TResult Function(Widget icon, Widget title, void Function() onPressed)?
         action,
+    TResult Function(int? flex, Widget child)? custom,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -49,24 +50,23 @@ mixin _$CmsWidgetItem {
   TResult map<TResult extends Object?>({
     required TResult Function(CmsWidgetItemPage value) page,
     required TResult Function(CmsWidgetItemAction value) action,
+    required TResult Function(CmsWidgetItemCustom value) custom,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(CmsWidgetItemPage value)? page,
     TResult? Function(CmsWidgetItemAction value)? action,
+    TResult? Function(CmsWidgetItemCustom value)? custom,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(CmsWidgetItemPage value)? page,
     TResult Function(CmsWidgetItemAction value)? action,
+    TResult Function(CmsWidgetItemCustom value)? custom,
     required TResult orElse(),
   }) =>
-      throw _privateConstructorUsedError;
-
-  @JsonKey(ignore: true)
-  $CmsWidgetItemCopyWith<CmsWidgetItem> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -75,8 +75,6 @@ abstract class $CmsWidgetItemCopyWith<$Res> {
   factory $CmsWidgetItemCopyWith(
           CmsWidgetItem value, $Res Function(CmsWidgetItem) then) =
       _$CmsWidgetItemCopyWithImpl<$Res, CmsWidgetItem>;
-  @useResult
-  $Res call({Widget icon, Widget title});
 }
 
 /// @nodoc
@@ -88,33 +86,13 @@ class _$CmsWidgetItemCopyWithImpl<$Res, $Val extends CmsWidgetItem>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? icon = null,
-    Object? title = null,
-  }) {
-    return _then(_value.copyWith(
-      icon: null == icon
-          ? _value.icon
-          : icon // ignore: cast_nullable_to_non_nullable
-              as Widget,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as Widget,
-    ) as $Val);
-  }
 }
 
 /// @nodoc
-abstract class _$$CmsWidgetItemPageCopyWith<$Res>
-    implements $CmsWidgetItemCopyWith<$Res> {
+abstract class _$$CmsWidgetItemPageCopyWith<$Res> {
   factory _$$CmsWidgetItemPageCopyWith(
           _$CmsWidgetItemPage value, $Res Function(_$CmsWidgetItemPage) then) =
       __$$CmsWidgetItemPageCopyWithImpl<$Res>;
-  @override
   @useResult
   $Res call({Widget icon, Widget title, String id, Widget content});
 }
@@ -158,12 +136,13 @@ class __$$CmsWidgetItemPageCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$CmsWidgetItemPage implements CmsWidgetItemPage {
+class _$CmsWidgetItemPage extends CmsWidgetItemPage {
   _$CmsWidgetItemPage(
       {required this.icon,
       required this.title,
       required this.id,
-      required this.content});
+      required this.content})
+      : super._();
 
   @override
   final Widget icon;
@@ -208,6 +187,7 @@ class _$CmsWidgetItemPage implements CmsWidgetItemPage {
     required TResult Function(
             Widget icon, Widget title, void Function() onPressed)
         action,
+    required TResult Function(int? flex, Widget child) custom,
   }) {
     return page(icon, title, id, content);
   }
@@ -219,6 +199,7 @@ class _$CmsWidgetItemPage implements CmsWidgetItemPage {
         page,
     TResult? Function(Widget icon, Widget title, void Function() onPressed)?
         action,
+    TResult? Function(int? flex, Widget child)? custom,
   }) {
     return page?.call(icon, title, id, content);
   }
@@ -230,6 +211,7 @@ class _$CmsWidgetItemPage implements CmsWidgetItemPage {
         page,
     TResult Function(Widget icon, Widget title, void Function() onPressed)?
         action,
+    TResult Function(int? flex, Widget child)? custom,
     required TResult orElse(),
   }) {
     if (page != null) {
@@ -243,6 +225,7 @@ class _$CmsWidgetItemPage implements CmsWidgetItemPage {
   TResult map<TResult extends Object?>({
     required TResult Function(CmsWidgetItemPage value) page,
     required TResult Function(CmsWidgetItemAction value) action,
+    required TResult Function(CmsWidgetItemCustom value) custom,
   }) {
     return page(this);
   }
@@ -252,6 +235,7 @@ class _$CmsWidgetItemPage implements CmsWidgetItemPage {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(CmsWidgetItemPage value)? page,
     TResult? Function(CmsWidgetItemAction value)? action,
+    TResult? Function(CmsWidgetItemCustom value)? custom,
   }) {
     return page?.call(this);
   }
@@ -261,6 +245,7 @@ class _$CmsWidgetItemPage implements CmsWidgetItemPage {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(CmsWidgetItemPage value)? page,
     TResult Function(CmsWidgetItemAction value)? action,
+    TResult Function(CmsWidgetItemCustom value)? custom,
     required TResult orElse(),
   }) {
     if (page != null) {
@@ -270,32 +255,28 @@ class _$CmsWidgetItemPage implements CmsWidgetItemPage {
   }
 }
 
-abstract class CmsWidgetItemPage implements CmsWidgetItem {
+abstract class CmsWidgetItemPage extends CmsWidgetItem {
   factory CmsWidgetItemPage(
       {required final Widget icon,
       required final Widget title,
       required final String id,
       required final Widget content}) = _$CmsWidgetItemPage;
+  CmsWidgetItemPage._() : super._();
 
-  @override
   Widget get icon;
-  @override
   Widget get title;
   String get id;
   Widget get content;
-  @override
   @JsonKey(ignore: true)
   _$$CmsWidgetItemPageCopyWith<_$CmsWidgetItemPage> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$CmsWidgetItemActionCopyWith<$Res>
-    implements $CmsWidgetItemCopyWith<$Res> {
+abstract class _$$CmsWidgetItemActionCopyWith<$Res> {
   factory _$$CmsWidgetItemActionCopyWith(_$CmsWidgetItemAction value,
           $Res Function(_$CmsWidgetItemAction) then) =
       __$$CmsWidgetItemActionCopyWithImpl<$Res>;
-  @override
   @useResult
   $Res call({Widget icon, Widget title, void Function() onPressed});
 }
@@ -334,9 +315,10 @@ class __$$CmsWidgetItemActionCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$CmsWidgetItemAction implements CmsWidgetItemAction {
+class _$CmsWidgetItemAction extends CmsWidgetItemAction {
   _$CmsWidgetItemAction(
-      {required this.icon, required this.title, required this.onPressed});
+      {required this.icon, required this.title, required this.onPressed})
+      : super._();
 
   @override
   final Widget icon;
@@ -380,6 +362,7 @@ class _$CmsWidgetItemAction implements CmsWidgetItemAction {
     required TResult Function(
             Widget icon, Widget title, void Function() onPressed)
         action,
+    required TResult Function(int? flex, Widget child) custom,
   }) {
     return action(icon, title, onPressed);
   }
@@ -391,6 +374,7 @@ class _$CmsWidgetItemAction implements CmsWidgetItemAction {
         page,
     TResult? Function(Widget icon, Widget title, void Function() onPressed)?
         action,
+    TResult? Function(int? flex, Widget child)? custom,
   }) {
     return action?.call(icon, title, onPressed);
   }
@@ -402,6 +386,7 @@ class _$CmsWidgetItemAction implements CmsWidgetItemAction {
         page,
     TResult Function(Widget icon, Widget title, void Function() onPressed)?
         action,
+    TResult Function(int? flex, Widget child)? custom,
     required TResult orElse(),
   }) {
     if (action != null) {
@@ -415,6 +400,7 @@ class _$CmsWidgetItemAction implements CmsWidgetItemAction {
   TResult map<TResult extends Object?>({
     required TResult Function(CmsWidgetItemPage value) page,
     required TResult Function(CmsWidgetItemAction value) action,
+    required TResult Function(CmsWidgetItemCustom value) custom,
   }) {
     return action(this);
   }
@@ -424,6 +410,7 @@ class _$CmsWidgetItemAction implements CmsWidgetItemAction {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(CmsWidgetItemPage value)? page,
     TResult? Function(CmsWidgetItemAction value)? action,
+    TResult? Function(CmsWidgetItemCustom value)? custom,
   }) {
     return action?.call(this);
   }
@@ -433,6 +420,7 @@ class _$CmsWidgetItemAction implements CmsWidgetItemAction {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(CmsWidgetItemPage value)? page,
     TResult Function(CmsWidgetItemAction value)? action,
+    TResult Function(CmsWidgetItemCustom value)? custom,
     required TResult orElse(),
   }) {
     if (action != null) {
@@ -442,19 +430,177 @@ class _$CmsWidgetItemAction implements CmsWidgetItemAction {
   }
 }
 
-abstract class CmsWidgetItemAction implements CmsWidgetItem {
+abstract class CmsWidgetItemAction extends CmsWidgetItem {
   factory CmsWidgetItemAction(
       {required final Widget icon,
       required final Widget title,
       required final void Function() onPressed}) = _$CmsWidgetItemAction;
+  CmsWidgetItemAction._() : super._();
 
-  @override
   Widget get icon;
-  @override
   Widget get title;
   void Function() get onPressed;
-  @override
   @JsonKey(ignore: true)
   _$$CmsWidgetItemActionCopyWith<_$CmsWidgetItemAction> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$CmsWidgetItemCustomCopyWith<$Res> {
+  factory _$$CmsWidgetItemCustomCopyWith(_$CmsWidgetItemCustom value,
+          $Res Function(_$CmsWidgetItemCustom) then) =
+      __$$CmsWidgetItemCustomCopyWithImpl<$Res>;
+  @useResult
+  $Res call({int? flex, Widget child});
+}
+
+/// @nodoc
+class __$$CmsWidgetItemCustomCopyWithImpl<$Res>
+    extends _$CmsWidgetItemCopyWithImpl<$Res, _$CmsWidgetItemCustom>
+    implements _$$CmsWidgetItemCustomCopyWith<$Res> {
+  __$$CmsWidgetItemCustomCopyWithImpl(
+      _$CmsWidgetItemCustom _value, $Res Function(_$CmsWidgetItemCustom) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? flex = freezed,
+    Object? child = null,
+  }) {
+    return _then(_$CmsWidgetItemCustom(
+      flex: freezed == flex
+          ? _value.flex
+          : flex // ignore: cast_nullable_to_non_nullable
+              as int?,
+      child: null == child
+          ? _value.child
+          : child // ignore: cast_nullable_to_non_nullable
+              as Widget,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$CmsWidgetItemCustom extends CmsWidgetItemCustom {
+  _$CmsWidgetItemCustom({this.flex, this.child = const SizedBox()}) : super._();
+
+  @override
+  final int? flex;
+  @override
+  @JsonKey()
+  final Widget child;
+
+  @override
+  String toString() {
+    return 'CmsWidgetItem.custom(flex: $flex, child: $child)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CmsWidgetItemCustom &&
+            (identical(other.flex, flex) || other.flex == flex) &&
+            (identical(other.child, child) || other.child == child));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, flex, child);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$CmsWidgetItemCustomCopyWith<_$CmsWidgetItemCustom> get copyWith =>
+      __$$CmsWidgetItemCustomCopyWithImpl<_$CmsWidgetItemCustom>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            Widget icon, Widget title, String id, Widget content)
+        page,
+    required TResult Function(
+            Widget icon, Widget title, void Function() onPressed)
+        action,
+    required TResult Function(int? flex, Widget child) custom,
+  }) {
+    return custom(flex, child);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(Widget icon, Widget title, String id, Widget content)?
+        page,
+    TResult? Function(Widget icon, Widget title, void Function() onPressed)?
+        action,
+    TResult? Function(int? flex, Widget child)? custom,
+  }) {
+    return custom?.call(flex, child);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(Widget icon, Widget title, String id, Widget content)?
+        page,
+    TResult Function(Widget icon, Widget title, void Function() onPressed)?
+        action,
+    TResult Function(int? flex, Widget child)? custom,
+    required TResult orElse(),
+  }) {
+    if (custom != null) {
+      return custom(flex, child);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(CmsWidgetItemPage value) page,
+    required TResult Function(CmsWidgetItemAction value) action,
+    required TResult Function(CmsWidgetItemCustom value) custom,
+  }) {
+    return custom(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(CmsWidgetItemPage value)? page,
+    TResult? Function(CmsWidgetItemAction value)? action,
+    TResult? Function(CmsWidgetItemCustom value)? custom,
+  }) {
+    return custom?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(CmsWidgetItemPage value)? page,
+    TResult Function(CmsWidgetItemAction value)? action,
+    TResult Function(CmsWidgetItemCustom value)? custom,
+    required TResult orElse(),
+  }) {
+    if (custom != null) {
+      return custom(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class CmsWidgetItemCustom extends CmsWidgetItem {
+  factory CmsWidgetItemCustom({final int? flex, final Widget child}) =
+      _$CmsWidgetItemCustom;
+  CmsWidgetItemCustom._() : super._();
+
+  int? get flex;
+  Widget get child;
+  @JsonKey(ignore: true)
+  _$$CmsWidgetItemCustomCopyWith<_$CmsWidgetItemCustom> get copyWith =>
       throw _privateConstructorUsedError;
 }

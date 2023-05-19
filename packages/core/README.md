@@ -3,7 +3,7 @@
 The Utopia CMS Core package is a data visualization library written in Flutter for creating beautiful,
 animated, high-performance and flexible CMS panels, which are used to manage databases for mobile apps.
 
-<img src="https://github.com/Utopia-USS/utopia_cms/raw/master/packages/core/video.gif" height="500px"/>
+<img src="https://github.com/Utopia-USS/utopia_cms/raw/master/packages/core/video.gif"/>
 
 ## Motivation
 
