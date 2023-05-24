@@ -65,6 +65,8 @@ abstract class CmsEntry<T> {
 
   bool get editable => modifier.editable;
 
+  bool get initializable => modifier.initializable;
+
   bool get expanded => modifier.expanded;
 
   Future<void> onSaved() async {}

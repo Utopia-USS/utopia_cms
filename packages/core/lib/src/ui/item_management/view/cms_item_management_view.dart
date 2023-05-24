@@ -72,8 +72,10 @@ class CmsItemManagementView extends HookWidget {
     return HookBuilder(builder: (context) {
       final readOnlyShort = useMemoized(() => state.entries.readOnly.where((e) => !e.isExpanded).toIList());
       final readOnlyExpanded = useMemoized(() => state.entries.readOnly.where((e) => e.isExpanded).toIList());
-      final editableShort = useMemoized(() => state.entries.editable.where((e) => !e.isExpanded)).toIList();
-      final editableExpanded = useMemoized(() => state.entries.editable.where((e) => e.isExpanded).toIList());
+      final editableShort =
+          useMemoized(() => state.entries.editable(isCreate: !state.isEdit).where((e) => !e.isExpanded)).toIList();
+      final editableExpanded =
+          useMemoized(() => state.entries.editable(isCreate: !state.isEdit).where((e) => e.isExpanded).toIList());
       return CustomScrollView(
         controller: state.scrollController,
         slivers: [
@@ -108,7 +110,7 @@ class CmsItemManagementView extends HookWidget {
     final fixedNestedCount = entries.length.isEven ? length : length + 1;
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-            (context, index) {
+        (context, index) {
           final fixedIndex = canNest ? index * 2 : index;
           final shouldBuildSecond = fixedIndex + 1 < entries.length && canNest;
           return _buildTile(
@@ -135,7 +137,7 @@ class CmsItemManagementView extends HookWidget {
   SliverList _buildSingularSection(IList<CmsEntry<dynamic>> entries, {bool readOnly = false}) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-            (context, index) {
+        (context, index) {
           return _buildTile(
             context,
             readOnly: readOnly,

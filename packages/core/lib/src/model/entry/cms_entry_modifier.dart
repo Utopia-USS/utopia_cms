@@ -11,9 +11,15 @@ class CmsEntryModifier {
 
   ///  Defines whether the entry is editable.
   ///
-  ///  If true field will be read only in the management flow and not visible in the create flow
+  ///  If false field will be read only in the management flow and not visible in the create flow
   ///  e.g. id of an item shouldn't be editable.
   final bool editable;
+
+  ///  Defines whether the entry appears in the create flow.
+  ///
+  ///  If true field will appear in the create item flow
+  ///  Field can be initializable and not editable (e.g. user e-mail)
+  final bool initializable;
 
   ///  If true field will be necessary to create/edit item
   final bool required;
@@ -26,11 +32,14 @@ class CmsEntryModifier {
   /// If true the entry will be placed in the separate row in the [CmsItemManagementView]
   final bool expanded;
 
+
+
   const CmsEntryModifier({
     this.pinned = true,
     this.editable = true,
     this.required = true,
     this.sortable = false,
     this.expanded = false,
+    this.initializable = true,
   });
 }
