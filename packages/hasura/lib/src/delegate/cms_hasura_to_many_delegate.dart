@@ -13,6 +13,8 @@ class CmsHasuraOneToManyDelegate implements CmsToManyDelegate {
   final CmsGraphQLFields foreignFields;
   final String foreignKey;
 
+  final CmsFilterNotEquals? archivedFilter;
+
   const CmsHasuraOneToManyDelegate(
     this._hasuraService, {
     required this.client,
@@ -20,6 +22,7 @@ class CmsHasuraOneToManyDelegate implements CmsToManyDelegate {
     required this.foreignTable,
     required this.foreignFields,
     required this.foreignKey,
+        this.archivedFilter,
   });
 
   @override
@@ -30,11 +33,12 @@ class CmsHasuraOneToManyDelegate implements CmsToManyDelegate {
 
   @override
   Future<List<JsonMap>> get({Object? originId, CmsFilter filter = const CmsFilter.all()}) async {
+    final fixedFilter = archivedFilter == null ? filter : CmsFilterAnd([archivedFilter!, filter]);
     return _hasuraService.query(
       client,
       table: foreignTable,
       fields: foreignFields,
-      filter: _buildFilter(originId, filter),
+      filter: _buildFilter(originId, fixedFilter),
     );
   }
 
@@ -64,12 +68,14 @@ class CmsHasuraManyToManyDelegate implements CmsToManyDelegate {
   final GraphQLClient client;
   final CmsHasuraAssociationTable associationTable;
   final CmsGraphQLFields foreignFields;
+  final CmsFilterNotEquals? archivedFilter;
 
   const CmsHasuraManyToManyDelegate(
     this._hasuraService, {
     required this.client,
     required this.associationTable,
     required this.foreignFields,
+        this.archivedFilter,
   });
 
   @override
@@ -80,11 +86,12 @@ class CmsHasuraManyToManyDelegate implements CmsToManyDelegate {
 
   @override
   Future<List<JsonMap>> get({Object? originId, CmsFilter filter = const CmsFilter.all()}) async {
+    final fixedFilter = archivedFilter == null ? filter : CmsFilterAnd([archivedFilter!, filter]);
     return _hasuraService.query(
       client,
       table: associationTable.foreignTable,
       fields: foreignFields,
-      filter: originId != null ? filter & _buildFilter(originId) : filter,
+      filter: originId != null ? fixedFilter & _buildFilter(originId) : fixedFilter,
     );
   }
 

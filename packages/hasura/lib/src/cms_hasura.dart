@@ -35,6 +35,7 @@ class CmsHasura {
     required CmsHasuraDataTable foreignTable,
     required CmsGraphQLFields foreignFields,
     required String foreignKey,
+    CmsFilterNotEquals? archivedFilter,
   }) {
     return CmsHasuraOneToManyDelegate(
       service,
@@ -43,6 +44,7 @@ class CmsHasura {
       foreignTable: foreignTable,
       foreignFields: foreignFields,
       foreignKey: foreignKey,
+      archivedFilter: archivedFilter
     );
   }
 
@@ -50,12 +52,14 @@ class CmsHasura {
     required GraphQLClient client,
     required CmsHasuraAssociationTable associationTable,
     required CmsGraphQLFields foreignFields,
+    CmsFilterNotEquals? archivedFilter,
   }) {
     return CmsHasuraManyToManyDelegate(
       service,
       client: client,
       associationTable: associationTable,
       foreignFields: foreignFields,
+      archivedFilter: archivedFilter
     );
   }
 }
