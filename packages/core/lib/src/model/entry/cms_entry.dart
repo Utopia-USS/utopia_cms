@@ -12,6 +12,7 @@ import 'package:utopia_cms/src/ui/item_management/state/cms_item_management_stat
 import 'package:utopia_cms/src/ui/table_page/cms_table_page.dart';
 import 'package:utopia_cms/src/util/json_map.dart';
 import 'package:utopia_cms/src/util/map_extensions.dart';
+import 'package:utopia_cms/src/util/string_extensions.dart';
 
 ///  * [CmsEntry] is an interface of a basic [CmsTablePage] component.
 ///
@@ -52,6 +53,9 @@ abstract class CmsEntry<T> {
 
   /// Real display of the field. If null, last segment of [key] is displayed
   String get fixedLabel => label ?? key.split('.').last;
+
+  /// Adds * at the end of the label
+  String get fixedLabelRequired => fixedLabel.modifyRequired(required);
 
   bool get pinned => modifier.pinned;
 

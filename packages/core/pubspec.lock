@@ -327,10 +327,10 @@ packages:
     dependency: "direct main"
     description:
       name: intl
-      sha256: "910f85bce16fb5c6f614e117efa303e85a1731bb0081edf3604a2ae6e9a3cc91"
+      sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"
       url: "https://pub.dev"
     source: hosted
-    version: "0.17.0"
+    version: "0.18.1"
   io:
     dependency: transitive
     description:
@@ -724,10 +724,10 @@ packages:
     dependency: "direct main"
     description:
       name: utopia_utils
-      sha256: "9ff0c79d740b9f338deb13581e856534552be2becb84acd40bbd03d8f77544d9"
+      sha256: a757d487c2e01632afab42623b014481af514fa56bae323bbb9217ccbd955f64
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.25"
+    version: "0.2.25+1"
   utopia_widgets:
     dependency: "direct main"
     description:

@@ -67,9 +67,18 @@ class CmsToManyDropdownField extends HookWidget {
           enabledBorder: InputBorder.none,
           errorBorder: InputBorder.none,
           disabledBorder: InputBorder.none,
+          isDense: true,
         ),
       ),
-      dropdownBuilder: (__, ___) => Text(label, style: labelStyle),
+      dropdownBuilder: (__, values) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label, style: context.textStyles.caption),
+            Text(values.reversed.map(valueLabelBuilder).join(', '), overflow: TextOverflow.ellipsis, style: labelStyle),
+          ],
+        );
+      },
       popupProps: PopupPropsMultiSelection.menu(
         searchDelay: const Duration(milliseconds: 200),
         showSelectedItems: true,

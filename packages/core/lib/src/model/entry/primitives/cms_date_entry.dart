@@ -38,7 +38,7 @@ class CmsDateEntry extends CmsEntry<DateTime?> {
     required DateTime? value,
     required void Function(DateTime value) onChanged,
   }) {
-    return CmsDatePicker(date: value, label: fixedLabel, onDateChanged: onChanged);
+    return CmsDatePicker(date: value, label: fixedLabelRequired, onDateChanged: onChanged);
   }
 
   @override

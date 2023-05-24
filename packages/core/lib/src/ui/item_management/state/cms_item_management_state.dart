@@ -41,6 +41,9 @@ class CmsItemManagementState implements CmsItemManagementBaseState {
 
   bool get canDelete => isEdit && params.canDelete;
 
+  bool get isButtonAvailable =>
+      !entries.where((e) => e.required && e.editable).any((element) => values.getAtPath(element.key) == null);
+
   const CmsItemManagementState({
     required this.values,
     required this.onSubmit,

@@ -17,7 +17,7 @@ class CmsItemManagementView extends HookWidget {
 
   const CmsItemManagementView({super.key, required this.state, required this.animation});
 
-  static const _itemWidth = 360.0;
+  static const _itemWidth = 420.0;
 
   @override
   Widget build(BuildContext context) {
@@ -181,6 +181,7 @@ class CmsItemManagementView extends HookWidget {
               loading: state.isUploading,
               dense: true,
               child: const Text("Continue"),
+              isEnabled: state.isButtonAvailable,
             ),
           ],
         ),

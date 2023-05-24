@@ -54,7 +54,7 @@ class CmsTextEntry extends CmsEntry<String> {
       maxLength: maxLength,
       lines: maxLines,
       formatters: formatters,
-      label: Text(fixedLabel, overflow: overflow),
+      label: Text(fixedLabelRequired, overflow: overflow),
     );
   }
 }

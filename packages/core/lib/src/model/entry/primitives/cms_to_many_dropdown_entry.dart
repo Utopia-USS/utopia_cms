@@ -67,7 +67,7 @@ class CmsToManyDropdownEntry extends CmsEntry<Object> {
     required void Function(JsonMap value) onChanged,
   }) {
     return CmsToManyDropdownField(
-      label: fixedLabel,
+      label: fixedLabelRequired,
       valueLabelBuilder: fieldDisplayBuilder,
       delegate: delegate,
       filterFields: filterFields,

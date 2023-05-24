@@ -42,7 +42,7 @@ class CmsBoolEntry extends CmsEntry<bool> {
     return CmsSwitchField(
       value: value ?? false,
       onChanged: onChanged,
-      title: fixedLabel,
+      title: fixedLabelRequired,
     );
   }
 }

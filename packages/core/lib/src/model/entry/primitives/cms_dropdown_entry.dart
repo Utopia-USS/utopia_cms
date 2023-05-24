@@ -57,7 +57,7 @@ class CmsDropdownEntry<T> extends CmsEntry<T> {
         value: value ?? defaultValue,
         onChanged: onChanged,
         values: values,
-        label: fixedLabel,
+        label: fixedLabelRequired,
         valueLabelBuilder: valueLabelBuilder,
       ),
     );

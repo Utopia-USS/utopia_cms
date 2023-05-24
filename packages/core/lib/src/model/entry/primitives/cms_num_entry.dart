@@ -51,21 +51,23 @@ class CmsNumEntry extends CmsEntry<num?> {
     required num? value,
     required void Function(num? value) onChanged,
   }) {
-    return HookBuilder(builder: (context) {
-      final fieldState = useFieldState(initialValue: value?.toString() ?? '');
-      return CmsTextField(
-        key: Key(key),
-        value: fieldState.value,
-        onChanged: (value) {
-          onChanged(num.tryParse(value));
-          fieldState.value = value;
-        },
-        formatters: isDecimal ? decimalInputFormatter : nonDecimalInputFormatter,
-        keyboardType: TextInputType.numberWithOptions(decimal: isDecimal),
-        maxLength: 20,
-        lines: 1,
-        label: Text(fixedLabel, overflow: TextOverflow.ellipsis),
-      );
-    });
+    return HookBuilder(
+      builder: (context) {
+        final fieldState = useFieldState(initialValue: value?.toString() ?? '');
+        return CmsTextField(
+          key: Key(key),
+          value: fieldState.value,
+          onChanged: (value) {
+            onChanged(num.tryParse(value));
+            fieldState.value = value;
+          },
+          formatters: isDecimal ? decimalInputFormatter : nonDecimalInputFormatter,
+          keyboardType: TextInputType.numberWithOptions(decimal: isDecimal),
+          maxLength: 20,
+          lines: 1,
+          label: Text(fixedLabelRequired, overflow: TextOverflow.ellipsis),
+        );
+      },
+    );
   }
 }
