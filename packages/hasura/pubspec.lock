@@ -33,6 +33,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.17.1"
+  country_list_pick:
+    dependency: transitive
+    description:
+      name: country_list_pick
+      sha256: "379da3b8d194d4bd5a07472128c3ce5b4d205a0a15e217236aed1c393959a8b6"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1+6"
   crypto:
     dependency: transitive
     description:
@@ -223,10 +231,10 @@ packages:
     dependency: transitive
     description:
       name: intl
-      sha256: "910f85bce16fb5c6f614e117efa303e85a1731bb0081edf3604a2ae6e9a3cc91"
+      sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"
       url: "https://pub.dev"
     source: hosted
-    version: "0.17.0"
+    version: "0.18.1"
   js:
     dependency: transitive
     description:
@@ -502,14 +510,14 @@ packages:
       path: "../core"
       relative: true
     source: path
-    version: "0.0.2+3"
+    version: "0.0.2+4"
   utopia_cms_graphql:
     dependency: "direct main"
     description:
       path: "../graphql"
       relative: true
     source: path
-    version: "0.0.2+5"
+    version: "0.0.2+6"
   utopia_hooks:
     dependency: transitive
     description:
@@ -522,10 +530,10 @@ packages:
     dependency: "direct main"
     description:
       name: utopia_utils
-      sha256: "9ff0c79d740b9f338deb13581e856534552be2becb84acd40bbd03d8f77544d9"
+      sha256: fdebad3db1e0dd47fce525c12fe731961fa40a6192514498fedf2ce689316ed5
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.25"
+    version: "0.2.27"
   utopia_widgets:
     dependency: transitive
     description:
