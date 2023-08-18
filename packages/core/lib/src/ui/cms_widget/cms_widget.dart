@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:utopia_arch/utopia_arch.dart';
 import 'package:utopia_cms/src/model/menu/cms_widget_menu_params.dart';
 import 'package:utopia_cms/src/theme/cms_theme_data.dart';
 import 'package:utopia_cms/src/ui/cms_widget/cms_widget_item.dart';
@@ -47,7 +48,9 @@ class CmsWidget extends HookWidget {
                   onPressed: (index) => items[index].map(
                     page: (it) => selectedPageIdState.value = it.id,
                     action: (it) => it.onPressed(),
-                    custom: (it) {},
+                    custom: (it) {
+                      return null;
+                    },
                   ),
                 ),
                 Expanded(

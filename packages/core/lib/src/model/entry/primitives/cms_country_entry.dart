@@ -1,12 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry_modifier.dart';
 import 'package:utopia_cms/src/ui/common/country_picker/cms_country_field.dart';
 import 'package:utopia_cms/src/ui/common/table/cms_table_preview_text.dart';
-import 'package:utopia_cms/src/ui/common/text_field/cms_text_field.dart';
 
 /// [CmsEntry] for picking countries
 class CmsCountryEntry extends CmsEntry<String> {
