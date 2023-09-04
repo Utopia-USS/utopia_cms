@@ -3,6 +3,58 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-09-04
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`utopia_cms` - `v0.1.0`](#utopia_cms---v010)
+ - [`utopia_cms_firebase` - `v0.1.0`](#utopia_cms_firebase---v010)
+ - [`utopia_cms_graphql` - `v0.1.0`](#utopia_cms_graphql---v010)
+ - [`utopia_cms_hasura` - `v0.1.0`](#utopia_cms_hasura---v010)
+
+Packages with other changes:
+
+ - There are no other changes in this release.
+
+---
+
+#### `utopia_cms` - `v0.1.0`
+
+ - **FIX**(utopia_cms_core): CmsEntryModifier initializable added.
+ - **FIX**(utopia_cms_core): required fields marker, many to many field behavior changed.
+ - **FIX**(utopia_cms_core): intl update.
+ - **FEAT**: Upgrade dependencies.
+ - **FEAT**(utopia_cms_core): CmsCountryEntry.
+ - **FEAT**(utopia_cms_core): customizable menu behaviors, general fixes.
+ - **BREAKING** **FEAT**: CmsMediaEntry and general media handling. Introduced CmsFilterEntry with ready implementation of CmsFilterSearchEntry, and CmsFilterDateEntry for CmsTable filtering. General UI fixes and adjustments (we've killed few bugs, not sorry for it).
+
+#### `utopia_cms_firebase` - `v0.1.0`
+
+ - **FEAT**: Upgrade dependencies.
+ - **FEAT**(utopia_cms_core): CmsCountryEntry.
+ - **FEAT**(utopia_cms_core): customizable menu behaviors, general fixes.
+ - **BREAKING** **FEAT**: CmsMediaEntry and general media handling. Introduced CmsFilterEntry with ready implementation of CmsFilterSearchEntry, and CmsFilterDateEntry for CmsTable filtering. General UI fixes and adjustments (we've killed few bugs, not sorry for it).
+
+#### `utopia_cms_graphql` - `v0.1.0`
+
+ - **FEAT**: Upgrade dependencies.
+ - **FEAT**(utopia_cms_core): CmsCountryEntry.
+ - **FEAT**(utopia_cms_core): customizable menu behaviors, general fixes.
+ - **BREAKING** **FEAT**: CmsMediaEntry and general media handling. Introduced CmsFilterEntry with ready implementation of CmsFilterSearchEntry, and CmsFilterDateEntry for CmsTable filtering. General UI fixes and adjustments (we've killed few bugs, not sorry for it).
+
+#### `utopia_cms_hasura` - `v0.1.0`
+
+ - **FIX**(utopia_cms_hasura): archived filter added.
+ - **FEAT**: Upgrade dependencies.
+ - **FEAT**(utopia_cms_core): CmsCountryEntry.
+ - **FEAT**(utopia_cms_core): customizable menu behaviors, general fixes.
+ - **BREAKING** **FEAT**: CmsMediaEntry and general media handling. Introduced CmsFilterEntry with ready implementation of CmsFilterSearchEntry, and CmsFilterDateEntry for CmsTable filtering. General UI fixes and adjustments (we've killed few bugs, not sorry for it).
+
+
 ## 2023-05-13
 
 ### Changes
