@@ -1,3 +1,5 @@
+<img src="https://github.com/Utopia-USS/utopia_cms/raw/master/packages/hasura/cms_hasura.png" width = "380" height = "159"/>
+
 # Utopia CMS Hasura
 
 Hasura implementation of the server-layer for [utopia_cms](https://pub.dev/packages/utopia_cms)

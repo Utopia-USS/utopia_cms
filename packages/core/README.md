@@ -1,4 +1,4 @@
-<img src="https://github.com/Utopia-USS/utopia_cms/raw/master/packages/core/cms_core.png" width = "915" height = "516"/>
+<img src="https://github.com/Utopia-USS/utopia_cms/raw/master/packages/core/cms_core.png" width = "343" height = "159"/>
 
 # Utopia CMS (Core)
 

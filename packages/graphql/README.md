@@ -1,3 +1,5 @@
+<img src="https://github.com/Utopia-USS/utopia_cms/raw/master/packages/graphql/cms_graphql.png" width = "399" height = "159"/>
+
 # Utopia CMS GraphQL
 
 A GraphQL implementation of the server-layer for [utopia_cms](https://pub.dev/packages/utopia_cms)
