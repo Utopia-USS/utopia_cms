@@ -1,3 +1,12 @@
+## 0.1.0
+
+> Note: This release has breaking changes.
+
+ - **FEAT**: Upgrade dependencies.
+ - **FEAT**(utopia_cms_core): CmsCountryEntry.
+ - **FEAT**(utopia_cms_core): customizable menu behaviors, general fixes.
+ - **BREAKING** **FEAT**: CmsMediaEntry and general media handling. Introduced CmsFilterEntry with ready implementation of CmsFilterSearchEntry, and CmsFilterDateEntry for CmsTable filtering. General UI fixes and adjustments (we've killed few bugs, not sorry for it).
+
 ## 0.0.2+6
 
  - Update a dependency to the latest release.

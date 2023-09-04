@@ -1,15 +1,15 @@
 name: utopia_cms_hasura
-version: 0.0.2+7
+version: 0.1.0
 description: Utopia CMS - Hasura
 homepage: https://github.com/Utopia-USS/utopia_cms
 
 environment:
-  sdk: ">=2.19.0 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
   flutter: ">=3.0.0"
 
 dependencies:
-  utopia_cms: ^0.0.2+4
-  utopia_cms_graphql: ^0.0.2+6
+  utopia_cms: ^0.1.0
+  utopia_cms_graphql: ^0.1.0
   utopia_utils: ^0.2.25
   gql: ^1.0.0
   graphql: ^5.1.3
