@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry_modifier.dart';
-import 'package:utopia_cms/src/ui/common/dropdown/cms_dropdown_field.dart';
-import 'package:utopia_cms/src/ui/common/table/cms_table_preview_text.dart';
+import 'package:utopia_cms/src/ui/widget/dropdown/cms_dropdown_field.dart';
+import 'package:utopia_cms/src/ui/widget/table/cms_table_preview_text.dart';
 
 /// [CmsEntry] for handling offline items picker
 class CmsDropdownEntry<T> extends CmsEntry<T> {
@@ -43,7 +43,7 @@ class CmsDropdownEntry<T> extends CmsEntry<T> {
   final CmsEntryModifier modifier;
 
   @override
-  Widget buildPreview(BuildContext context, T value) => CmsTablePreviewText(valueLabelBuilder(value));
+  Widget buildPreview(BuildContext context, T? value) => CmsTablePreviewText(valueLabelBuilder(value));
 
   @override
   Widget buildEditField({

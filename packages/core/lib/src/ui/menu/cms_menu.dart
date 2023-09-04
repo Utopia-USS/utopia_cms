@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:utopia_arch/utopia_arch.dart';
 import 'package:utopia_cms/src/model/menu/cms_widget_menu_params.dart';
 import 'package:utopia_cms/src/ui/cms_widget/cms_widget_item.dart';
-import 'package:utopia_cms/src/ui/common/layout/cms_gradient_background.dart';
+import 'package:utopia_cms/src/ui/widget/layout/cms_gradient_background.dart';
 import 'package:utopia_cms/src/ui/menu/cms_menu_tile.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
 import 'package:utopia_hooks/utopia_hooks.dart';
@@ -54,12 +54,15 @@ class CmsMenu extends HookWidget {
                 boxShadow: context.theme.menuShadow,
                 borderRadius: _buildBorderRadius(constraints, context),
               ),
+
               width: isExpanded ? 200 : 70,
               child: CmsGradientBackground(
                 borderRadius: _buildBorderRadius(constraints, context),
+                colors: menuParams.backgroundColors,
                 child: FillViewportScrollView(
                   child: Column(
                     children: [
+                      const SizedBox(height: 12),
                       for (int index = 0; index < items.length; index++)
                         if (items[index] is CmsWidgetItemCustom)
                           _buildCustom(items[index] as CmsWidgetItemCustom)
@@ -71,6 +74,7 @@ class CmsMenu extends HookWidget {
                                 items[index].maybeMap(page: (it) => it.id == selectedPageId, orElse: () => false),
                             onPressed: () => onPressed(index),
                           ),
+                      const SizedBox(height: 12),
                     ],
                   ),
                 ),

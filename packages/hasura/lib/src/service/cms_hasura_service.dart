@@ -103,19 +103,11 @@ class CmsHasuraService {
     final result = await _graphQLService.mutate(
       client,
       name: "delete_${table.name}_by_pk",
-      arguments: {"pk_columns": keys.toValueNodeUnsafe()},
+      arguments: keys.map((key, value) => MapEntry(key, (value as Object).toValueNodeUnsafe())),
       fields: fields,
     );
     return result! as JsonMap;
   }
-
-  Future<JsonMap> deleteById(
-    GraphQLClient client, {
-    required CmsHasuraDataTable table,
-    required JsonMap object,
-    CmsGraphQLFields fields = const {},
-  }) async =>
-      deleteByPk(client, table: table, keys: {table.idKey: object[table.idKey]}, fields: fields);
 
   ValueNode buildFilter(CmsFilter filter) {
     return filter.when(
@@ -128,6 +120,8 @@ class CmsHasuraService {
       and: (filters) => {"_and": filters.map(buildFilter).toValueNode()}.toValueNode(),
       or: (filters) => {"_or": filters.map(buildFilter).toValueNode()}.toValueNode(),
       not: (filter) => {"_not": buildFilter(filter)}.toValueNode(),
+      greaterOrEq: (field, value) => _buildNested(field, {"_gte": value.toValueNodeUnsafe()}.toValueNode()),
+      lesserOrEq: (field, value) => _buildNested(field, {"_lte": value.toValueNodeUnsafe()}.toValueNode()),
     );
   }
 

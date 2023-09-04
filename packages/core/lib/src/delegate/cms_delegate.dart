@@ -1,7 +1,7 @@
 import 'package:utopia_cms/src/delegate/cms_to_many_delegate.dart';
 import 'package:utopia_cms/src/model/cms_filter.dart';
 import 'package:utopia_cms/src/model/cms_functions_params.dart';
-import 'package:utopia_cms/src/ui/common/table/cms_table.dart';
+import 'package:utopia_cms/src/ui/widget/table/cms_table.dart';
 import 'package:utopia_cms/src/util/json_map.dart';
 
 ///  * [CmsDelegate] is a main interface for handling [CmsTable] items.
@@ -18,7 +18,7 @@ abstract class CmsDelegate {
   });
 
   /// Responsible for updating existing item within the table
-  Future<JsonMap> update(JsonMap value);
+  Future<JsonMap> update(JsonMap value,JsonMap oldValue);
 
   /// Responsible for creating new object
   Future<JsonMap> create(JsonMap value);

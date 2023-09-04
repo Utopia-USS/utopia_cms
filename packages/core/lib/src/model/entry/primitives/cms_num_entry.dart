@@ -3,19 +3,20 @@ import 'package:flutter/services.dart';
 import 'package:utopia_arch/utopia_arch.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry_modifier.dart';
-import 'package:utopia_cms/src/ui/common/table/cms_table_preview_text.dart';
-import 'package:utopia_cms/src/ui/common/text_field/cms_text_field.dart';
+import 'package:utopia_cms/src/ui/widget/table/cms_table_preview_text.dart';
+import 'package:utopia_cms/src/ui/widget/text_field/cms_text_field.dart';
 import 'package:utopia_hooks/utopia_hooks.dart';
 
 /// [CmsEntry] for handling basic num values
 class CmsNumEntry extends CmsEntry<num?> {
   final bool isDecimal;
-
+  final String Function(num?)? previewBuilder;
   late final List<FilteringTextInputFormatter> decimalInputFormatter;
   late final List<FilteringTextInputFormatter> nonDecimalInputFormatter;
 
   CmsNumEntry({
     required this.key,
+    this.previewBuilder,
     this.label,
     this.modifier = const CmsEntryModifier(),
     this.isDecimal = false,
@@ -43,7 +44,9 @@ class CmsNumEntry extends CmsEntry<num?> {
   final CmsEntryModifier modifier;
 
   @override
-  Widget buildPreview(BuildContext context, num? value) => CmsTablePreviewText(value?.toString());
+  Widget buildPreview(BuildContext context, num? value) => CmsTablePreviewText(
+        previewBuilder?.call(value) ?? value?.toString(),
+      );
 
   @override
   Widget buildEditField({

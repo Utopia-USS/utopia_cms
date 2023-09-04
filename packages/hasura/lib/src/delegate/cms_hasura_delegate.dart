@@ -6,7 +6,7 @@ import 'package:utopia_cms_hasura/src/model/cms_hasura_table.dart';
 import 'package:utopia_cms_hasura/src/service/cms_hasura_service.dart';
 
 class CmsHasuraDelegate implements CmsDelegate {
-  final CmsHasuraService _hasuraService;
+  final CmsHasuraService hasuraService;
 
   final GraphQLClient client;
   final CmsHasuraDataTable table;
@@ -15,7 +15,7 @@ class CmsHasuraDelegate implements CmsDelegate {
   final CmsFilterNotEquals? archivedFilter;
 
   const CmsHasuraDelegate(
-    this._hasuraService, {
+    this.hasuraService, {
     required this.client,
     required this.table,
     this.archivedFilter,
@@ -32,7 +32,7 @@ class CmsHasuraDelegate implements CmsDelegate {
     required CmsFunctionsPagingParams paging,
   }) async {
     final fixedFilter = archivedFilter == null ? filter : CmsFilterAnd([archivedFilter!, filter]);
-    return _hasuraService.query(
+    return hasuraService.query(
       client,
       table: table,
       fields: fields,
@@ -44,20 +44,20 @@ class CmsHasuraDelegate implements CmsDelegate {
 
   @override
   Future<JsonMap> create(JsonMap value) async =>
-      _hasuraService.insertOne(client, table: table, fields: fields, object: value);
+      hasuraService.insertOne(client, table: table, fields: fields, object: value);
 
   @override
-  Future<JsonMap> update(JsonMap value) async =>
-      _hasuraService.updateById(client, table: table, fields: fields, object: value);
+  Future<JsonMap> update(JsonMap value, _) async =>
+      hasuraService.updateById(client, table: table, fields: fields, object: value);
 
   @override
   Future<void> delete(JsonMap value) async => archivedFilter != null
       ? _archive(value)
-      : _hasuraService.deleteById(client, table: table, fields: fields, object: value);
+      : hasuraService.deleteByPk(client, table: table, fields: fields, keys: {table.idKey: value[table.idKey]});
 
   Future<void> _archive(JsonMap value) async {
     final map = value;
     map.setAtPath(archivedFilter!.field, archivedFilter!.value);
-    await update(value);
+    await update(value, value);
   }
 }

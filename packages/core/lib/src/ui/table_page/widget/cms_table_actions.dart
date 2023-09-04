@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:utopia_cms/src/model/table_action/cms_table_action.dart';
-import 'package:utopia_cms/src/ui/common/loading/cms_loader.dart';
+import 'package:utopia_cms/src/ui/widget/loading/cms_loader.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
 import 'package:utopia_cms/src/util/json_map.dart';
 import 'package:utopia_hooks/utopia_hooks.dart';

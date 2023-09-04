@@ -2,7 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:utopia_cms/src/delegate/cms_delegate.dart';
 import 'package:utopia_cms/src/model/cms_filter.dart';
 import 'package:utopia_cms/src/model/entry/primitives/cms_to_many_dropdown_entry.dart';
-import 'package:utopia_cms/src/ui/common/table/cms_table.dart';
+import 'package:utopia_cms/src/ui/widget/table/cms_table.dart';
 import 'package:utopia_cms/src/util/json_map.dart';
 
 ///  * [CmsToManyDelegate] is an interface for handling toMany relationships.

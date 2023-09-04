@@ -1,11 +1,14 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:utopia_cms/src/delegate/cms_delegate.dart';
+import 'package:utopia_cms/src/model/cms_filter.dart';
 import 'package:utopia_cms/src/model/cms_functions_params.dart';
 import 'package:utopia_cms/src/model/cms_table_page_params.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry.dart';
+import 'package:utopia_cms/src/model/filter_entry/cms_filter_entry.dart';
 import 'package:utopia_cms/src/ui/item_management/cms_item_management_page.dart';
 import 'package:utopia_cms/src/util/json_map.dart';
+import 'package:utopia_cms/src/util/map_extensions.dart';
 import 'package:utopia_hooks/utopia_hooks.dart';
 
 class CmsTablePageState {
@@ -13,6 +16,9 @@ class CmsTablePageState {
   final IList<JsonMap> items;
   final CmsTableParams params;
   final ScrollController scrollController;
+
+  final JsonMap filterValues;
+  final void Function(String entryKey, dynamic value) onFilterChanged;
   final CmsFunctionsSortingParams? currentSortingParams;
   final bool pagingEnabled;
 
@@ -34,6 +40,8 @@ class CmsTablePageState {
     required this.currentSortingParams,
     required this.onSortPressed,
     required this.pagingEnabled,
+    required this.onFilterChanged,
+    required this.filterValues,
   });
 
   bool get hasDefaultActions => params.canDelete || params.canEdit;
@@ -44,13 +52,37 @@ CmsTablePageState useCmsTablePageState({
   required CmsTableParams params,
   required NavigatorState navigator,
   required IList<CmsEntry<dynamic>> entries,
+  required IList<CmsFilterEntry<dynamic>> filterEntries,
   required Future<bool?> Function() confirmDelete,
   required int? pagingLimit,
 }) {
   final sortingParamsState = useState<CmsFunctionsSortingParams?>(null);
+
   final pagingEnabledState = useState<bool>(true);
   final pagingOffsetState = useState<int>(0);
   final itemsState = useState<IList<JsonMap>>(IList());
+  void resetState() {
+    pagingOffsetState.value = 0;
+    pagingEnabledState.value = true;
+    itemsState.value = IList();
+  }
+
+  final filtersState = useState<JsonMap>({});
+  void onFilterChanged(String entryKey, dynamic value) {
+    resetState();
+    filtersState.value = {...filtersState.value}..setAtPath(entryKey, value);
+  }
+
+  CmsFilter buildFilter() {
+    if (filterEntries.isEmpty) return const CmsFilterAll();
+    final fixedValues = filterEntries.where((a) => filtersState.value[a.entryKey] != null);
+    if(fixedValues.isEmpty) return const CmsFilterAll();
+    if(fixedValues.length == 1) return fixedValues.first.filterFromValues(filtersState.value);
+    return CmsFilterAnd(filterEntries
+        .where((a) => filtersState.value[a.entryKey] != null)
+        .map((e) => e.filterFromValues(filtersState.value))
+        .toList());
+  }
 
   final state = useAutoComputedState<void>(
     compute: () async {
@@ -58,28 +90,26 @@ CmsTablePageState useCmsTablePageState({
         final result = await delegate.get(
           sorting: sortingParamsState.value,
           paging: CmsFunctionsPagingParams(offset: pagingOffsetState.value, limit: pagingLimit),
+          filter: buildFilter(),
         );
         if (pagingLimit == null || result.length < pagingLimit) pagingEnabledState.value = false;
 
         if (result.isNotEmpty) {
           final filtered =
-              result.where((e1) => !itemsState.value.any((e2) => e1[delegate.idKey] == e2[delegate.idKey]));
+          result.where((e1) => !itemsState.value.any((e2) => e1[delegate.idKey] == e2[delegate.idKey]));
           itemsState.value = itemsState.value.addAll(filtered);
           pagingOffsetState.value += result.length;
         }
       }
     },
-    keys: [sortingParamsState.value],
+    keys: [sortingParamsState.value, filtersState.value],
   );
 
   void updateItem(JsonMap value, int index) {
     itemsState.value = itemsState.value.replace(index, value);
   }
-  void resetState (){
-    pagingOffsetState.value = 0;
-    pagingEnabledState.value = true;
-    itemsState.value = IList();
-  }
+
+
 
   Future<void> onCreate() async {
     final result = await navigator.push<bool?>(
@@ -89,10 +119,15 @@ CmsTablePageState useCmsTablePageState({
         barrierColor: Colors.black45,
         transitionDuration: const Duration(milliseconds: 400),
         reverseTransitionDuration: const Duration(milliseconds: 400),
-        pageBuilder: (_, animation, ___) => CmsItemManagement(
-          args: CmsItemManagementArgs(uploadChanges: delegate.create, entries: entries, params: params),
-          animation: animation,
-        ),
+        pageBuilder: (_, animation, ___) =>
+            CmsItemManagement(
+              args: CmsItemManagementArgs(
+                uploadChanges: (json, _) => delegate.create(json),
+                entries: entries,
+                params: params,
+              ),
+              animation: animation,
+            ),
       ),
     );
     if (result != null) {
@@ -118,16 +153,17 @@ CmsTablePageState useCmsTablePageState({
         barrierColor: Colors.black45,
         transitionDuration: const Duration(milliseconds: 400),
         reverseTransitionDuration: const Duration(milliseconds: 400),
-        pageBuilder: (_, animation, ___) => CmsItemManagement(
-          args: CmsItemManagementArgs(
-            uploadChanges: delegate.update,
-            deleteItem: () => onDelete(value, index),
-            entries: entries,
-            initialValue: Map.of(value),
-            params: params,
-          ),
-          animation: animation,
-        ),
+        pageBuilder: (_, animation, ___) =>
+            CmsItemManagement(
+              args: CmsItemManagementArgs(
+                uploadChanges: (newJson, oldJson) => delegate.update(newJson, oldJson!),
+                deleteItem: () => onDelete(value, index),
+                entries: entries,
+                initialValue: Map.of(value),
+                params: params,
+              ),
+              animation: animation,
+            ),
       ),
     );
     if (result != null) {
@@ -138,9 +174,7 @@ CmsTablePageState useCmsTablePageState({
 
   final scrollController = useScrollController();
 
-
-
-  Future<void> onSortPressed(CmsEntry entry) async{
+  Future<void> onSortPressed(CmsEntry entry) async {
     final currentValue = sortingParamsState.value;
     final isCurrent = entry.key == currentValue?.fieldKey;
     if (currentValue == null || !isCurrent) {
@@ -149,7 +183,6 @@ CmsTablePageState useCmsTablePageState({
       sortingParamsState.value = CmsFunctionsSortingParams(sortDesc: !currentValue.sortDesc, fieldKey: entry.key);
     }
     resetState();
-
   }
 
   return CmsTablePageState(
@@ -164,5 +197,7 @@ CmsTablePageState useCmsTablePageState({
     updateItem: updateItem,
     onSortPressed: onSortPressed,
     currentSortingParams: sortingParamsState.value,
+    onFilterChanged: onFilterChanged,
+    filterValues: filtersState.value,
   );
 }

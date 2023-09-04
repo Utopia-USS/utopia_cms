@@ -11,7 +11,7 @@ import 'package:utopia_hooks/utopia_hooks.dart';
 
 class CmsItemManagementArgs {
   final JsonMap? initialValue;
-  final Future<JsonMap> Function(JsonMap) uploadChanges;
+  final Future<JsonMap> Function(JsonMap newJson, JsonMap? oldJson) uploadChanges;
   final Future<void> Function()? deleteItem;
   final CmsTableParams params;
   final IList<CmsEntry<dynamic>> entries;

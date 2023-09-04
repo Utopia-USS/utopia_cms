@@ -27,7 +27,7 @@ class CmsFirebaseDelegate implements CmsDelegate {
   }
 
   @override
-  Future<JsonMap> update(JsonMap value) async {
+  Future<JsonMap> update(JsonMap value, _) async {
     final id = value[idKey]! as String;
     final map = JsonMap.from(value)..remove(idKey);
     await FirebaseFirestore.instance.collection(collection).doc(id).update(map);

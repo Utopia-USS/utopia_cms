@@ -40,7 +40,7 @@ class CmsItemManagementState implements CmsItemManagementBaseState {
   final CmsTableParams params;
 
   bool get canDelete => isEdit && params.canDelete;
-
+  bool get canCreate => !isEdit || params.canEdit;
   bool get isButtonAvailable =>
       !entries.where((e) => e.required && e.editable).any((element) => values.getAtPath(element.key) == null);
 
@@ -64,7 +64,7 @@ CmsItemManagementState useCmsItemManagementState({
   required CmsItemManagementArgs args,
   required void Function(bool) moveBack,
 }) {
-  final state = useState<JsonMap>(args.initialValue ?? {});
+  final state = useState<JsonMap>({...?args.initialValue});
 
   void onValueChanged(String key, Object? value) {
     state.mutate((it) => it.setAtPath(key, value));
@@ -75,7 +75,7 @@ CmsItemManagementState useCmsItemManagementState({
   final uploadSubmitState = useSubmitState();
   Future<void> onSubmit() async {
     await uploadSubmitState.run(() async {
-      final result = await args.uploadChanges(state.value);
+      final result = await args.uploadChanges(state.value, args.initialValue);
       await Future.wait([for (final callback in onSavedCallbacksState.value) callback(result)]);
       moveBack(true);
     });
@@ -101,8 +101,8 @@ CmsItemManagementState useCmsItemManagementState({
     isSubmitEnabled: submitEnabled,
     onSubmit: onSubmit,
     onValueChanged: onValueChanged,
-    isUploading: uploadSubmitState.isSubmitInProgress,
-    isDeleting: deleteSubmitState.isSubmitInProgress,
+    isUploading: uploadSubmitState.inProgress,
+    isDeleting: deleteSubmitState.inProgress,
     isEdit: args.initialValue != null,
     scrollController: scrollController,
     params: args.params,

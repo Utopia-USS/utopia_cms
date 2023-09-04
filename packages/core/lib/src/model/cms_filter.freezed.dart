@@ -26,6 +26,8 @@ mixin _$CmsFilter {
     required TResult Function(String field, List<Object> values) inList,
     required TResult Function(List<CmsFilter> filters) and,
     required TResult Function(List<CmsFilter> filters) or,
+    required TResult Function(String field, Object value) greaterOrEq,
+    required TResult Function(String field, Object value) lesserOrEq,
     required TResult Function(CmsFilter filter) not,
   }) =>
       throw _privateConstructorUsedError;
@@ -39,6 +41,8 @@ mixin _$CmsFilter {
     TResult? Function(String field, List<Object> values)? inList,
     TResult? Function(List<CmsFilter> filters)? and,
     TResult? Function(List<CmsFilter> filters)? or,
+    TResult? Function(String field, Object value)? greaterOrEq,
+    TResult? Function(String field, Object value)? lesserOrEq,
     TResult? Function(CmsFilter filter)? not,
   }) =>
       throw _privateConstructorUsedError;
@@ -52,6 +56,8 @@ mixin _$CmsFilter {
     TResult Function(String field, List<Object> values)? inList,
     TResult Function(List<CmsFilter> filters)? and,
     TResult Function(List<CmsFilter> filters)? or,
+    TResult Function(String field, Object value)? greaterOrEq,
+    TResult Function(String field, Object value)? lesserOrEq,
     TResult Function(CmsFilter filter)? not,
     required TResult orElse(),
   }) =>
@@ -65,6 +71,8 @@ mixin _$CmsFilter {
     required TResult Function(CmsFilterInList value) inList,
     required TResult Function(CmsFilterAnd value) and,
     required TResult Function(CmsFilterOr value) or,
+    required TResult Function(CmsFilterGreaterOrEq value) greaterOrEq,
+    required TResult Function(CmsFilterLesserOrEq value) lesserOrEq,
     required TResult Function(CmsFilterNot value) not,
   }) =>
       throw _privateConstructorUsedError;
@@ -77,6 +85,8 @@ mixin _$CmsFilter {
     TResult? Function(CmsFilterInList value)? inList,
     TResult? Function(CmsFilterAnd value)? and,
     TResult? Function(CmsFilterOr value)? or,
+    TResult? Function(CmsFilterGreaterOrEq value)? greaterOrEq,
+    TResult? Function(CmsFilterLesserOrEq value)? lesserOrEq,
     TResult? Function(CmsFilterNot value)? not,
   }) =>
       throw _privateConstructorUsedError;
@@ -89,6 +99,8 @@ mixin _$CmsFilter {
     TResult Function(CmsFilterInList value)? inList,
     TResult Function(CmsFilterAnd value)? and,
     TResult Function(CmsFilterOr value)? or,
+    TResult Function(CmsFilterGreaterOrEq value)? greaterOrEq,
+    TResult Function(CmsFilterLesserOrEq value)? lesserOrEq,
     TResult Function(CmsFilterNot value)? not,
     required TResult orElse(),
   }) =>
@@ -158,6 +170,8 @@ class _$CmsFilterAll implements CmsFilterAll {
     required TResult Function(String field, List<Object> values) inList,
     required TResult Function(List<CmsFilter> filters) and,
     required TResult Function(List<CmsFilter> filters) or,
+    required TResult Function(String field, Object value) greaterOrEq,
+    required TResult Function(String field, Object value) lesserOrEq,
     required TResult Function(CmsFilter filter) not,
   }) {
     return all();
@@ -174,6 +188,8 @@ class _$CmsFilterAll implements CmsFilterAll {
     TResult? Function(String field, List<Object> values)? inList,
     TResult? Function(List<CmsFilter> filters)? and,
     TResult? Function(List<CmsFilter> filters)? or,
+    TResult? Function(String field, Object value)? greaterOrEq,
+    TResult? Function(String field, Object value)? lesserOrEq,
     TResult? Function(CmsFilter filter)? not,
   }) {
     return all?.call();
@@ -190,6 +206,8 @@ class _$CmsFilterAll implements CmsFilterAll {
     TResult Function(String field, List<Object> values)? inList,
     TResult Function(List<CmsFilter> filters)? and,
     TResult Function(List<CmsFilter> filters)? or,
+    TResult Function(String field, Object value)? greaterOrEq,
+    TResult Function(String field, Object value)? lesserOrEq,
     TResult Function(CmsFilter filter)? not,
     required TResult orElse(),
   }) {
@@ -209,6 +227,8 @@ class _$CmsFilterAll implements CmsFilterAll {
     required TResult Function(CmsFilterInList value) inList,
     required TResult Function(CmsFilterAnd value) and,
     required TResult Function(CmsFilterOr value) or,
+    required TResult Function(CmsFilterGreaterOrEq value) greaterOrEq,
+    required TResult Function(CmsFilterLesserOrEq value) lesserOrEq,
     required TResult Function(CmsFilterNot value) not,
   }) {
     return all(this);
@@ -224,6 +244,8 @@ class _$CmsFilterAll implements CmsFilterAll {
     TResult? Function(CmsFilterInList value)? inList,
     TResult? Function(CmsFilterAnd value)? and,
     TResult? Function(CmsFilterOr value)? or,
+    TResult? Function(CmsFilterGreaterOrEq value)? greaterOrEq,
+    TResult? Function(CmsFilterLesserOrEq value)? lesserOrEq,
     TResult? Function(CmsFilterNot value)? not,
   }) {
     return all?.call(this);
@@ -239,6 +261,8 @@ class _$CmsFilterAll implements CmsFilterAll {
     TResult Function(CmsFilterInList value)? inList,
     TResult Function(CmsFilterAnd value)? and,
     TResult Function(CmsFilterOr value)? or,
+    TResult Function(CmsFilterGreaterOrEq value)? greaterOrEq,
+    TResult Function(CmsFilterLesserOrEq value)? lesserOrEq,
     TResult Function(CmsFilterNot value)? not,
     required TResult orElse(),
   }) {
@@ -331,6 +355,8 @@ class _$CmsFilterEquals implements CmsFilterEquals {
     required TResult Function(String field, List<Object> values) inList,
     required TResult Function(List<CmsFilter> filters) and,
     required TResult Function(List<CmsFilter> filters) or,
+    required TResult Function(String field, Object value) greaterOrEq,
+    required TResult Function(String field, Object value) lesserOrEq,
     required TResult Function(CmsFilter filter) not,
   }) {
     return equals(field, value);
@@ -347,6 +373,8 @@ class _$CmsFilterEquals implements CmsFilterEquals {
     TResult? Function(String field, List<Object> values)? inList,
     TResult? Function(List<CmsFilter> filters)? and,
     TResult? Function(List<CmsFilter> filters)? or,
+    TResult? Function(String field, Object value)? greaterOrEq,
+    TResult? Function(String field, Object value)? lesserOrEq,
     TResult? Function(CmsFilter filter)? not,
   }) {
     return equals?.call(field, value);
@@ -363,6 +391,8 @@ class _$CmsFilterEquals implements CmsFilterEquals {
     TResult Function(String field, List<Object> values)? inList,
     TResult Function(List<CmsFilter> filters)? and,
     TResult Function(List<CmsFilter> filters)? or,
+    TResult Function(String field, Object value)? greaterOrEq,
+    TResult Function(String field, Object value)? lesserOrEq,
     TResult Function(CmsFilter filter)? not,
     required TResult orElse(),
   }) {
@@ -382,6 +412,8 @@ class _$CmsFilterEquals implements CmsFilterEquals {
     required TResult Function(CmsFilterInList value) inList,
     required TResult Function(CmsFilterAnd value) and,
     required TResult Function(CmsFilterOr value) or,
+    required TResult Function(CmsFilterGreaterOrEq value) greaterOrEq,
+    required TResult Function(CmsFilterLesserOrEq value) lesserOrEq,
     required TResult Function(CmsFilterNot value) not,
   }) {
     return equals(this);
@@ -397,6 +429,8 @@ class _$CmsFilterEquals implements CmsFilterEquals {
     TResult? Function(CmsFilterInList value)? inList,
     TResult? Function(CmsFilterAnd value)? and,
     TResult? Function(CmsFilterOr value)? or,
+    TResult? Function(CmsFilterGreaterOrEq value)? greaterOrEq,
+    TResult? Function(CmsFilterLesserOrEq value)? lesserOrEq,
     TResult? Function(CmsFilterNot value)? not,
   }) {
     return equals?.call(this);
@@ -412,6 +446,8 @@ class _$CmsFilterEquals implements CmsFilterEquals {
     TResult Function(CmsFilterInList value)? inList,
     TResult Function(CmsFilterAnd value)? and,
     TResult Function(CmsFilterOr value)? or,
+    TResult Function(CmsFilterGreaterOrEq value)? greaterOrEq,
+    TResult Function(CmsFilterLesserOrEq value)? lesserOrEq,
     TResult Function(CmsFilterNot value)? not,
     required TResult orElse(),
   }) {
@@ -512,6 +548,8 @@ class _$CmsFilterNotEquals implements CmsFilterNotEquals {
     required TResult Function(String field, List<Object> values) inList,
     required TResult Function(List<CmsFilter> filters) and,
     required TResult Function(List<CmsFilter> filters) or,
+    required TResult Function(String field, Object value) greaterOrEq,
+    required TResult Function(String field, Object value) lesserOrEq,
     required TResult Function(CmsFilter filter) not,
   }) {
     return notEquals(field, value);
@@ -528,6 +566,8 @@ class _$CmsFilterNotEquals implements CmsFilterNotEquals {
     TResult? Function(String field, List<Object> values)? inList,
     TResult? Function(List<CmsFilter> filters)? and,
     TResult? Function(List<CmsFilter> filters)? or,
+    TResult? Function(String field, Object value)? greaterOrEq,
+    TResult? Function(String field, Object value)? lesserOrEq,
     TResult? Function(CmsFilter filter)? not,
   }) {
     return notEquals?.call(field, value);
@@ -544,6 +584,8 @@ class _$CmsFilterNotEquals implements CmsFilterNotEquals {
     TResult Function(String field, List<Object> values)? inList,
     TResult Function(List<CmsFilter> filters)? and,
     TResult Function(List<CmsFilter> filters)? or,
+    TResult Function(String field, Object value)? greaterOrEq,
+    TResult Function(String field, Object value)? lesserOrEq,
     TResult Function(CmsFilter filter)? not,
     required TResult orElse(),
   }) {
@@ -563,6 +605,8 @@ class _$CmsFilterNotEquals implements CmsFilterNotEquals {
     required TResult Function(CmsFilterInList value) inList,
     required TResult Function(CmsFilterAnd value) and,
     required TResult Function(CmsFilterOr value) or,
+    required TResult Function(CmsFilterGreaterOrEq value) greaterOrEq,
+    required TResult Function(CmsFilterLesserOrEq value) lesserOrEq,
     required TResult Function(CmsFilterNot value) not,
   }) {
     return notEquals(this);
@@ -578,6 +622,8 @@ class _$CmsFilterNotEquals implements CmsFilterNotEquals {
     TResult? Function(CmsFilterInList value)? inList,
     TResult? Function(CmsFilterAnd value)? and,
     TResult? Function(CmsFilterOr value)? or,
+    TResult? Function(CmsFilterGreaterOrEq value)? greaterOrEq,
+    TResult? Function(CmsFilterLesserOrEq value)? lesserOrEq,
     TResult? Function(CmsFilterNot value)? not,
   }) {
     return notEquals?.call(this);
@@ -593,6 +639,8 @@ class _$CmsFilterNotEquals implements CmsFilterNotEquals {
     TResult Function(CmsFilterInList value)? inList,
     TResult Function(CmsFilterAnd value)? and,
     TResult Function(CmsFilterOr value)? or,
+    TResult Function(CmsFilterGreaterOrEq value)? greaterOrEq,
+    TResult Function(CmsFilterLesserOrEq value)? lesserOrEq,
     TResult Function(CmsFilterNot value)? not,
     required TResult orElse(),
   }) {
@@ -705,6 +753,8 @@ class _$CmsFilterContains implements CmsFilterContains {
     required TResult Function(String field, List<Object> values) inList,
     required TResult Function(List<CmsFilter> filters) and,
     required TResult Function(List<CmsFilter> filters) or,
+    required TResult Function(String field, Object value) greaterOrEq,
+    required TResult Function(String field, Object value) lesserOrEq,
     required TResult Function(CmsFilter filter) not,
   }) {
     return containsString(field, value, caseSensitive);
@@ -721,6 +771,8 @@ class _$CmsFilterContains implements CmsFilterContains {
     TResult? Function(String field, List<Object> values)? inList,
     TResult? Function(List<CmsFilter> filters)? and,
     TResult? Function(List<CmsFilter> filters)? or,
+    TResult? Function(String field, Object value)? greaterOrEq,
+    TResult? Function(String field, Object value)? lesserOrEq,
     TResult? Function(CmsFilter filter)? not,
   }) {
     return containsString?.call(field, value, caseSensitive);
@@ -737,6 +789,8 @@ class _$CmsFilterContains implements CmsFilterContains {
     TResult Function(String field, List<Object> values)? inList,
     TResult Function(List<CmsFilter> filters)? and,
     TResult Function(List<CmsFilter> filters)? or,
+    TResult Function(String field, Object value)? greaterOrEq,
+    TResult Function(String field, Object value)? lesserOrEq,
     TResult Function(CmsFilter filter)? not,
     required TResult orElse(),
   }) {
@@ -756,6 +810,8 @@ class _$CmsFilterContains implements CmsFilterContains {
     required TResult Function(CmsFilterInList value) inList,
     required TResult Function(CmsFilterAnd value) and,
     required TResult Function(CmsFilterOr value) or,
+    required TResult Function(CmsFilterGreaterOrEq value) greaterOrEq,
+    required TResult Function(CmsFilterLesserOrEq value) lesserOrEq,
     required TResult Function(CmsFilterNot value) not,
   }) {
     return containsString(this);
@@ -771,6 +827,8 @@ class _$CmsFilterContains implements CmsFilterContains {
     TResult? Function(CmsFilterInList value)? inList,
     TResult? Function(CmsFilterAnd value)? and,
     TResult? Function(CmsFilterOr value)? or,
+    TResult? Function(CmsFilterGreaterOrEq value)? greaterOrEq,
+    TResult? Function(CmsFilterLesserOrEq value)? lesserOrEq,
     TResult? Function(CmsFilterNot value)? not,
   }) {
     return containsString?.call(this);
@@ -786,6 +844,8 @@ class _$CmsFilterContains implements CmsFilterContains {
     TResult Function(CmsFilterInList value)? inList,
     TResult Function(CmsFilterAnd value)? and,
     TResult Function(CmsFilterOr value)? or,
+    TResult Function(CmsFilterGreaterOrEq value)? greaterOrEq,
+    TResult Function(CmsFilterLesserOrEq value)? lesserOrEq,
     TResult Function(CmsFilterNot value)? not,
     required TResult orElse(),
   }) {
@@ -895,6 +955,8 @@ class _$CmsFilterInList implements CmsFilterInList {
     required TResult Function(String field, List<Object> values) inList,
     required TResult Function(List<CmsFilter> filters) and,
     required TResult Function(List<CmsFilter> filters) or,
+    required TResult Function(String field, Object value) greaterOrEq,
+    required TResult Function(String field, Object value) lesserOrEq,
     required TResult Function(CmsFilter filter) not,
   }) {
     return inList(field, values);
@@ -911,6 +973,8 @@ class _$CmsFilterInList implements CmsFilterInList {
     TResult? Function(String field, List<Object> values)? inList,
     TResult? Function(List<CmsFilter> filters)? and,
     TResult? Function(List<CmsFilter> filters)? or,
+    TResult? Function(String field, Object value)? greaterOrEq,
+    TResult? Function(String field, Object value)? lesserOrEq,
     TResult? Function(CmsFilter filter)? not,
   }) {
     return inList?.call(field, values);
@@ -927,6 +991,8 @@ class _$CmsFilterInList implements CmsFilterInList {
     TResult Function(String field, List<Object> values)? inList,
     TResult Function(List<CmsFilter> filters)? and,
     TResult Function(List<CmsFilter> filters)? or,
+    TResult Function(String field, Object value)? greaterOrEq,
+    TResult Function(String field, Object value)? lesserOrEq,
     TResult Function(CmsFilter filter)? not,
     required TResult orElse(),
   }) {
@@ -946,6 +1012,8 @@ class _$CmsFilterInList implements CmsFilterInList {
     required TResult Function(CmsFilterInList value) inList,
     required TResult Function(CmsFilterAnd value) and,
     required TResult Function(CmsFilterOr value) or,
+    required TResult Function(CmsFilterGreaterOrEq value) greaterOrEq,
+    required TResult Function(CmsFilterLesserOrEq value) lesserOrEq,
     required TResult Function(CmsFilterNot value) not,
   }) {
     return inList(this);
@@ -961,6 +1029,8 @@ class _$CmsFilterInList implements CmsFilterInList {
     TResult? Function(CmsFilterInList value)? inList,
     TResult? Function(CmsFilterAnd value)? and,
     TResult? Function(CmsFilterOr value)? or,
+    TResult? Function(CmsFilterGreaterOrEq value)? greaterOrEq,
+    TResult? Function(CmsFilterLesserOrEq value)? lesserOrEq,
     TResult? Function(CmsFilterNot value)? not,
   }) {
     return inList?.call(this);
@@ -976,6 +1046,8 @@ class _$CmsFilterInList implements CmsFilterInList {
     TResult Function(CmsFilterInList value)? inList,
     TResult Function(CmsFilterAnd value)? and,
     TResult Function(CmsFilterOr value)? or,
+    TResult Function(CmsFilterGreaterOrEq value)? greaterOrEq,
+    TResult Function(CmsFilterLesserOrEq value)? lesserOrEq,
     TResult Function(CmsFilterNot value)? not,
     required TResult orElse(),
   }) {
@@ -1075,6 +1147,8 @@ class _$CmsFilterAnd implements CmsFilterAnd {
     required TResult Function(String field, List<Object> values) inList,
     required TResult Function(List<CmsFilter> filters) and,
     required TResult Function(List<CmsFilter> filters) or,
+    required TResult Function(String field, Object value) greaterOrEq,
+    required TResult Function(String field, Object value) lesserOrEq,
     required TResult Function(CmsFilter filter) not,
   }) {
     return and(filters);
@@ -1091,6 +1165,8 @@ class _$CmsFilterAnd implements CmsFilterAnd {
     TResult? Function(String field, List<Object> values)? inList,
     TResult? Function(List<CmsFilter> filters)? and,
     TResult? Function(List<CmsFilter> filters)? or,
+    TResult? Function(String field, Object value)? greaterOrEq,
+    TResult? Function(String field, Object value)? lesserOrEq,
     TResult? Function(CmsFilter filter)? not,
   }) {
     return and?.call(filters);
@@ -1107,6 +1183,8 @@ class _$CmsFilterAnd implements CmsFilterAnd {
     TResult Function(String field, List<Object> values)? inList,
     TResult Function(List<CmsFilter> filters)? and,
     TResult Function(List<CmsFilter> filters)? or,
+    TResult Function(String field, Object value)? greaterOrEq,
+    TResult Function(String field, Object value)? lesserOrEq,
     TResult Function(CmsFilter filter)? not,
     required TResult orElse(),
   }) {
@@ -1126,6 +1204,8 @@ class _$CmsFilterAnd implements CmsFilterAnd {
     required TResult Function(CmsFilterInList value) inList,
     required TResult Function(CmsFilterAnd value) and,
     required TResult Function(CmsFilterOr value) or,
+    required TResult Function(CmsFilterGreaterOrEq value) greaterOrEq,
+    required TResult Function(CmsFilterLesserOrEq value) lesserOrEq,
     required TResult Function(CmsFilterNot value) not,
   }) {
     return and(this);
@@ -1141,6 +1221,8 @@ class _$CmsFilterAnd implements CmsFilterAnd {
     TResult? Function(CmsFilterInList value)? inList,
     TResult? Function(CmsFilterAnd value)? and,
     TResult? Function(CmsFilterOr value)? or,
+    TResult? Function(CmsFilterGreaterOrEq value)? greaterOrEq,
+    TResult? Function(CmsFilterLesserOrEq value)? lesserOrEq,
     TResult? Function(CmsFilterNot value)? not,
   }) {
     return and?.call(this);
@@ -1156,6 +1238,8 @@ class _$CmsFilterAnd implements CmsFilterAnd {
     TResult Function(CmsFilterInList value)? inList,
     TResult Function(CmsFilterAnd value)? and,
     TResult Function(CmsFilterOr value)? or,
+    TResult Function(CmsFilterGreaterOrEq value)? greaterOrEq,
+    TResult Function(CmsFilterLesserOrEq value)? lesserOrEq,
     TResult Function(CmsFilterNot value)? not,
     required TResult orElse(),
   }) {
@@ -1253,6 +1337,8 @@ class _$CmsFilterOr implements CmsFilterOr {
     required TResult Function(String field, List<Object> values) inList,
     required TResult Function(List<CmsFilter> filters) and,
     required TResult Function(List<CmsFilter> filters) or,
+    required TResult Function(String field, Object value) greaterOrEq,
+    required TResult Function(String field, Object value) lesserOrEq,
     required TResult Function(CmsFilter filter) not,
   }) {
     return or(filters);
@@ -1269,6 +1355,8 @@ class _$CmsFilterOr implements CmsFilterOr {
     TResult? Function(String field, List<Object> values)? inList,
     TResult? Function(List<CmsFilter> filters)? and,
     TResult? Function(List<CmsFilter> filters)? or,
+    TResult? Function(String field, Object value)? greaterOrEq,
+    TResult? Function(String field, Object value)? lesserOrEq,
     TResult? Function(CmsFilter filter)? not,
   }) {
     return or?.call(filters);
@@ -1285,6 +1373,8 @@ class _$CmsFilterOr implements CmsFilterOr {
     TResult Function(String field, List<Object> values)? inList,
     TResult Function(List<CmsFilter> filters)? and,
     TResult Function(List<CmsFilter> filters)? or,
+    TResult Function(String field, Object value)? greaterOrEq,
+    TResult Function(String field, Object value)? lesserOrEq,
     TResult Function(CmsFilter filter)? not,
     required TResult orElse(),
   }) {
@@ -1304,6 +1394,8 @@ class _$CmsFilterOr implements CmsFilterOr {
     required TResult Function(CmsFilterInList value) inList,
     required TResult Function(CmsFilterAnd value) and,
     required TResult Function(CmsFilterOr value) or,
+    required TResult Function(CmsFilterGreaterOrEq value) greaterOrEq,
+    required TResult Function(CmsFilterLesserOrEq value) lesserOrEq,
     required TResult Function(CmsFilterNot value) not,
   }) {
     return or(this);
@@ -1319,6 +1411,8 @@ class _$CmsFilterOr implements CmsFilterOr {
     TResult? Function(CmsFilterInList value)? inList,
     TResult? Function(CmsFilterAnd value)? and,
     TResult? Function(CmsFilterOr value)? or,
+    TResult? Function(CmsFilterGreaterOrEq value)? greaterOrEq,
+    TResult? Function(CmsFilterLesserOrEq value)? lesserOrEq,
     TResult? Function(CmsFilterNot value)? not,
   }) {
     return or?.call(this);
@@ -1334,6 +1428,8 @@ class _$CmsFilterOr implements CmsFilterOr {
     TResult Function(CmsFilterInList value)? inList,
     TResult Function(CmsFilterAnd value)? and,
     TResult Function(CmsFilterOr value)? or,
+    TResult Function(CmsFilterGreaterOrEq value)? greaterOrEq,
+    TResult Function(CmsFilterLesserOrEq value)? lesserOrEq,
     TResult Function(CmsFilterNot value)? not,
     required TResult orElse(),
   }) {
@@ -1350,6 +1446,392 @@ abstract class CmsFilterOr implements CmsFilter {
   List<CmsFilter> get filters;
   @JsonKey(ignore: true)
   _$$CmsFilterOrCopyWith<_$CmsFilterOr> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$CmsFilterGreaterOrEqCopyWith<$Res> {
+  factory _$$CmsFilterGreaterOrEqCopyWith(_$CmsFilterGreaterOrEq value,
+          $Res Function(_$CmsFilterGreaterOrEq) then) =
+      __$$CmsFilterGreaterOrEqCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String field, Object value});
+}
+
+/// @nodoc
+class __$$CmsFilterGreaterOrEqCopyWithImpl<$Res>
+    extends _$CmsFilterCopyWithImpl<$Res, _$CmsFilterGreaterOrEq>
+    implements _$$CmsFilterGreaterOrEqCopyWith<$Res> {
+  __$$CmsFilterGreaterOrEqCopyWithImpl(_$CmsFilterGreaterOrEq _value,
+      $Res Function(_$CmsFilterGreaterOrEq) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? field = null,
+    Object? value = null,
+  }) {
+    return _then(_$CmsFilterGreaterOrEq(
+      null == field
+          ? _value.field
+          : field // ignore: cast_nullable_to_non_nullable
+              as String,
+      null == value ? _value.value : value,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$CmsFilterGreaterOrEq implements CmsFilterGreaterOrEq {
+  const _$CmsFilterGreaterOrEq(this.field, this.value);
+
+  @override
+  final String field;
+  @override
+  final Object value;
+
+  @override
+  String toString() {
+    return 'CmsFilter.greaterOrEq(field: $field, value: $value)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CmsFilterGreaterOrEq &&
+            (identical(other.field, field) || other.field == field) &&
+            const DeepCollectionEquality().equals(other.value, value));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, field, const DeepCollectionEquality().hash(value));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$CmsFilterGreaterOrEqCopyWith<_$CmsFilterGreaterOrEq> get copyWith =>
+      __$$CmsFilterGreaterOrEqCopyWithImpl<_$CmsFilterGreaterOrEq>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() all,
+    required TResult Function(String field, Object? value) equals,
+    required TResult Function(String field, Object value) notEquals,
+    required TResult Function(String field, String value, bool caseSensitive)
+        containsString,
+    required TResult Function(String field, List<Object> values) inList,
+    required TResult Function(List<CmsFilter> filters) and,
+    required TResult Function(List<CmsFilter> filters) or,
+    required TResult Function(String field, Object value) greaterOrEq,
+    required TResult Function(String field, Object value) lesserOrEq,
+    required TResult Function(CmsFilter filter) not,
+  }) {
+    return greaterOrEq(field, value);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? all,
+    TResult? Function(String field, Object? value)? equals,
+    TResult? Function(String field, Object value)? notEquals,
+    TResult? Function(String field, String value, bool caseSensitive)?
+        containsString,
+    TResult? Function(String field, List<Object> values)? inList,
+    TResult? Function(List<CmsFilter> filters)? and,
+    TResult? Function(List<CmsFilter> filters)? or,
+    TResult? Function(String field, Object value)? greaterOrEq,
+    TResult? Function(String field, Object value)? lesserOrEq,
+    TResult? Function(CmsFilter filter)? not,
+  }) {
+    return greaterOrEq?.call(field, value);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? all,
+    TResult Function(String field, Object? value)? equals,
+    TResult Function(String field, Object value)? notEquals,
+    TResult Function(String field, String value, bool caseSensitive)?
+        containsString,
+    TResult Function(String field, List<Object> values)? inList,
+    TResult Function(List<CmsFilter> filters)? and,
+    TResult Function(List<CmsFilter> filters)? or,
+    TResult Function(String field, Object value)? greaterOrEq,
+    TResult Function(String field, Object value)? lesserOrEq,
+    TResult Function(CmsFilter filter)? not,
+    required TResult orElse(),
+  }) {
+    if (greaterOrEq != null) {
+      return greaterOrEq(field, value);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(CmsFilterAll value) all,
+    required TResult Function(CmsFilterEquals value) equals,
+    required TResult Function(CmsFilterNotEquals value) notEquals,
+    required TResult Function(CmsFilterContains value) containsString,
+    required TResult Function(CmsFilterInList value) inList,
+    required TResult Function(CmsFilterAnd value) and,
+    required TResult Function(CmsFilterOr value) or,
+    required TResult Function(CmsFilterGreaterOrEq value) greaterOrEq,
+    required TResult Function(CmsFilterLesserOrEq value) lesserOrEq,
+    required TResult Function(CmsFilterNot value) not,
+  }) {
+    return greaterOrEq(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(CmsFilterAll value)? all,
+    TResult? Function(CmsFilterEquals value)? equals,
+    TResult? Function(CmsFilterNotEquals value)? notEquals,
+    TResult? Function(CmsFilterContains value)? containsString,
+    TResult? Function(CmsFilterInList value)? inList,
+    TResult? Function(CmsFilterAnd value)? and,
+    TResult? Function(CmsFilterOr value)? or,
+    TResult? Function(CmsFilterGreaterOrEq value)? greaterOrEq,
+    TResult? Function(CmsFilterLesserOrEq value)? lesserOrEq,
+    TResult? Function(CmsFilterNot value)? not,
+  }) {
+    return greaterOrEq?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(CmsFilterAll value)? all,
+    TResult Function(CmsFilterEquals value)? equals,
+    TResult Function(CmsFilterNotEquals value)? notEquals,
+    TResult Function(CmsFilterContains value)? containsString,
+    TResult Function(CmsFilterInList value)? inList,
+    TResult Function(CmsFilterAnd value)? and,
+    TResult Function(CmsFilterOr value)? or,
+    TResult Function(CmsFilterGreaterOrEq value)? greaterOrEq,
+    TResult Function(CmsFilterLesserOrEq value)? lesserOrEq,
+    TResult Function(CmsFilterNot value)? not,
+    required TResult orElse(),
+  }) {
+    if (greaterOrEq != null) {
+      return greaterOrEq(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class CmsFilterGreaterOrEq implements CmsFilter {
+  const factory CmsFilterGreaterOrEq(final String field, final Object value) =
+      _$CmsFilterGreaterOrEq;
+
+  String get field;
+  Object get value;
+  @JsonKey(ignore: true)
+  _$$CmsFilterGreaterOrEqCopyWith<_$CmsFilterGreaterOrEq> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$CmsFilterLesserOrEqCopyWith<$Res> {
+  factory _$$CmsFilterLesserOrEqCopyWith(_$CmsFilterLesserOrEq value,
+          $Res Function(_$CmsFilterLesserOrEq) then) =
+      __$$CmsFilterLesserOrEqCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String field, Object value});
+}
+
+/// @nodoc
+class __$$CmsFilterLesserOrEqCopyWithImpl<$Res>
+    extends _$CmsFilterCopyWithImpl<$Res, _$CmsFilterLesserOrEq>
+    implements _$$CmsFilterLesserOrEqCopyWith<$Res> {
+  __$$CmsFilterLesserOrEqCopyWithImpl(
+      _$CmsFilterLesserOrEq _value, $Res Function(_$CmsFilterLesserOrEq) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? field = null,
+    Object? value = null,
+  }) {
+    return _then(_$CmsFilterLesserOrEq(
+      null == field
+          ? _value.field
+          : field // ignore: cast_nullable_to_non_nullable
+              as String,
+      null == value ? _value.value : value,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$CmsFilterLesserOrEq implements CmsFilterLesserOrEq {
+  const _$CmsFilterLesserOrEq(this.field, this.value);
+
+  @override
+  final String field;
+  @override
+  final Object value;
+
+  @override
+  String toString() {
+    return 'CmsFilter.lesserOrEq(field: $field, value: $value)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CmsFilterLesserOrEq &&
+            (identical(other.field, field) || other.field == field) &&
+            const DeepCollectionEquality().equals(other.value, value));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, field, const DeepCollectionEquality().hash(value));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$CmsFilterLesserOrEqCopyWith<_$CmsFilterLesserOrEq> get copyWith =>
+      __$$CmsFilterLesserOrEqCopyWithImpl<_$CmsFilterLesserOrEq>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() all,
+    required TResult Function(String field, Object? value) equals,
+    required TResult Function(String field, Object value) notEquals,
+    required TResult Function(String field, String value, bool caseSensitive)
+        containsString,
+    required TResult Function(String field, List<Object> values) inList,
+    required TResult Function(List<CmsFilter> filters) and,
+    required TResult Function(List<CmsFilter> filters) or,
+    required TResult Function(String field, Object value) greaterOrEq,
+    required TResult Function(String field, Object value) lesserOrEq,
+    required TResult Function(CmsFilter filter) not,
+  }) {
+    return lesserOrEq(field, value);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? all,
+    TResult? Function(String field, Object? value)? equals,
+    TResult? Function(String field, Object value)? notEquals,
+    TResult? Function(String field, String value, bool caseSensitive)?
+        containsString,
+    TResult? Function(String field, List<Object> values)? inList,
+    TResult? Function(List<CmsFilter> filters)? and,
+    TResult? Function(List<CmsFilter> filters)? or,
+    TResult? Function(String field, Object value)? greaterOrEq,
+    TResult? Function(String field, Object value)? lesserOrEq,
+    TResult? Function(CmsFilter filter)? not,
+  }) {
+    return lesserOrEq?.call(field, value);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? all,
+    TResult Function(String field, Object? value)? equals,
+    TResult Function(String field, Object value)? notEquals,
+    TResult Function(String field, String value, bool caseSensitive)?
+        containsString,
+    TResult Function(String field, List<Object> values)? inList,
+    TResult Function(List<CmsFilter> filters)? and,
+    TResult Function(List<CmsFilter> filters)? or,
+    TResult Function(String field, Object value)? greaterOrEq,
+    TResult Function(String field, Object value)? lesserOrEq,
+    TResult Function(CmsFilter filter)? not,
+    required TResult orElse(),
+  }) {
+    if (lesserOrEq != null) {
+      return lesserOrEq(field, value);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(CmsFilterAll value) all,
+    required TResult Function(CmsFilterEquals value) equals,
+    required TResult Function(CmsFilterNotEquals value) notEquals,
+    required TResult Function(CmsFilterContains value) containsString,
+    required TResult Function(CmsFilterInList value) inList,
+    required TResult Function(CmsFilterAnd value) and,
+    required TResult Function(CmsFilterOr value) or,
+    required TResult Function(CmsFilterGreaterOrEq value) greaterOrEq,
+    required TResult Function(CmsFilterLesserOrEq value) lesserOrEq,
+    required TResult Function(CmsFilterNot value) not,
+  }) {
+    return lesserOrEq(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(CmsFilterAll value)? all,
+    TResult? Function(CmsFilterEquals value)? equals,
+    TResult? Function(CmsFilterNotEquals value)? notEquals,
+    TResult? Function(CmsFilterContains value)? containsString,
+    TResult? Function(CmsFilterInList value)? inList,
+    TResult? Function(CmsFilterAnd value)? and,
+    TResult? Function(CmsFilterOr value)? or,
+    TResult? Function(CmsFilterGreaterOrEq value)? greaterOrEq,
+    TResult? Function(CmsFilterLesserOrEq value)? lesserOrEq,
+    TResult? Function(CmsFilterNot value)? not,
+  }) {
+    return lesserOrEq?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(CmsFilterAll value)? all,
+    TResult Function(CmsFilterEquals value)? equals,
+    TResult Function(CmsFilterNotEquals value)? notEquals,
+    TResult Function(CmsFilterContains value)? containsString,
+    TResult Function(CmsFilterInList value)? inList,
+    TResult Function(CmsFilterAnd value)? and,
+    TResult Function(CmsFilterOr value)? or,
+    TResult Function(CmsFilterGreaterOrEq value)? greaterOrEq,
+    TResult Function(CmsFilterLesserOrEq value)? lesserOrEq,
+    TResult Function(CmsFilterNot value)? not,
+    required TResult orElse(),
+  }) {
+    if (lesserOrEq != null) {
+      return lesserOrEq(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class CmsFilterLesserOrEq implements CmsFilter {
+  const factory CmsFilterLesserOrEq(final String field, final Object value) =
+      _$CmsFilterLesserOrEq;
+
+  String get field;
+  Object get value;
+  @JsonKey(ignore: true)
+  _$$CmsFilterLesserOrEqCopyWith<_$CmsFilterLesserOrEq> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -1435,6 +1917,8 @@ class _$CmsFilterNot implements CmsFilterNot {
     required TResult Function(String field, List<Object> values) inList,
     required TResult Function(List<CmsFilter> filters) and,
     required TResult Function(List<CmsFilter> filters) or,
+    required TResult Function(String field, Object value) greaterOrEq,
+    required TResult Function(String field, Object value) lesserOrEq,
     required TResult Function(CmsFilter filter) not,
   }) {
     return not(filter);
@@ -1451,6 +1935,8 @@ class _$CmsFilterNot implements CmsFilterNot {
     TResult? Function(String field, List<Object> values)? inList,
     TResult? Function(List<CmsFilter> filters)? and,
     TResult? Function(List<CmsFilter> filters)? or,
+    TResult? Function(String field, Object value)? greaterOrEq,
+    TResult? Function(String field, Object value)? lesserOrEq,
     TResult? Function(CmsFilter filter)? not,
   }) {
     return not?.call(filter);
@@ -1467,6 +1953,8 @@ class _$CmsFilterNot implements CmsFilterNot {
     TResult Function(String field, List<Object> values)? inList,
     TResult Function(List<CmsFilter> filters)? and,
     TResult Function(List<CmsFilter> filters)? or,
+    TResult Function(String field, Object value)? greaterOrEq,
+    TResult Function(String field, Object value)? lesserOrEq,
     TResult Function(CmsFilter filter)? not,
     required TResult orElse(),
   }) {
@@ -1486,6 +1974,8 @@ class _$CmsFilterNot implements CmsFilterNot {
     required TResult Function(CmsFilterInList value) inList,
     required TResult Function(CmsFilterAnd value) and,
     required TResult Function(CmsFilterOr value) or,
+    required TResult Function(CmsFilterGreaterOrEq value) greaterOrEq,
+    required TResult Function(CmsFilterLesserOrEq value) lesserOrEq,
     required TResult Function(CmsFilterNot value) not,
   }) {
     return not(this);
@@ -1501,6 +1991,8 @@ class _$CmsFilterNot implements CmsFilterNot {
     TResult? Function(CmsFilterInList value)? inList,
     TResult? Function(CmsFilterAnd value)? and,
     TResult? Function(CmsFilterOr value)? or,
+    TResult? Function(CmsFilterGreaterOrEq value)? greaterOrEq,
+    TResult? Function(CmsFilterLesserOrEq value)? lesserOrEq,
     TResult? Function(CmsFilterNot value)? not,
   }) {
     return not?.call(this);
@@ -1516,6 +2008,8 @@ class _$CmsFilterNot implements CmsFilterNot {
     TResult Function(CmsFilterInList value)? inList,
     TResult Function(CmsFilterAnd value)? and,
     TResult Function(CmsFilterOr value)? or,
+    TResult Function(CmsFilterGreaterOrEq value)? greaterOrEq,
+    TResult Function(CmsFilterLesserOrEq value)? lesserOrEq,
     TResult Function(CmsFilterNot value)? not,
     required TResult orElse(),
   }) {

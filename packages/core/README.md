@@ -1,9 +1,11 @@
+<img src="https://github.com/Utopia-USS/utopia_cms/raw/master/packages/core/cms_core.png" width = "915" height = "516"/>
+
 # Utopia CMS (Core)
 
 The Utopia CMS Core package is a data visualization library written in Flutter for creating beautiful,
 animated, high-performance and flexible CMS panels, which are used to manage databases for mobile apps.
 
-<img src="https://github.com/Utopia-USS/utopia_cms/raw/master/packages/core/video.gif"/>
+<img src="https://github.com/Utopia-USS/utopia_cms/raw/master/packages/core/video.gif" width = "960" height = "425"/>
 
 ## Motivation
 
@@ -77,8 +79,8 @@ Modifies the styling of the Widgets, determines fonts and colors.
 ### CmsTable
 
 This is a standalone widget for table-based content management. By default, it displays a sortable and filterable table,
-creates edit and create subpages, and supports item removal. The data is provided by `CmsDelegate` and displayed by
-`CmsEntry`.
+introduces 25 item infinite-scroll paging, creates edit and create subpages, and supports item removal. The data is
+provided by `CmsDelegate` and displayed by `CmsEntry`. Requests may be filtered via `CmsFilterEntry`.
 
 ### CmsEntry
 
@@ -92,10 +94,23 @@ basic data types.
 | [CmsDropdownEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsDropdownEntry-class.html)             | For managing set of options and singular choice |
 | [CmsBoolEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsBoolEntry-class.html)                     | Handles bool variables                          |
 | [CmsDateEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsDateEntry-class.html)                     | Handles Date variables                          |
+| [CmsMediaEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsMediaEntry-class.html)                   | Handles files (img, vid, doc, unknown)          |
 | [CmsToManyDropdownEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsToManyDropdownEntry-class.html) | M2M relationships multi selection dropdown      |
 
 You can create custom entries by referring to the implementation of any primitive and the
 [CmsEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsEntry-class.html)
+
+### CmsFilterEntry
+
+This interface handles filtering fields of the CmsTable.
+
+| Name                                                                                                               | Description                        |
+|--------------------------------------------------------------------------------------------------------------------|------------------------------------|
+| [CmsFilterSearchEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsFilterSearchEntry-class.html) | Handles generic String full search |
+| [CmsFilterDateEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsFilterDateEntry-class.html)     | Handles date ranges                |
+
+You can create custom entries by referring to the implementation of any primitive and the
+[CmsFilterEntry](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsFilterEntry-class.html)
 
 ### CmsDelegate
 
@@ -134,6 +149,46 @@ The library provides the following existing solutions for relationships:
 | Existing `CmsToManyDelegate` implementations                | Source                                                          |
 |-------------------------------------------------------------|-----------------------------------------------------------------|
 | `CmsHasuraOneToManyDelegate`, `CmsHasuraManyToManyDelegate` | [utopia_cms_hasura](https://pub.dev/packages/utopia_cms_hasura) |
+
+## Media
+
+Media such as images or videos are
+handled by [CmsMediaDelegate](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsMediaDelegate-class.html)
+which introduces upload and delete functions.
+
+The library provides no existing generic solutions for relationships yet, but here's an example
+
+```
+class FileDelegate implements CmsMediaDelegate {
+  final CmsGraphQLService graphQLService;
+  final GraphQLClient client;
+
+  const FileDelegate(this.graphQLService, this.client);
+
+  Future<({String downloadUrl, CmsFileRef ref})> upload(XFile file) async {
+    final (uploadUrl, downloadUrl) = await _createAttachment(mimeType: file.mimeType!);
+    await _upload(uploadUrl, file);
+    return (downloadUrl: downloadUrl, ref: "XD");
+  }
+
+  Future<(String, String)> _createAttachment({required String mimeType}) async {
+    final result = await graphQLService.mutate(
+      client,
+      name: 'createAttachment',
+      arguments: {'data': {'contentType': mimeType}.toValueNodeUnsafe()},
+      fields: {CmsGraphQLField('uploadUrl'), CmsGraphQLField('downloadUrl')},
+    );
+    result as Map<String, dynamic>;
+    return (result['uploadUrl'] as String, result['downloadUrl'] as String);
+  }
+
+  Future<void> _upload(String url, XFile file) async {
+    final webFile = await HttpRequest.request(file.path, responseType: 'blob');
+    final request = await HttpRequest.request(url, method: 'PUT', mimeType: file.mimeType!, sendData: webFile.response);
+    if(request.status != HttpStatus.ok) throw Exception("Failed to upload");
+  }
+}
+```
 
 ## Widgets
 

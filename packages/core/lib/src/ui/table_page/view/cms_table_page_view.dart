@@ -3,21 +3,24 @@ import 'dart:async';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry.dart';
+import 'package:utopia_cms/src/model/filter_entry/cms_filter_entry.dart';
 import 'package:utopia_cms/src/model/table_action/cms_table_action.dart';
-import 'package:utopia_cms/src/ui/common/button/cms_button.dart';
-import 'package:utopia_cms/src/ui/common/header/cms_header.dart';
-import 'package:utopia_cms/src/ui/common/loading/cms_loader.dart';
-import 'package:utopia_cms/src/ui/common/loading/cms_mock_loading_box.dart';
-import 'package:utopia_cms/src/ui/common/table/cms_table.dart';
 import 'package:utopia_cms/src/ui/table_page/state/cms_table_page_state.dart';
 import 'package:utopia_cms/src/ui/table_page/widget/cms_table_actions.dart';
+import 'package:utopia_cms/src/ui/widget/button/cms_button.dart';
+import 'package:utopia_cms/src/ui/widget/header/cms_header.dart';
+import 'package:utopia_cms/src/ui/widget/loading/cms_loader.dart';
+import 'package:utopia_cms/src/ui/widget/loading/cms_mock_loading_box.dart';
+import 'package:utopia_cms/src/ui/widget/table/cms_table.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
+import 'package:utopia_cms/src/util/entries_extensions.dart';
 import 'package:utopia_hooks/utopia_hooks.dart';
 import 'package:utopia_widgets/misc/multi_widget.dart';
 
 class CmsTablePageView extends HookWidget {
   final CmsTablePageState state;
   final IList<CmsEntry<dynamic>> entries;
+  final IList<CmsFilterEntry<dynamic>> filterEntries;
   final IList<CmsTableAction> customActions;
   final String title;
 
@@ -27,7 +30,10 @@ class CmsTablePageView extends HookWidget {
     required this.entries,
     required this.title,
     required this.customActions,
+    required this.filterEntries,
   });
+
+  static const double _filterWidthFactor = 120.0;
 
   @override
   Widget build(BuildContext context) {
@@ -77,17 +83,44 @@ class CmsTablePageView extends HookWidget {
     //todo revisit text
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 36.0),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CmsHeader(text: title),
-          const Spacer(),
-          if (state.params.canCreate)
-            CmsButton(
-              maxWidth: context.theme.shortButtonWidth,
-              onTap: state.onCreatePressed,
-              dense: true,
-              child: const Text("Create"),
-            ),
+          Row(
+            children: [
+              CmsHeader(text: title),
+              const Spacer(),
+              if (state.params.canCreate)
+                CmsButton(
+                  maxWidth: context.theme.shortButtonWidth,
+                  onTap: state.onCreatePressed,
+                  dense: true,
+                  child: const Text("Create"),
+                ),
+            ],
+          ),
+          SizedBox(height: 12),
+          Row(
+            children: filterEntries.map(
+              (e) {
+                return Flexible(
+                  key: Key(e.entryKey),
+                  flex: e.flex,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 12.0),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: _filterWidthFactor * e.flex),
+                      child: e.buildField(
+                        context: context,
+                        value: e.fromJson(state.filterValues[e.entryKey ?? '']),
+                        onChanged: (value) => state.onFilterChanged(e.entryKey, e.toJson(value)),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ).toList(),
+          )
         ],
       ),
     );
@@ -95,13 +128,13 @@ class CmsTablePageView extends HookWidget {
 
   Widget _buildTable(BuildContext context) {
     return CmsTable(
-      onManagePressed: state.params.canEdit ? state.onEditPressed : null,
+      onManagePressed: state.onEditPressed,
       scrollController: state.scrollController,
       values: state.items,
-      entries: entries,
+      entries: entries.pinned,
       onSortPressed: state.onSortPressed,
       currentSortParams: state.currentSortingParams,
-      actionsBuilder: !state.hasDefaultActions && customActions.isNotEmpty
+      actionsBuilder: !state.hasDefaultActions && customActions.isEmpty
           ? null
           : (e, index) {
               ///workaround: force actions to the end of the [DataTable]
@@ -109,7 +142,7 @@ class CmsTablePageView extends HookWidget {
                 value: e,
                 onUpdate: (value) => state.updateItem(value, index),
                 actions: [
-                  if (state.params.canEdit) _buildManageAction(index),
+                  _buildManageAction(index),
                   if (customActions.isNotEmpty) ...customActions,
                   if (state.params.canDelete) _buildDeleteAction(index),
                 ],

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry_modifier.dart';
-import 'package:utopia_cms/src/ui/common/date_picker/cms_date_picker.dart';
-import 'package:utopia_cms/src/ui/common/table/cms_table_preview_text.dart';
+import 'package:utopia_cms/src/ui/widget/date_picker/cms_date_picker.dart';
+import 'package:utopia_cms/src/ui/widget/table/cms_table_preview_text.dart';
 import 'package:utopia_cms/src/util/date_time_extension.dart';
 import 'package:utopia_utils/utopia_utils.dart';
 

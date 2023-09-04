@@ -3,8 +3,9 @@ import 'dart:math';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry.dart';
-import 'package:utopia_cms/src/ui/common/button/cms_button.dart';
-import 'package:utopia_cms/src/ui/common/header/cms_header.dart';
+import 'package:utopia_cms/src/ui/widget/button/cms_button.dart';
+import 'package:utopia_cms/src/ui/widget/header/cms_header.dart';
+import 'package:utopia_cms/src/ui/widget/header/cms_title.dart';
 import 'package:utopia_cms/src/ui/item_management/state/cms_item_management_state.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
 import 'package:utopia_cms/src/util/entries_extensions.dart';
@@ -81,9 +82,12 @@ class CmsItemManagementView extends HookWidget {
         slivers: [
           const SliverToBoxAdapter(child: SizedBox(height: 48)),
           SliverToBoxAdapter(
-            child: CmsHeader(
-              text: state.isEdit ? "Manage item" : "Create new",
-              navigateBack: true,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 12.0),
+              child: CmsHeader(
+                text: _buildHeader(),
+                navigateBack: true,
+              ),
             ),
           ),
           if (state.isEdit && (readOnlyExpanded.isNotEmpty || readOnlyShort.isNotEmpty)) ...[
@@ -103,6 +107,11 @@ class CmsItemManagementView extends HookWidget {
         ],
       );
     });
+  }
+  String _buildHeader(){
+    if(!state.isEdit) return "Create new";
+    if(state.canCreate) return "Manage item";
+    return "Item details";
   }
 
   SliverList _buildNestedSection(IList<CmsEntry<dynamic>> entries, {bool readOnly = false, bool canNest = true}) {
@@ -177,6 +186,7 @@ class CmsItemManagementView extends HookWidget {
                 child: const Text("Delete"),
               ),
             const SizedBox(width: 12),
+            if(state.canCreate || !state.isEdit)
             CmsButton(
               maxWidth: context.theme.shortButtonWidth,
               onTap: state.onSubmit,
@@ -192,13 +202,11 @@ class CmsItemManagementView extends HookWidget {
   }
 
   SliverToBoxAdapter _buildTitle(String title, BuildContext context) {
+    if(!state.canCreate) return const SliverToBoxAdapter();
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 16, top: 32),
-        child: Text(
-          title,
-          style: context.textStyles.title,
-        ),
+        padding: const EdgeInsets.only(top: 32),
+        child: CmsTitle(title: title),
       ),
     );
   }

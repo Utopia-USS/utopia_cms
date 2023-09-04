@@ -18,12 +18,12 @@ extension DateTimeExtension on DateTime {
   }
 
   String toDisplayString() {
-    final dateFormat = DateFormat("dd MMMM yyyy HH:mm", 'en_US');
+    final dateFormat = DateFormat("dd MMM yyyy HH:mm", 'en_US');
     return dateFormat.format(this);
   }
 
   String toDisplayStringWithoutHours() {
-    final dateFormat = DateFormat("dd MMMM yyyy", 'en_US');
+    final dateFormat = DateFormat("dd MMM yyyy", 'en_US');
     return dateFormat.format(this);
   }
 
