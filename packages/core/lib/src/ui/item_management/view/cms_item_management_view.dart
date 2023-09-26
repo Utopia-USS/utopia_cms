@@ -3,10 +3,10 @@ import 'dart:math';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry.dart';
+import 'package:utopia_cms/src/ui/item_management/state/cms_item_management_state.dart';
 import 'package:utopia_cms/src/ui/widget/button/cms_button.dart';
 import 'package:utopia_cms/src/ui/widget/header/cms_header.dart';
 import 'package:utopia_cms/src/ui/widget/header/cms_title.dart';
-import 'package:utopia_cms/src/ui/item_management/state/cms_item_management_state.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
 import 'package:utopia_cms/src/util/entries_extensions.dart';
 import 'package:utopia_cms/src/util/map_extensions.dart';
@@ -71,12 +71,17 @@ class CmsItemManagementView extends HookWidget {
 
   Widget _buildScrollView(bool canNest) {
     return HookBuilder(builder: (context) {
-      final readOnlyShort = useMemoized(() => state.entries.readOnly.where((e) => !e.isExpanded).toIList());
-      final readOnlyExpanded = useMemoized(() => state.entries.readOnly.where((e) => e.isExpanded).toIList());
-      final editableShort =
-          useMemoized(() => state.entries.editable(isCreate: !state.isEdit).where((e) => !e.isExpanded)).toIList();
-      final editableExpanded =
-          useMemoized(() => state.entries.editable(isCreate: !state.isEdit).where((e) => e.isExpanded).toIList());
+      final readOnlyShort = useMemoized(
+          () => state.entries.readOnly(isPageEditable: state.params.canEdit).where((e) => !e.isExpanded).toIList());
+      final readOnlyExpanded = useMemoized(
+          () => state.entries.readOnly(isPageEditable: state.params.canEdit).where((e) => e.isExpanded).toIList());
+      final editableShort = useMemoized(() => state.entries
+          .editable(isCreate: !state.isEdit, isPageEditable: state.params.canEdit)
+          .where((e) => !e.isExpanded)).toIList();
+      final editableExpanded = useMemoized(() => state.entries
+          .editable(isCreate: !state.isEdit, isPageEditable: state.params.canEdit)
+          .where((e) => e.isExpanded)
+          .toIList());
       return CustomScrollView(
         controller: state.scrollController,
         slivers: [
@@ -108,9 +113,10 @@ class CmsItemManagementView extends HookWidget {
       );
     });
   }
-  String _buildHeader(){
-    if(!state.isEdit) return "Create new";
-    if(state.canCreate) return "Manage item";
+
+  String _buildHeader() {
+    if (!state.isEdit) return "Create new";
+    if (state.canCreate) return "Manage item";
     return "Item details";
   }
 
@@ -186,15 +192,15 @@ class CmsItemManagementView extends HookWidget {
                 child: const Text("Delete"),
               ),
             const SizedBox(width: 12),
-            if(state.canCreate || !state.isEdit)
-            CmsButton(
-              maxWidth: context.theme.shortButtonWidth,
-              onTap: state.onSubmit,
-              loading: state.isUploading,
-              dense: true,
-              isEnabled: state.isButtonAvailable,
-              child: const Text("Continue"),
-            ),
+            if (state.canCreate || !state.isEdit)
+              CmsButton(
+                maxWidth: context.theme.shortButtonWidth,
+                onTap: state.onSubmit,
+                loading: state.isUploading,
+                dense: true,
+                isEnabled: state.isButtonAvailable,
+                child: const Text("Continue"),
+              ),
           ],
         ),
       ),
@@ -202,7 +208,7 @@ class CmsItemManagementView extends HookWidget {
   }
 
   SliverToBoxAdapter _buildTitle(String title, BuildContext context) {
-    if(!state.canCreate) return const SliverToBoxAdapter();
+    if (!state.canCreate) return const SliverToBoxAdapter();
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.only(top: 32),

@@ -8,7 +8,7 @@ import 'package:utopia_cms/src/ui/widget/table/cms_table_preview_text.dart';
 import 'package:utopia_cms/src/ui/widget/text_field/cms_text_field.dart';
 
 /// [CmsEntry] for handling basic String values
-class CmsTextEntry extends CmsEntry<String> {
+class CmsTextEntry extends CmsEntry<String?> {
   final int maxLength;
   final int maxLines;
 
@@ -47,7 +47,7 @@ class CmsTextEntry extends CmsEntry<String> {
   Widget buildEditField({
     required BuildContext context,
     required FutureOr<String>? value,
-    required void Function(String value) onChanged,
+    required void Function(String? value) onChanged,
   }) {
     return CmsTextField(
       key: Key(key),

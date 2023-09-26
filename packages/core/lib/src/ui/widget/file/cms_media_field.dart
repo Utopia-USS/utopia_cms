@@ -12,7 +12,7 @@ class CmsMediaField extends HookWidget {
   final dynamic Function(String url, XFile file)? valueBuilder;
   final CmsMediaDelegate delegate;
   final String label;
-  final void Function(Iterable<dynamic>) onChanged;
+  final void Function(Iterable<dynamic>?) onChanged;
   final Iterable<dynamic>? initialValues;
   final List<CmsMediaType> supportedMedia;
   final CmsMediaType Function(dynamic object) mediaTypeBuilder;

@@ -1,6 +1,7 @@
 import 'package:cross_file/cross_file.dart';
 import 'package:flutter/material.dart';
 import 'package:utopia_cms/src/ui/widget/table/cms_table_preview_media.dart';
+import 'package:utopia_cms/src/util/string_extensions.dart';
 import 'package:utopia_cms/utopia_cms.dart';
 
 /// [CmsEntry] for handling images
@@ -47,10 +48,10 @@ class CmsMediaEntry extends CmsEntry<Iterable<dynamic>?> {
   Widget buildEditField({
     required BuildContext context,
     required Iterable<dynamic>? value,
-    required void Function(Iterable<dynamic> value) onChanged,
+    required void Function(Iterable<dynamic>? value) onChanged,
   }) {
     return CmsMediaField(
-      label: label ?? key,
+      label: (label ?? key).modifyRequired(modifier.required),
       delegate: delegate,
       onChanged: onChanged,
       initialValues: value,

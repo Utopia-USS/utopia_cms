@@ -4,12 +4,13 @@ import 'package:utopia_cms/src/model/entry/primitives/cms_text_entry.dart';
 import 'package:utopia_utils/utopia_utils.dart';
 
 extension EntriesExtensions on IList<CmsEntry<dynamic>> {
-  IList<CmsEntry<dynamic>> editable({required bool isCreate}) =>
-      where((e) => e.editable || isCreate && e.initializable).toIList();
+  IList<CmsEntry<dynamic>> editable({required bool isCreate, required bool isPageEditable}) =>
+      !isPageEditable ? IList() : where((e) => e.editable || isCreate && e.initializable).toIList();
 
   IList<CmsEntry<dynamic>> get pinned => where((e) => e.pinned).toIList();
 
-  IList<CmsEntry<dynamic>> get readOnly => where((e) => !e.editable).toIList();
+  IList<CmsEntry<dynamic>> readOnly({required bool isPageEditable}) =>
+      !isPageEditable ? this : where((e) => !e.editable).toIList();
 
   IList<CmsEntry<dynamic>> get sorted {
     final short = <dynamic>[];

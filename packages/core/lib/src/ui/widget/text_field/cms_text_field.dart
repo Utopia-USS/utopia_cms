@@ -17,7 +17,7 @@ class CmsTextField extends HookWidget {
   final int lines;
   final bool readOnly;
 
-  final void Function(String) onChanged;
+  final void Function(String?) onChanged;
   final void Function()? onTap;
 
   const CmsTextField({
@@ -45,7 +45,7 @@ class CmsTextField extends HookWidget {
     final colors = context.colors;
     return StatelessTextEditingControllerWrapper(
       value: value,
-      onChanged: onChanged,
+      onChanged: (value) => onChanged(value.isEmpty ? null : value),
       child: (controller) => Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,

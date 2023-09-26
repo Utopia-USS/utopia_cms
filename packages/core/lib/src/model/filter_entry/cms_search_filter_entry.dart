@@ -9,7 +9,7 @@ import 'package:utopia_cms/src/util/json_map.dart';
 import 'package:utopia_cms/src/util/map_extensions.dart';
 
 /// [CmsFilterEntry] for handling basic search
-class CmsFilterSearchEntry extends CmsFilterEntry<String> {
+class CmsFilterSearchEntry extends CmsFilterEntry<String?> {
   final List<TextInputFormatter>? formatters;
   final List<String> filterKeys;
 
@@ -35,7 +35,7 @@ class CmsFilterSearchEntry extends CmsFilterEntry<String> {
   Widget buildField({
     required BuildContext context,
     required FutureOr<String>? value,
-    required void Function(String value) onChanged,
+    required void Function(String? value) onChanged,
   }) {
     return CmsTextField(
       key: Key(filterKeys.join()),

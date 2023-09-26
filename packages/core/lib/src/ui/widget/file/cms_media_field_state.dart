@@ -51,7 +51,7 @@ CmsMediaFieldState useCmsMediaFieldState({
   required CmsMediaDelegate delegate,
   required Iterable<dynamic>? initialValues,
   required List<CmsMediaType> supportedMedia,
-  required void Function(Iterable<dynamic> values) onChanged,
+  required void Function(Iterable<dynamic>? values) onChanged,
   required String Function(dynamic object)? urlBuilder,
   required CmsMediaType Function(dynamic object) mediaTypeBuilder,
   required NavigatorState navigator,
@@ -110,7 +110,7 @@ CmsMediaFieldState useCmsMediaFieldState({
 
   useSimpleEffect(() {
     final values = uploadedImagesState.value + initialImagesState.value;
-    onChanged(values.unlock);
+    onChanged(values.isEmpty ? null : values.unlock);
   }, [uploadedImagesState.value, initialImagesState.value]);
 
   final uploadedItems = initialImagesState.value + uploadedImagesState.value;

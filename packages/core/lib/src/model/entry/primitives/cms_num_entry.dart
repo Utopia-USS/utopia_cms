@@ -61,8 +61,14 @@ class CmsNumEntry extends CmsEntry<num?> {
           key: Key(key),
           value: fieldState.value,
           onChanged: (value) {
-            onChanged(num.tryParse(value));
-            fieldState.value = value;
+            if(value == null){
+              onChanged(null);
+              fieldState.value = '';
+            }else{
+              onChanged(num.tryParse(value));
+              fieldState.value = value;
+            }
+
           },
           formatters: isDecimal ? decimalInputFormatter : nonDecimalInputFormatter,
           keyboardType: TextInputType.numberWithOptions(decimal: isDecimal),
