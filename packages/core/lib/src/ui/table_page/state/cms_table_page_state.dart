@@ -103,6 +103,7 @@ CmsTablePageState useCmsTablePageState({
       }
     },
     keys: [sortingParamsState.value, filtersState.value],
+    debounceDuration: const Duration(milliseconds: 300),
   );
 
   void updateItem(JsonMap value, int index) {
