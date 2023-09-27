@@ -19,6 +19,7 @@ export 'src/model/entry/primitives/cms_media_entry.dart';
 export 'src/model/filter_entry/cms_date_filter_entry.dart';
 export 'src/model/filter_entry/cms_filter_entry.dart';
 export 'src/model/filter_entry/cms_search_filter_entry.dart';
+export 'src/model/table_action/cms_table_action.dart';
 export 'src/model/menu/cms_widget_menu_params.dart';
 export 'src/ui/cms_widget/cms_widget.dart';
 export 'src/ui/cms_widget/cms_widget_item.dart';
