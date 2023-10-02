@@ -1,3 +1,4 @@
+import 'package:utopia_cms/src/model/cms_functions_params.dart';
 import 'package:utopia_cms/src/model/table_action/cms_table_action.dart';
 import 'package:utopia_cms/src/ui/widget/table/cms_table.dart';
 import 'package:utopia_cms/src/ui/widget/table/cms_table_item.dart';
@@ -20,11 +21,15 @@ class CmsTableParams {
   /// If true [CmsTableAction] appears in the [CmsTableItem]
   final bool canEdit;
 
+  /// Initializes table with sorting params
+  final CmsFunctionsSortingParams? initialSortingParams;
+
 
   CmsTableParams({
     this.canEdit = true,
     this.canCreate = true,
     this.canDelete = true,
+    this.initialSortingParams,
   });
 
   static final CmsTableParams defaultParams = CmsTableParams();

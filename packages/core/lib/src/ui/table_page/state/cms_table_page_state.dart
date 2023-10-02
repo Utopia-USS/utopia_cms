@@ -56,7 +56,7 @@ CmsTablePageState useCmsTablePageState({
   required Future<bool?> Function() confirmDelete,
   required int? pagingLimit,
 }) {
-  final sortingParamsState = useState<CmsFunctionsSortingParams?>(null);
+  final sortingParamsState = useState<CmsFunctionsSortingParams?>(params.initialSortingParams);
 
   final pagingEnabledState = useState<bool>(true);
   final pagingOffsetState = useState<int>(0);
