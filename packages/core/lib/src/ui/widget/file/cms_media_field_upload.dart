@@ -1,15 +1,11 @@
 import 'package:cross_file/cross_file.dart';
-import 'package:cross_file_image/cross_file_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dropzone/flutter_dropzone.dart';
-import 'package:utopia_cms/src/ui/attachment_preview/cms_media_type.dart';
+import 'package:utopia_cms/src/delegate/media/cms_media_upload_res.dart';
 import 'package:utopia_cms/src/ui/widget/file/cms_media_field_state.dart';
 import 'package:utopia_cms/src/ui/widget/file/cms_media_field_wrapper.dart';
-import 'package:utopia_cms/src/ui/widget/header/cms_title.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
 import 'package:utopia_cms/utopia_cms.dart';
 import 'package:utopia_hooks/utopia_hooks.dart';
-import 'package:utopia_utils/utopia_utils.dart';
 
 class CmsFiledFieldUpload extends HookWidget {
   final CmsMediaFieldState state;
@@ -17,7 +13,7 @@ class CmsFiledFieldUpload extends HookWidget {
   final double size;
   final XFile file;
   final int index;
-  final dynamic Function(String url, XFile file)? valueBuilder;
+  final dynamic Function(CmsMediaUploadRes res, XFile file)? valueBuilder;
 
   const CmsFiledFieldUpload({
     super.key,
@@ -35,8 +31,8 @@ class CmsFiledFieldUpload extends HookWidget {
     useAutoComputedState(
       compute: () async {
         final result = await delegate.upload(file);
-        final enhancedResult = valueBuilder?.call(result.downloadUrl, file);
-        state.onUploaded(index, enhancedResult ?? result);
+        final enhancedResult = valueBuilder?.call(result, file);
+        state.onUploaded(index, enhancedResult ?? result.downloadUrl);
         uploadingState.value = false;
       },
       keys: [],

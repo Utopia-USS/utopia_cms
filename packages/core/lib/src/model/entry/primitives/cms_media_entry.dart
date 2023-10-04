@@ -1,5 +1,6 @@
 import 'package:cross_file/cross_file.dart';
 import 'package:flutter/material.dart';
+import 'package:utopia_cms/src/delegate/media/cms_media_upload_res.dart';
 import 'package:utopia_cms/src/ui/widget/table/cms_table_preview_media.dart';
 import 'package:utopia_cms/src/util/string_extensions.dart';
 import 'package:utopia_cms/utopia_cms.dart';
@@ -9,9 +10,16 @@ class CmsMediaEntry extends CmsEntry<Iterable<dynamic>?> {
   final CmsMediaDelegate delegate;
   final List<CmsMediaType> supportedMedia;
 
+  /// Function that determines [CmsMediaType] based on object's JsonMap
   final CmsMediaType Function(dynamic object) mediaTypeBuilder;
+
+  /// getter for url from object's JsonMap
   final String Function(dynamic object)? urlBuilder;
-  final dynamic Function(String url, XFile file)? valueBuilder;
+
+  /// Optional custom object created from upload response and file
+  ///
+  /// Entry returns String url if not provided
+  final dynamic Function(CmsMediaUploadRes res, XFile file)? valueBuilder;
 
   CmsMediaEntry({
     required this.key,

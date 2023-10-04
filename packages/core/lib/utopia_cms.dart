@@ -2,7 +2,8 @@ export 'package:utopia_cms/src/ui/attachment_preview/cms_media_type.dart';
 
 export 'src/delegate/cms_delegate.dart';
 export 'src/delegate/cms_to_many_delegate.dart';
-export 'src/delegate/cms_media_delegate.dart';
+export 'src/delegate/media/cms_media_delegate.dart';
+export 'src/delegate/media/cms_media_upload_res.dart';
 export 'src/model/cms_filter.dart';
 export 'src/model/cms_functions_params.dart';
 export 'src/model/cms_table_page_params.dart';
