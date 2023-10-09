@@ -6,13 +6,19 @@ class CmsFirebaseDelegate implements CmsDelegate {
 
   @override
   final String idKey;
+  final String media;
 
-  const CmsFirebaseDelegate(this.collection, {this.idKey = 'id'});
+  const CmsFirebaseDelegate(this.collection, {this.idKey = 'id', this.media = 'media'});
 
   @override
   Future<void> delete(JsonMap value) async {
     final id = value[idKey]! as String;
+    final storageUrl = value[media];
     final userRef = FirebaseFirestore.instance.collection(collection).doc(id);
+    if (storageUrl != null) {
+      for (final url in storageUrl)
+        await FirebaseStorage.instance.refFromURL(url).delete();
+    }
     await userRef.delete();
   }
 
