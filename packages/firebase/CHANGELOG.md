@@ -1,3 +1,7 @@
+## 0.1.1
+
+ - **FEAT**: read me branding.
+
 ## 0.1.0
 
 > Note: This release has breaking changes.

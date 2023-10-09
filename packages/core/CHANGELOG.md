@@ -1,3 +1,12 @@
+## 0.1.1
+
+ - **FEAT**: cms_core upload adjustments.
+ - **FEAT**: cms_core sorting fixes.
+ - **FEAT**: cms_core debounce to search added.
+ - **FEAT**: cms_table_action export.
+ - **FEAT**: fixes and adjustments.
+ - **FEAT**: read me branding.
+
 ## 0.1.0
 
 > Note: This release has breaking changes.

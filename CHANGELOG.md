@@ -3,6 +3,48 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-10-09
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`utopia_cms` - `v0.1.1`](#utopia_cms---v011)
+ - [`utopia_cms_firebase` - `v0.1.1`](#utopia_cms_firebase---v011)
+ - [`utopia_cms_graphql` - `v0.1.1`](#utopia_cms_graphql---v011)
+ - [`utopia_cms_hasura` - `v0.1.1`](#utopia_cms_hasura---v011)
+
+---
+
+#### `utopia_cms` - `v0.1.1`
+
+ - **FEAT**: cms_core upload adjustments.
+ - **FEAT**: cms_core sorting fixes.
+ - **FEAT**: cms_core debounce to search added.
+ - **FEAT**: cms_table_action export.
+ - **FEAT**: fixes and adjustments.
+ - **FEAT**: read me branding.
+
+#### `utopia_cms_firebase` - `v0.1.1`
+
+ - **FEAT**: read me branding.
+
+#### `utopia_cms_graphql` - `v0.1.1`
+
+ - **FEAT**: read me branding.
+
+#### `utopia_cms_hasura` - `v0.1.1`
+
+ - **FEAT**: cms_core sorting fixes.
+ - **FEAT**: read me branding.
+
+
 ## 2023-09-04
 
 ### Changes
