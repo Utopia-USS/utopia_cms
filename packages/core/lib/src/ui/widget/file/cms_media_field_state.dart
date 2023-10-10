@@ -15,12 +15,11 @@ import 'package:utopia_utils/utopia_utils.dart';
 
 class CmsMediaFieldState {
   final CmsMediaDelegate delegate;
-  final IList<XFile> newFiles;
-  final IList<dynamic> uploadedFiles;
+  /// if XFile it's a new one
+  final IList<dynamic> files;
 
   final MutableValue<bool> isHighlighted;
 
-  final int itemCount;
 
   final void Function(int index, dynamic value) onUploaded;
 
@@ -30,6 +29,7 @@ class CmsMediaFieldState {
   final Future<void> Function(dynamic) onDropFile; //in flutter_dropzone docs this variable has to be dynamic
   final Future<void> Function() onSelectFilePressed;
   final void Function(int index) onNavigateToPreview;
+  final void Function(int oldIndex, int newIndex) onReorder;
 
   const CmsMediaFieldState({
     required this.isHighlighted,
@@ -39,11 +39,10 @@ class CmsMediaFieldState {
     required this.onSelectFilePressed,
     required this.setHighlightedFalse,
     required this.setHighlightedTrue,
-    required this.newFiles,
-    required this.uploadedFiles,
     required this.onUploaded,
-    required this.itemCount,
     required this.onNavigateToPreview,
+    required this.onReorder,
+    required this.files,
   });
 }
 
@@ -59,9 +58,8 @@ CmsMediaFieldState useCmsMediaFieldState({
   final controller = useState<DropzoneViewController?>(null);
   final isHighlightedState = useState<bool>(false);
 
-  final imagesState = useState<IList<XFile>>(<XFile>[].lock);
-  final initialImagesState = useState<IList<dynamic>>(initialValues?.toIList() ?? IList());
-  final uploadedImagesState = useState<IList<dynamic>>(IList());
+  final filesState = useState<IList<dynamic>>(initialValues?.toIList() ?? IList());
+  final uploadedItems = filesState.value.where((e) => e is! XFile).toIList();
 
   final context = useContext();
 
@@ -95,7 +93,7 @@ CmsMediaFieldState useCmsMediaFieldState({
       isHighlightedState.value = false;
       if (isImage) {
         final xFile = await setUpXFile(file);
-        imagesState.value = imagesState.value.add(xFile);
+        filesState.value = filesState.value.add(xFile);
       } else {}
     }
   }
@@ -104,16 +102,15 @@ CmsMediaFieldState useCmsMediaFieldState({
     if (controller.value != null) {
       final files = await controller.value!.pickFiles(multiple: false, mime: supportedMedia.getMimes);
       final xFiles = await Future.wait(files.map((e) async => setUpXFile(e)));
-      imagesState.value = imagesState.value.addAll(xFiles);
+      filesState.value = filesState.value.addAll(xFiles);
     }
   }
 
   useSimpleEffect(() {
-    final values = uploadedImagesState.value + initialImagesState.value;
-    onChanged(values.isEmpty ? null : values.unlock);
-  }, [uploadedImagesState.value, initialImagesState.value]);
+    final values = filesState.value;
+    onChanged(values.isEmpty ? null : uploadedItems.unlock);
+  }, [filesState.value]);
 
-  final uploadedItems = initialImagesState.value + uploadedImagesState.value;
 
   Future<void> navigateToPreview(int index) async {
    await navigator.push<bool?>(
@@ -144,13 +141,16 @@ CmsMediaFieldState useCmsMediaFieldState({
     onDropFile: dropFile,
     delegate: delegate,
     onSelectFilePressed: selectFiles,
-    uploadedFiles: uploadedItems,
-    newFiles: imagesState.value,
-    onUploaded: (index, url) {
-      uploadedImagesState.value = uploadedImagesState.value.add(url);
-      imagesState.value = imagesState.value.removeAt(index);
-    },
-    itemCount: uploadedImagesState.value.length + initialImagesState.value.length,
     onNavigateToPreview: navigateToPreview,
+    files: filesState.value,
+    onUploaded: (index, value) {
+      filesState.value = filesState.value.removeAt(index);
+      filesState.value = filesState.value.insert(index, value);
+    },
+    onReorder: (oldIndex, newIndex){
+      final item = filesState.value[oldIndex];
+      filesState.value = filesState.value.removeAt(oldIndex);
+      filesState.value = filesState.value.insert(newIndex, item);
+    }
   );
 }
