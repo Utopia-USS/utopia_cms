@@ -7,7 +7,7 @@ import 'package:utopia_cms/src/util/context_extensions.dart';
 import 'package:utopia_cms/utopia_cms.dart';
 import 'package:utopia_hooks/utopia_hooks.dart';
 
-class CmsFiledFieldUpload extends HookWidget {
+class CmsMediaFieldUpload extends HookWidget {
   final CmsMediaFieldState state;
   final CmsMediaDelegate delegate;
   final double size;
@@ -15,7 +15,7 @@ class CmsFiledFieldUpload extends HookWidget {
   final int index;
   final dynamic Function(CmsMediaUploadRes res, XFile file)? valueBuilder;
 
-  const CmsFiledFieldUpload({
+  const CmsMediaFieldUpload({
     super.key,
     required this.size,
     required this.state,

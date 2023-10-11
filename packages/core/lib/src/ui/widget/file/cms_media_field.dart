@@ -1,7 +1,7 @@
 import 'package:cross_file/cross_file.dart';
 import 'package:flutter/material.dart';
+import 'package:reorderables/reorderables.dart';
 import 'package:utopia_arch/utopia_arch.dart';
-import 'package:utopia_cms/src/delegate/media/cms_media_upload_res.dart';
 import 'package:utopia_cms/src/ui/widget/file/cms_media_field_video_player.dart';
 import 'package:utopia_cms/src/ui/widget/header/cms_title.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
@@ -17,7 +17,6 @@ class CmsMediaField extends HookWidget {
   final Iterable<dynamic>? initialValues;
   final List<CmsMediaType> supportedMedia;
   final CmsMediaType Function(dynamic object) mediaTypeBuilder;
-
 
   const CmsMediaField({
     super.key,
@@ -52,31 +51,36 @@ class CmsMediaField extends HookWidget {
           children: [
             CmsTitle(title: label),
             SizedBox(height: spacing),
-            Wrap(
+            ReorderableWrap(
+              enableReorder: !state.files.any((e) => e is XFile),
+              needsLongPressDraggable: false,
               spacing: spacing,
               runSpacing: spacing,
+              onReorder: state.onReorder,
+              header: [CmsMediaFieldAddButton(state: state, size: size)],
               children: [
-                CmsMediaFieldAddButton(state: state, size: size),
-                for (int i = 0; i < state.uploadedFiles.length; i++)
-                  MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: GestureDetector(
-                      onTap: () =>state.onNavigateToPreview(i),
-                      child: CmsFileFieldWrapper(
-                        size: size,
-                        child: _buildUploadedItem(state.uploadedFiles[i], size),
+
+                for (int i = 0; i < state.files.length; i++)
+                  if (state.files[i] is XFile)
+                    CmsMediaFieldUpload(
+                      size: size,
+                      state: state,
+                      delegate: delegate,
+                      valueBuilder: valueBuilder,
+                      file: state.files[i] as XFile,
+                      index: i,
+                    )
+                  else
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: () => state.onNavigateToPreview(i),
+                        child: CmsFileFieldWrapper(
+                          size: size,
+                          child: _buildUploadedItem(state.files[i], size),
+                        ),
                       ),
                     ),
-                  ),
-                for (int i = 0; i < state.newFiles.length; i++)
-                  CmsFiledFieldUpload(
-                    size: size,
-                    state: state,
-                    delegate: delegate,
-                    valueBuilder: valueBuilder,
-                    file: state.newFiles[i],
-                    index: i,
-                  ),
               ],
             ),
           ],
