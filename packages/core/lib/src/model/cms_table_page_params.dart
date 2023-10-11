@@ -24,13 +24,15 @@ class CmsTableParams {
   /// Initializes table with sorting params
   final CmsFunctionsSortingParams? initialSortingParams;
 
+  final Map<String, dynamic> initialFilterValues;
 
-  CmsTableParams({
+  const CmsTableParams({
     this.canEdit = true,
     this.canCreate = true,
     this.canDelete = true,
     this.initialSortingParams,
+    this.initialFilterValues = const {},
   });
 
-  static final CmsTableParams defaultParams = CmsTableParams();
+  static const defaultParams = CmsTableParams();
 }

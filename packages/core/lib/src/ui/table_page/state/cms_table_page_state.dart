@@ -67,7 +67,7 @@ CmsTablePageState useCmsTablePageState({
     itemsState.value = IList();
   }
 
-  final filtersState = useState<JsonMap>({});
+  final filtersState = useState(params.initialFilterValues);
   void onFilterChanged(String entryKey, dynamic value) {
     resetState();
     filtersState.value = {...filtersState.value}..setAtPath(entryKey, value);

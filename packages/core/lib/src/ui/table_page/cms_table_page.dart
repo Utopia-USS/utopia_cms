@@ -16,7 +16,7 @@ import 'package:utopia_utils/utopia_utils.dart';
 
 class CmsTablePage extends HookWidget {
   final CmsDelegate delegate;
-  final CmsTableParams? params;
+  final CmsTableParams params;
   final String title;
   final List<CmsEntry<dynamic>> entries;
   final List<CmsFilterEntry<dynamic>>? filterEntries;
@@ -27,7 +27,7 @@ class CmsTablePage extends HookWidget {
     super.key,
     required this.delegate,
     required this.title,
-    this.params,
+    this.params = CmsTableParams.defaultParams,
     required this.entries,
     this.customActions,
     this.filterEntries,
@@ -39,7 +39,7 @@ class CmsTablePage extends HookWidget {
     final navigator = context.navigator;
     final state = useCmsTablePageState(
       delegate: delegate,
-      params: params ?? CmsTableParams.defaultParams,
+      params: params,
       navigator: navigator,
       entries: entries.lock,
       filterEntries: (filterEntries ?? []).lock,
