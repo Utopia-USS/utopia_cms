@@ -31,7 +31,7 @@ class CmsGraphQLService {
   Future<Object?> mutate(
     GraphQLClient client, {
     required String name,
-    CmsGraphQLFields fields = const {},
+    CmsGraphQLFields? fields,
     Map<String, String> variableTypes = const {},
     Map<String, ValueNode> arguments = const {},
     JsonMap variables = const {},
@@ -51,7 +51,7 @@ class CmsGraphQLService {
   DocumentNode _buildDocument({
     required OperationType type,
     required String name,
-    required CmsGraphQLFields fields,
+    required CmsGraphQLFields? fields,
     Map<String, String> variableTypes = const {},
     Map<String, ValueNode> arguments = const {},
   }) {
@@ -64,7 +64,7 @@ class CmsGraphQLService {
           FieldNode(
             alias: "result".toNameNode(),
             name: name.toNameNode(),
-            selectionSet: _buildSelectionSet(fields),
+            selectionSet: fields?.let(_buildSelectionSet),
             arguments: arguments.toArgumentNodes(),
           ),
         ]),
