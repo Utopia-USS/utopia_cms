@@ -8,6 +8,7 @@ import 'package:utopia_arch/utopia_arch.dart';
 import 'package:utopia_cms/src/delegate/media/cms_media_delegate.dart';
 import 'package:utopia_cms/src/ui/attachment_preview/cms_media_preview_page.dart';
 import 'package:utopia_cms/src/ui/attachment_preview/cms_media_type.dart';
+import 'package:utopia_cms/src/ui/item_management/state/cms_item_management_state.dart';
 import 'package:utopia_cms/src/ui/widget/dialog/cms_dialog.dart';
 import 'package:utopia_hooks/utopia_hooks.dart';
 import 'package:utopia_utils/utopia_utils.dart';
@@ -58,7 +59,9 @@ CmsMediaFieldState useCmsMediaFieldState({
   final controller = useState<DropzoneViewController?>(null);
   final isHighlightedState = useState<bool>(false);
 
+  final baseState = useProvided<CmsItemManagementBaseState>();
   final filesState = useState<IList<dynamic>>(initialValues?.toIList() ?? IList());
+  final deletedFilesState = useState<IList<dynamic>>(IList());
   final uploadedItems = filesState.value.where((e) => e is! XFile).toIList();
 
   final context = useContext();
@@ -111,6 +114,14 @@ CmsMediaFieldState useCmsMediaFieldState({
     onChanged(values.isEmpty ? null : uploadedItems.unlock);
   }, [filesState.value]);
 
+
+  useSimpleEffect(() {
+    baseState.addOnSavedCallback((value) async {
+      await Future.wait(deletedFilesState.value.map((e) async=> await delegate.delete(e)));
+    });
+  }, []);
+
+
   Future<void> navigateToPreview(int index) async {
     await navigator.push<bool?>(
       PageRouteBuilder(
@@ -154,7 +165,7 @@ CmsMediaFieldState useCmsMediaFieldState({
     onRemove: (index) {
       final value = filesState.value[index];
       filesState.value = filesState.value.removeAt(index);
-      unawaited(delegate.delete(value));
+      deletedFilesState.value = deletedFilesState.value.add(value);
     },
   );
 }
