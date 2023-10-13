@@ -63,6 +63,8 @@ abstract class CmsEntry<T> {
 
   bool get sortable => modifier.sortable;
 
+  bool get sortInvertNulls => modifier.sortInvertNulls;
+
   bool get editable => modifier.editable;
 
   bool get initializable => modifier.initializable;

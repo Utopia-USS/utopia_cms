@@ -29,16 +29,21 @@ class CmsEntryModifier {
   /// [CmsDelegate] must support sorting by the given field. Check its documentation for more information.
   final bool sortable;
 
+  /// Inverts the sorting order of null values.
+  ///
+  /// Must be supported by the [CmsDelegate].
+  /// Does nothing if [sortable] is false.
+  final bool sortInvertNulls;
+
   /// If true the entry will be placed in the separate row in the [CmsItemManagementView]
   final bool expanded;
-
-
 
   const CmsEntryModifier({
     this.pinned = true,
     this.editable = true,
     this.required = true,
     this.sortable = false,
+    this.sortInvertNulls = false,
     this.expanded = false,
     this.initializable = true,
   });

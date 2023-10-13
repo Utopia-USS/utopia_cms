@@ -1,11 +1,14 @@
-class CmsFunctionsSortingParams {
-  final bool sortDesc;
-  final String fieldKey;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  CmsFunctionsSortingParams({
-    required this.sortDesc,
-    required this.fieldKey,
-  });
+part 'cms_functions_params.freezed.dart';
+
+@freezed
+class CmsFunctionsSortingParams with _$CmsFunctionsSortingParams {
+  const factory CmsFunctionsSortingParams({
+    required bool sortDesc,
+    @Default(false) bool invertNulls,
+    required String fieldKey,
+  }) = _CmsFunctionsSortingParams;
 }
 
 class CmsFunctionsPagingParams {

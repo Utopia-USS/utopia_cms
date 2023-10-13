@@ -76,8 +76,8 @@ CmsTablePageState useCmsTablePageState({
   CmsFilter buildFilter() {
     if (filterEntries.isEmpty) return const CmsFilterAll();
     final fixedValues = filterEntries.where((a) => filtersState.value[a.entryKey] != null);
-    if(fixedValues.isEmpty) return const CmsFilterAll();
-    if(fixedValues.length == 1) return fixedValues.first.filterFromValues(filtersState.value);
+    if (fixedValues.isEmpty) return const CmsFilterAll();
+    if (fixedValues.length == 1) return fixedValues.first.filterFromValues(filtersState.value);
     return CmsFilterAnd(filterEntries
         .where((a) => filtersState.value[a.entryKey] != null)
         .map((e) => e.filterFromValues(filtersState.value))
@@ -96,7 +96,7 @@ CmsTablePageState useCmsTablePageState({
 
         if (result.isNotEmpty) {
           final filtered =
-          result.where((e1) => !itemsState.value.any((e2) => e1[delegate.idKey] == e2[delegate.idKey]));
+              result.where((e1) => !itemsState.value.any((e2) => e1[delegate.idKey] == e2[delegate.idKey]));
           itemsState.value = itemsState.value.addAll(filtered);
           pagingOffsetState.value += result.length;
         }
@@ -110,8 +110,6 @@ CmsTablePageState useCmsTablePageState({
     itemsState.value = itemsState.value.replace(index, value);
   }
 
-
-
   Future<void> onCreate() async {
     final result = await navigator.push<bool?>(
       PageRouteBuilder(
@@ -120,15 +118,14 @@ CmsTablePageState useCmsTablePageState({
         barrierColor: Colors.black45,
         transitionDuration: const Duration(milliseconds: 400),
         reverseTransitionDuration: const Duration(milliseconds: 400),
-        pageBuilder: (_, animation, ___) =>
-            CmsItemManagement(
-              args: CmsItemManagementArgs(
-                uploadChanges: (json, _) => delegate.create(json),
-                entries: entries,
-                params: params,
-              ),
-              animation: animation,
-            ),
+        pageBuilder: (_, animation, ___) => CmsItemManagement(
+          args: CmsItemManagementArgs(
+            uploadChanges: (json, _) => delegate.create(json),
+            entries: entries,
+            params: params,
+          ),
+          animation: animation,
+        ),
       ),
     );
     if (result != null) {
@@ -154,17 +151,16 @@ CmsTablePageState useCmsTablePageState({
         barrierColor: Colors.black45,
         transitionDuration: const Duration(milliseconds: 400),
         reverseTransitionDuration: const Duration(milliseconds: 400),
-        pageBuilder: (_, animation, ___) =>
-            CmsItemManagement(
-              args: CmsItemManagementArgs(
-                uploadChanges: (newJson, oldJson) => delegate.update(newJson, oldJson!),
-                deleteItem: () => onDelete(value, index),
-                entries: entries,
-                initialValue: Map.of(value),
-                params: params,
-              ),
-              animation: animation,
-            ),
+        pageBuilder: (_, animation, ___) => CmsItemManagement(
+          args: CmsItemManagementArgs(
+            uploadChanges: (newJson, oldJson) => delegate.update(newJson, oldJson!),
+            deleteItem: () => onDelete(value, index),
+            entries: entries,
+            initialValue: Map.of(value),
+            params: params,
+          ),
+          animation: animation,
+        ),
       ),
     );
     if (result != null) {
@@ -178,11 +174,11 @@ CmsTablePageState useCmsTablePageState({
   Future<void> onSortPressed(CmsEntry entry) async {
     final currentValue = sortingParamsState.value;
     final isCurrent = entry.key == currentValue?.fieldKey;
-    if (currentValue == null || !isCurrent) {
-      sortingParamsState.value = CmsFunctionsSortingParams(sortDesc: false, fieldKey: entry.key);
-    } else {
-      sortingParamsState.value = CmsFunctionsSortingParams(sortDesc: !currentValue.sortDesc, fieldKey: entry.key);
-    }
+    sortingParamsState.value = CmsFunctionsSortingParams(
+      sortDesc: (currentValue == null || !isCurrent) ? false : !currentValue.sortDesc,
+      invertNulls: entry.sortInvertNulls,
+      fieldKey: entry.key,
+    );
     resetState();
   }
 

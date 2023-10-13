@@ -141,9 +141,16 @@ class CmsHasuraService {
   }
 
   ValueNode _buildSorting(CmsFunctionsSortingParams params) =>
-     _buildNested(params.fieldKey, (params.sortDesc ? 'desc' : 'asc').toEnumValueNode());
+      _buildNested(params.fieldKey, _buildSortingDirection(params).toEnumValueNode());
 
-
+  String _buildSortingDirection(CmsFunctionsSortingParams params) {
+    return switch ((params.sortDesc, params.invertNulls)) {
+      (false, false) => 'asc',
+      (false, true) => 'asc_nulls_first',
+      (true, false) => 'desc',
+      (true, true) => 'desc_nulls_last',
+    };
+  }
 
   ObjectValueNode _buildNested(String path, ValueNode value) {
     final parts = path.split(".");
