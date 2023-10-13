@@ -59,7 +59,6 @@ class CmsMediaField extends HookWidget {
               onReorder: state.onReorder,
               header: [CmsMediaFieldAddButton(state: state, size: size)],
               children: [
-
                 for (int i = 0; i < state.files.length; i++)
                   if (state.files[i] is XFile)
                     CmsMediaFieldUpload(
@@ -73,13 +72,11 @@ class CmsMediaField extends HookWidget {
                   else
                     MouseRegion(
                       cursor: SystemMouseCursors.click,
-                      child: GestureDetector(
-                        onTap: () => state.onNavigateToPreview(i),
-                        child: CmsFileFieldWrapper(
-                          onRemovePressed: () => state.onRemove(i),
-                          size: size,
-                          child: _buildUploadedItem(state.files[i], size),
-                        ),
+                      child: CmsFileFieldWrapper(
+                        onOpen: () => state.onNavigateToPreview(i),
+                        onRemove: () => state.onRemove(i),
+                        size: size,
+                        child: _buildUploadedItem(state.files[i], size),
                       ),
                     ),
               ],
