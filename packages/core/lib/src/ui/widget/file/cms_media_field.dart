@@ -76,6 +76,7 @@ class CmsMediaField extends HookWidget {
                       child: GestureDetector(
                         onTap: () => state.onNavigateToPreview(i),
                         child: CmsFileFieldWrapper(
+                          onRemovePressed: () => state.onRemove(i),
                           size: size,
                           child: _buildUploadedItem(state.files[i], size),
                         ),

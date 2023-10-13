@@ -22,6 +22,7 @@ mixin _$CmsThemeColors {
   Color get canvas => throw _privateConstructorUsedError;
   Color get error => throw _privateConstructorUsedError;
   Color get disabled => throw _privateConstructorUsedError;
+  Color get text => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $CmsThemeColorsCopyWith<CmsThemeColors> get copyWith =>
@@ -40,7 +41,8 @@ abstract class $CmsThemeColorsCopyWith<$Res> {
       Color field,
       Color canvas,
       Color error,
-      Color disabled});
+      Color disabled,
+      Color text});
 }
 
 /// @nodoc
@@ -62,6 +64,7 @@ class _$CmsThemeColorsCopyWithImpl<$Res, $Val extends CmsThemeColors>
     Object? canvas = null,
     Object? error = null,
     Object? disabled = null,
+    Object? text = null,
   }) {
     return _then(_value.copyWith(
       primary: null == primary
@@ -88,6 +91,10 @@ class _$CmsThemeColorsCopyWithImpl<$Res, $Val extends CmsThemeColors>
           ? _value.disabled
           : disabled // ignore: cast_nullable_to_non_nullable
               as Color,
+      text: null == text
+          ? _value.text
+          : text // ignore: cast_nullable_to_non_nullable
+              as Color,
     ) as $Val);
   }
 }
@@ -106,7 +113,8 @@ abstract class _$$_CmsThemeColorsCopyWith<$Res>
       Color field,
       Color canvas,
       Color error,
-      Color disabled});
+      Color disabled,
+      Color text});
 }
 
 /// @nodoc
@@ -126,6 +134,7 @@ class __$$_CmsThemeColorsCopyWithImpl<$Res>
     Object? canvas = null,
     Object? error = null,
     Object? disabled = null,
+    Object? text = null,
   }) {
     return _then(_$_CmsThemeColors(
       primary: null == primary
@@ -152,6 +161,10 @@ class __$$_CmsThemeColorsCopyWithImpl<$Res>
           ? _value.disabled
           : disabled // ignore: cast_nullable_to_non_nullable
               as Color,
+      text: null == text
+          ? _value.text
+          : text // ignore: cast_nullable_to_non_nullable
+              as Color,
     ));
   }
 }
@@ -165,7 +178,8 @@ class _$_CmsThemeColors extends _CmsThemeColors {
       required this.field,
       required this.canvas,
       required this.error,
-      required this.disabled})
+      required this.disabled,
+      required this.text})
       : super._();
 
   @override
@@ -180,10 +194,12 @@ class _$_CmsThemeColors extends _CmsThemeColors {
   final Color error;
   @override
   final Color disabled;
+  @override
+  final Color text;
 
   @override
   String toString() {
-    return 'CmsThemeColors(primary: $primary, accent: $accent, field: $field, canvas: $canvas, error: $error, disabled: $disabled)';
+    return 'CmsThemeColors(primary: $primary, accent: $accent, field: $field, canvas: $canvas, error: $error, disabled: $disabled, text: $text)';
   }
 
   @override
@@ -197,12 +213,13 @@ class _$_CmsThemeColors extends _CmsThemeColors {
             (identical(other.canvas, canvas) || other.canvas == canvas) &&
             (identical(other.error, error) || other.error == error) &&
             (identical(other.disabled, disabled) ||
-                other.disabled == disabled));
+                other.disabled == disabled) &&
+            (identical(other.text, text) || other.text == text));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, primary, accent, field, canvas, error, disabled);
+  int get hashCode => Object.hash(
+      runtimeType, primary, accent, field, canvas, error, disabled, text);
 
   @JsonKey(ignore: true)
   @override
@@ -218,7 +235,8 @@ abstract class _CmsThemeColors extends CmsThemeColors {
       required final Color field,
       required final Color canvas,
       required final Color error,
-      required final Color disabled}) = _$_CmsThemeColors;
+      required final Color disabled,
+      required final Color text}) = _$_CmsThemeColors;
   _CmsThemeColors._() : super._();
 
   @override
@@ -233,6 +251,8 @@ abstract class _CmsThemeColors extends CmsThemeColors {
   Color get error;
   @override
   Color get disabled;
+  @override
+  Color get text;
   @override
   @JsonKey(ignore: true)
   _$$_CmsThemeColorsCopyWith<_$_CmsThemeColors> get copyWith =>

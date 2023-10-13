@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:cross_file/cross_file.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -15,26 +14,27 @@ import 'package:utopia_utils/utopia_utils.dart';
 
 class CmsMediaFieldState {
   final CmsMediaDelegate delegate;
+
   /// if XFile it's a new one
   final IList<dynamic> files;
 
   final MutableValue<bool> isHighlighted;
-
-
-  final void Function(int index, dynamic value) onUploaded;
-
   final void Function() setHighlightedTrue;
   final void Function() setHighlightedFalse;
   final void Function(DropzoneViewController) onCreated;
   final Future<void> Function(dynamic) onDropFile; //in flutter_dropzone docs this variable has to be dynamic
+  final void Function(int index, dynamic value) onUploaded;
   final Future<void> Function() onSelectFilePressed;
+
   final void Function(int index) onNavigateToPreview;
+  final void Function(int index) onRemove;
   final void Function(int oldIndex, int newIndex) onReorder;
 
   const CmsMediaFieldState({
     required this.isHighlighted,
     required this.delegate,
     required this.onDropFile,
+    required this.onRemove,
     required this.onCreated,
     required this.onSelectFilePressed,
     required this.setHighlightedFalse,
@@ -111,9 +111,8 @@ CmsMediaFieldState useCmsMediaFieldState({
     onChanged(values.isEmpty ? null : uploadedItems.unlock);
   }, [filesState.value]);
 
-
   Future<void> navigateToPreview(int index) async {
-   await navigator.push<bool?>(
+    await navigator.push<bool?>(
       PageRouteBuilder(
         opaque: false,
         barrierDismissible: true,
@@ -125,7 +124,7 @@ CmsMediaFieldState useCmsMediaFieldState({
             items: uploadedItems,
             initialIndex: index,
             urlBuilder: urlBuilder,
-              mediaTypeBuilder: mediaTypeBuilder,
+            mediaTypeBuilder: mediaTypeBuilder,
           ),
           animation: animation,
         ),
@@ -147,10 +146,15 @@ CmsMediaFieldState useCmsMediaFieldState({
       filesState.value = filesState.value.removeAt(index);
       filesState.value = filesState.value.insert(index, value);
     },
-    onReorder: (oldIndex, newIndex){
+    onReorder: (oldIndex, newIndex) {
       final item = filesState.value[oldIndex];
       filesState.value = filesState.value.removeAt(oldIndex);
       filesState.value = filesState.value.insert(newIndex, item);
-    }
+    },
+    onRemove: (index) {
+      final value = filesState.value[index];
+      filesState.value = filesState.value.removeAt(index);
+      unawaited(delegate.delete(value));
+    },
   );
 }
