@@ -55,7 +55,7 @@ class CmsWidget extends HookWidget {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 36),
+                    padding: const EdgeInsets.symmetric(horizontal: 32),
                     child: CrossFadeIndexedStack(
                       duration: const Duration(milliseconds: 400),
                       index: items.indexWhere((it) => it is CmsWidgetItemPage && it.id == selectedPageIdState.value),

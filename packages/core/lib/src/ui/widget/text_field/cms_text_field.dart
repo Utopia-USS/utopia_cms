@@ -60,33 +60,41 @@ class CmsTextField extends HookWidget {
   Widget _buildField(BuildContext context, TextEditingController controller) {
     return CmsFieldWrapper(
       includePadding: label == null,
-      child: _buildTextField(context, controller),
+      child: Row(
+        children: [
+          Flexible(child: _buildTextField(context, controller)),
+          if(suffix != null) suffix!,
+        ],
+      ),
     );
   }
 
   Widget _buildTextField(BuildContext context, TextEditingController controller) {
     final textStyles = context.textStyles;
-    return TextField(
-      readOnly: readOnly,
-      cursorColor: context.colors.primary,
-      controller: controller,
-      focusNode: focusNode,
-      onTap: onTap,
-      keyboardType: keyboardType,
-      obscureText: obscureText,
-      textInputAction: TextInputAction.next,
-      inputFormatters: formatters,
-      decoration: InputDecoration(
-        border: InputBorder.none,
-        focusedBorder: InputBorder.none,
-        enabledBorder: InputBorder.none,
-        errorBorder: InputBorder.none,
-        disabledBorder: InputBorder.none,
-        label: label,
-        floatingLabelStyle: textStyles.label.copyWith(fontSize: 14, fontWeight: FontWeight.w600),
-        labelStyle: textStyles.label,
+    return IgnorePointer(
+      ignoring: readOnly,
+      child: TextField(
+        readOnly: readOnly,
+        cursorColor: context.colors.primary,
+        controller: controller,
+        focusNode: focusNode,
+        onTap: onTap,
+        keyboardType: keyboardType,
+        obscureText: obscureText,
+        textInputAction: TextInputAction.next,
+        inputFormatters: formatters,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          errorBorder: InputBorder.none,
+          disabledBorder: InputBorder.none,
+          label: label,
+          floatingLabelStyle: textStyles.label.copyWith(fontSize: 14, fontWeight: FontWeight.w600),
+          labelStyle: textStyles.label,
+        ),
+        style: textStyles.text,
       ),
-      style: textStyles.text,
     );
   }
 }

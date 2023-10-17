@@ -36,7 +36,7 @@ class CmsCountryEntry extends CmsEntry<dynamic> {
 
   @override
   Widget buildPreview(BuildContext context, dynamic value) => CmsTablePreviewText(
-        displayBuilder?.call(value) ?? value?.toString() ?? '',
+        displayBuilder?.call(value) ?? value?.toString() ?? '-',
       );
 
   @override

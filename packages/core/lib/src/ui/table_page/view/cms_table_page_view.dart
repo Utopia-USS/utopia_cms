@@ -67,9 +67,9 @@ class CmsTablePageView extends HookWidget {
         SizedBox(height: context.theme.pageTopPadding),
         _buildTopRow(context),
         Expanded(
-          child: values.isEmpty && state.computedState.value is ComputedStateValueInProgress
-              ? _buildLoader(context)
-              : _buildTable(context),
+          child:
+
+              _buildTable(context),
         ),
         if (values.isNotEmpty && state.computedState.value is ComputedStateValueInProgress)
           const Center(
@@ -99,7 +99,7 @@ class CmsTablePageView extends HookWidget {
                 ),
             ],
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           Row(
             children: filterEntries.map(
               (e) {
@@ -128,6 +128,7 @@ class CmsTablePageView extends HookWidget {
 
   Widget _buildTable(BuildContext context) {
     return CmsTable(
+      showLoader: state.items.isEmpty && state.computedState.value is ComputedStateValueInProgress,
       onManagePressed: state.onEditPressed,
       scrollController: state.scrollController,
       values: state.items,
@@ -178,24 +179,6 @@ class CmsTablePageView extends HookWidget {
         );
         return null;
       },
-    );
-  }
-
-  Widget _buildLoader(BuildContext context) {
-    return ListView(
-      physics: const NeverScrollableScrollPhysics(),
-      children: [
-        for (int i = 0; i < 20; i++)
-          const Padding(
-            padding: EdgeInsets.only(
-              top: CmsTable.tileHeight,
-            ),
-            child: CmsMockLoadingBox(
-              width: double.infinity,
-              height: CmsTable.tileHeight,
-            ),
-          )
-      ],
     );
   }
 }

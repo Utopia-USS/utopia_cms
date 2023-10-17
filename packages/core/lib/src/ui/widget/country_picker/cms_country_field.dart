@@ -1,5 +1,6 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:utopia_cms/src/ui/widget/button/cms_remove_icon_button.dart';
 import 'package:utopia_cms/src/ui/widget/text_field/cms_text_field.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
 import 'package:utopia_hooks/utopia_hooks.dart';
@@ -51,14 +52,12 @@ class CmsCountryField extends HookWidget {
         dialogSize: Size(540, MediaQuery.of(context).size.width),
         favorite: const ['GB', 'DE', 'US', 'NL', 'FR', 'AT', 'SE', 'PL', 'PT', 'CA', 'DK', 'CH'],
         builder: (_) {
-          return IgnorePointer(
-            ignoring: true,
-            child: CmsTextField(
-              value: displayBuilder?.call(value) ?? value?.toString() ?? '',
-              onChanged: onChanged,
-              label: label,
-              readOnly: true,
-            ),
+          return CmsTextField(
+            value: displayBuilder?.call(value) ?? value?.toString() ?? '',
+            onChanged: onChanged,
+            label: label,
+            readOnly: true,
+            suffix: CmsRemoveIconButton(onPressed: () => onChanged(null)),
           );
         },
       ),

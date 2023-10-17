@@ -36,7 +36,7 @@ class CmsDateEntry extends CmsEntry<DateTime?> {
   Widget buildEditField({
     required BuildContext context,
     required DateTime? value,
-    required void Function(DateTime value) onChanged,
+    required void Function(DateTime? value) onChanged,
   }) {
     return CmsDatePicker(date: value, label: fixedLabelRequired, onDateChanged: onChanged);
   }
