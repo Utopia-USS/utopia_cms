@@ -37,10 +37,10 @@ packages:
     dependency: transitive
     description:
       name: collection
-      sha256: ee67cb0715911d28db6bf4af1026078bd6f0128b07a5f66fb2ed94ec6783c09a
+      sha256: f092b211a4319e98e5ff58223576de6c2803db36221657b46c82574721240687
       url: "https://pub.dev"
     source: hosted
-    version: "1.18.0"
+    version: "1.17.2"
   country_code_picker:
     dependency: transitive
     description:
@@ -467,14 +467,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.5"
-  reorderables:
-    dependency: transitive
-    description:
-      name: reorderables
-      sha256: "004a886e4878df1ee27321831c838bc1c976311f4ca6a74ce7d561e506540a77"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.6.0"
   rxdart:
     dependency: transitive
     description:
@@ -611,9 +603,10 @@ packages:
   utopia_cms:
     dependency: "direct main"
     description:
-      path: "../core"
-      relative: true
-    source: path
+      name: utopia_cms
+      sha256: ba7f386e7d0dce635b25a68abd652efc0d78139f6482d96df124d8528c7ccee3
+      url: "https://pub.dev"
+    source: hosted
     version: "0.1.1"
   utopia_hooks:
     dependency: transitive
