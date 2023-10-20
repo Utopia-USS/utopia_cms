@@ -40,11 +40,11 @@ export 'src/theme/cms_theme_data.dart';
 export 'src/theme/cms_theme_text_styles.dart';
 export 'src/ui/widget/video/cms_video_player.dart';
 export 'src/ui/widget/video/cms_video_player_state.dart';
-export 'src/ui/widget/file/cms_media_field.dart';
-export 'src/ui/widget/file/cms_media_field_add_button.dart';
-export 'src/ui/widget/file/cms_media_field_image.dart';
-export 'src/ui/widget/file/cms_media_field_state.dart';
-export 'src/ui/widget/file/cms_media_field_upload.dart';
-export 'src/ui/widget/file/cms_media_field_wrapper.dart';
+export 'src/ui/widget/media/cms_media_field.dart';
+export 'src/ui/widget/media/cms_media_field_add_button.dart';
+export 'src/ui/widget/media/cms_media_field_image.dart';
+export 'src/ui/widget/media/cms_media_field_state.dart';
+export 'src/ui/widget/media/cms_media_field_upload.dart';
+export 'src/ui/widget/media/cms_media_field_wrapper.dart';
 export 'src/ui/widget/date_picker/cms_date_picker.dart';
 

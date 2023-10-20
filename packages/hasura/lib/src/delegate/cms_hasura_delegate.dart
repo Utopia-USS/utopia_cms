@@ -1,5 +1,4 @@
 import 'package:graphql/client.dart';
-import 'package:utopia_cms/src/util/map_extensions.dart';
 import 'package:utopia_cms/utopia_cms.dart';
 import 'package:utopia_cms_graphql/utopia_cms_graphql.dart';
 import 'package:utopia_cms_hasura/src/model/cms_hasura_table.dart';

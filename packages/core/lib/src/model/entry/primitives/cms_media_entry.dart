@@ -1,6 +1,5 @@
 import 'package:cross_file/cross_file.dart';
 import 'package:flutter/material.dart';
-import 'package:utopia_cms/src/delegate/media/cms_media_upload_res.dart';
 import 'package:utopia_cms/src/ui/widget/table/cms_table_preview_media.dart';
 import 'package:utopia_cms/src/util/string_extensions.dart';
 import 'package:utopia_cms/utopia_cms.dart';
