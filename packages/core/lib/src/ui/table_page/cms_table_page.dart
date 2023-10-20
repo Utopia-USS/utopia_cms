@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:utopia_arch/utopia_arch.dart';
 import 'package:utopia_cms/src/delegate/cms_delegate.dart';
-import 'package:utopia_cms/src/model/cms_functions_params.dart';
 import 'package:utopia_cms/src/model/cms_table_page_params.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry.dart';
 import 'package:utopia_cms/src/model/filter_entry/cms_filter_entry.dart';

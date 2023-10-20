@@ -10,7 +10,6 @@ import 'package:utopia_cms/src/ui/table_page/widget/cms_table_actions.dart';
 import 'package:utopia_cms/src/ui/widget/button/cms_button.dart';
 import 'package:utopia_cms/src/ui/widget/header/cms_header.dart';
 import 'package:utopia_cms/src/ui/widget/loading/cms_loader.dart';
-import 'package:utopia_cms/src/ui/widget/loading/cms_mock_loading_box.dart';
 import 'package:utopia_cms/src/ui/widget/table/cms_table.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
 import 'package:utopia_cms/src/util/entries_extensions.dart';
@@ -112,7 +111,7 @@ class CmsTablePageView extends HookWidget {
                       constraints: BoxConstraints(maxWidth: _filterWidthFactor * e.flex),
                       child: e.buildField(
                         context: context,
-                        value: e.fromJson(state.filterValues[e.entryKey ?? '']),
+                        value: e.fromJson(state.filterValues[e.entryKey]),
                         onChanged: (value) => state.onFilterChanged(e.entryKey, e.toJson(value)),
                       ),
                     ),

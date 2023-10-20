@@ -1,21 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:utopia_cms/src/delegate/cms_delegate.dart';
 import 'package:utopia_cms/src/model/cms_filter.dart';
-import 'package:utopia_cms/src/model/entry/cms_entry_modifier.dart';
-import 'package:utopia_cms/src/model/entry/primitives/cms_bool_entry.dart';
 import 'package:utopia_cms/src/model/entry/primitives/cms_date_entry.dart';
-import 'package:utopia_cms/src/model/entry/primitives/cms_text_entry.dart';
-import 'package:utopia_cms/src/model/entry/primitives/cms_to_many_dropdown_entry.dart';
 import 'package:utopia_cms/src/model/filter_entry/cms_search_filter_entry.dart';
 import 'package:utopia_cms/src/ui/widget/table/cms_table.dart';
-import 'package:utopia_cms/src/ui/widget/table/cms_table_item.dart';
 import 'package:utopia_cms/src/ui/widget/wrapper/cms_field_wrapper.dart';
-import 'package:utopia_cms/src/ui/item_management/state/cms_item_management_state.dart';
 import 'package:utopia_cms/src/ui/table_page/cms_table_page.dart';
 import 'package:utopia_cms/src/util/json_map.dart';
 import 'package:utopia_cms/src/util/map_extensions.dart';
-import 'package:utopia_cms/src/util/string_extensions.dart';
 
 ///  * [CmsFilterEntry] is an interface of a basic [CmsTablePage] filter component.
 ///

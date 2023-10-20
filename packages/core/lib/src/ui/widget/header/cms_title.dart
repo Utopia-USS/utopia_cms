@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:utopia_arch/utopia_arch.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
 
 class CmsTitle extends StatelessWidget {
