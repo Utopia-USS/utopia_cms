@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:utopia_cms/src/ui/widget/file/cms_media_field_wrapper.dart';
+import 'package:utopia_cms/src/ui/widget/media/cms_media_field_wrapper.dart';
 import 'package:utopia_hooks/utopia_hooks.dart';
 
 class CmsMediaFieldImage extends StatelessWidget {
