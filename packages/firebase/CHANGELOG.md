@@ -1,3 +1,8 @@
+## 0.1.2
+
+ - **FEAT**(utopia_cms): Invert nulls in sorting.
+ - **FEAT**: cms_core media are now reorderable.
+
 ## 0.1.1
 
  - **FEAT**: read me branding.

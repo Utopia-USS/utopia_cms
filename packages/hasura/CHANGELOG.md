@@ -1,3 +1,12 @@
+## 0.2.0
+
+> Note: This release has breaking changes.
+
+ - **FEAT**(utopia_cms): warnings fixed.
+ - **FEAT**(utopia_cms): Invert nulls in sorting.
+ - **FEAT**: cms_core media are now reorderable.
+ - **BREAKING** **FEAT**(utopia_cms_hasura): Make CmsHasura non-static.
+
 ## 0.1.1
 
  - **FEAT**: cms_core sorting fixes.

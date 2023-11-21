@@ -1,3 +1,12 @@
+## 0.2.0
+
+> Note: This release has breaking changes.
+
+ - **FEAT**(utopia_cms): Invert nulls in sorting.
+ - **FEAT**: cms_graphql fix on empty fields mutate.
+ - **FEAT**: cms_core media are now reorderable.
+ - **BREAKING** **FEAT**(utopia_cms_graphql): Make CmsGraphQL non-static.
+
 ## 0.1.1
 
  - **FEAT**: read me branding.
