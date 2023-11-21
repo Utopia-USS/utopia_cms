@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dropzone/flutter_dropzone.dart';
 import 'package:utopia_cms/src/ui/widget/media/cms_media_field_state.dart';
-import 'package:utopia_cms/src/ui/widget/media/cms_media_field_wrapper.dart';
+import 'package:utopia_cms/src/ui/widget/media/cms_media_field_item_wrapper.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
 
 class CmsMediaFieldAddButton extends StatelessWidget {
@@ -21,7 +21,7 @@ class CmsMediaFieldAddButton extends StatelessWidget {
       child: GestureDetector(
         onTap: state.onSelectFilePressed,
         behavior: HitTestBehavior.opaque,
-        child: CmsFileFieldWrapper(
+        child: CmsMediaFieldItemWrapper(
           size: size,
           hasShadow: false,
           color: state.isHighlighted.value ? context.colors.primary : context.colors.field,

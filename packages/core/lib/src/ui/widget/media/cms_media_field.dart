@@ -2,8 +2,8 @@ import 'package:cross_file/cross_file.dart';
 import 'package:flutter/material.dart';
 import 'package:reorderables/reorderables.dart';
 import 'package:utopia_arch/utopia_arch.dart';
-import 'package:utopia_cms/src/ui/widget/media/cms_media_field_video_player.dart';
 import 'package:utopia_cms/src/ui/widget/header/cms_title.dart';
+import 'package:utopia_cms/src/ui/widget/media/cms_media_field_video_player.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
 import 'package:utopia_cms/utopia_cms.dart';
 import 'package:utopia_hooks/utopia_hooks.dart';
@@ -72,7 +72,7 @@ class CmsMediaField extends HookWidget {
                   else
                     MouseRegion(
                       cursor: SystemMouseCursors.click,
-                      child: CmsFileFieldWrapper(
+                      child: CmsMediaFieldItemWrapper(
                         onOpen: () => state.onNavigateToPreview(i),
                         onRemove: () => state.onRemove(i),
                         size: size,
@@ -89,16 +89,16 @@ class CmsMediaField extends HookWidget {
 
   Widget _buildUploadedItem(dynamic item, double size) {
     final url = urlBuilder?.call(item) ?? item as String;
-    final type = mediaTypeBuilder(item);
+    final type = CmsMediaType.doc;
     switch (type) {
       case CmsMediaType.video:
         return CmsMediaFieldVideoPlayer(url: url, size: size);
       case CmsMediaType.image:
         return CmsMediaFieldImage(url: url);
       case CmsMediaType.doc:
-        throw UnimplementedError();
+        throw Icon(Icons.picture_as_pdf);
       case CmsMediaType.unknown:
-        throw UnimplementedError();
+        throw Icon(Icons.question_mark_rounded);
     }
   }
 }

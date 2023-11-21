@@ -3,7 +3,7 @@ import 'package:utopia_cms/src/util/context_extensions.dart';
 import 'package:utopia_hooks/utopia_hooks.dart';
 import 'package:utopia_utils/utopia_utils.dart';
 
-class CmsFileFieldWrapper extends HookWidget {
+class CmsMediaFieldItemWrapper extends HookWidget {
   final Widget child;
   final double size;
   final bool hasShadow;
@@ -11,7 +11,7 @@ class CmsFileFieldWrapper extends HookWidget {
   final void Function()? onOpen;
   final Color? color;
 
-  const CmsFileFieldWrapper({
+  const CmsMediaFieldItemWrapper({
     super.key,
     required this.size,
     required this.child,

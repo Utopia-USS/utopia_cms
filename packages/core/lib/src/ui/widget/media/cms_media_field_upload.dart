@@ -34,7 +34,7 @@ class CmsMediaFieldUpload extends HookWidget {
       },
       keys: [],
     );
-    return CmsFileFieldWrapper(
+    return CmsMediaFieldItemWrapper(
       key: Key(file.path),
       size: size,
       child: ColoredBox(
