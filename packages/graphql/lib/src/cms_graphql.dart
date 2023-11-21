@@ -4,12 +4,14 @@ import 'package:utopia_cms_graphql/src/service/cms_graphql_service.dart';
 import 'package:utopia_utils/utopia_utils.dart';
 
 class CmsGraphQL {
-  const CmsGraphQL._();
+  static const instance = CmsGraphQL();
 
-  static const service = CmsGraphQLService();
-  static const clientService = CmsGraphQLClientService();
+  const CmsGraphQL();
 
-  static GraphQLClient createClient(
+  final service = const CmsGraphQLService();
+  final clientService = const CmsGraphQLClientService();
+
+  GraphQLClient createClient(
     String uri, {
     String header = 'Authorization',
     Future<String?> Function()? tokenProvider,
