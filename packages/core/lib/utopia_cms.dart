@@ -45,6 +45,6 @@ export 'src/ui/widget/media/cms_media_field_add_button.dart';
 export 'src/ui/widget/media/cms_media_field_image.dart';
 export 'src/ui/widget/media/cms_media_field_state.dart';
 export 'src/ui/widget/media/cms_media_field_upload.dart';
-export 'src/ui/widget/media/cms_media_field_wrapper.dart';
+export 'src/ui/widget/media/cms_media_field_item_wrapper.dart';
 export 'src/ui/widget/date_picker/cms_date_picker.dart';
 
