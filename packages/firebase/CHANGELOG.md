@@ -1,3 +1,9 @@
+## 0.2.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **FEAT**(utopia_cms_hasura): Refactor CmsHasuraNamingConvention.
+
 ## 0.1.2
 
  - **FEAT**(utopia_cms): Invert nulls in sorting.

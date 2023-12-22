@@ -3,6 +3,42 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-12-22
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`utopia_cms` - `v0.2.0`](#utopia_cms---v020)
+ - [`utopia_cms_firebase` - `v0.2.0`](#utopia_cms_firebase---v020)
+ - [`utopia_cms_graphql` - `v0.3.0`](#utopia_cms_graphql---v030)
+ - [`utopia_cms_hasura` - `v0.3.0`](#utopia_cms_hasura---v030)
+
+Packages with other changes:
+
+ - There are no other changes in this release.
+
+---
+
+#### `utopia_cms` - `v0.2.0`
+
+ - **BREAKING** **FEAT**(utopia_cms_hasura): Refactor CmsHasuraNamingConvention.
+
+#### `utopia_cms_firebase` - `v0.2.0`
+
+ - **BREAKING** **FEAT**(utopia_cms_hasura): Refactor CmsHasuraNamingConvention.
+
+#### `utopia_cms_graphql` - `v0.3.0`
+
+ - **BREAKING** **FEAT**(utopia_cms_hasura): Refactor CmsHasuraNamingConvention.
+
+#### `utopia_cms_hasura` - `v0.3.0`
+
+ - **BREAKING** **FEAT**(utopia_cms_hasura): Refactor CmsHasuraNamingConvention.
+
+
 ## 2023-11-21
 
 ### Changes
