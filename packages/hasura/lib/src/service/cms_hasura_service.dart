@@ -27,7 +27,7 @@ class CmsHasuraService {
         if (paging != null) 'limit': paging.limit.toValueNodeUnsafe(),
         if (paging != null) 'offset': paging.offset.toValueNodeUnsafe(),
         'where': buildFilter(filter),
-        if (sorting != null) namingConvention(['order', 'by']): _buildSorting(sorting),
+        if (sorting != null) namingConvention.argument(['order', 'by']): _buildSorting(sorting),
       },
     );
     return (result! as List).cast<JsonMap>();
@@ -41,7 +41,7 @@ class CmsHasuraService {
   }) async {
     return _mutateReturning(
       client,
-      name: namingConvention(["insert", table.name]),
+      name: namingConvention.field(["insert", table.name]),
       fields: fields,
       arguments: {"objects": objects.toValueNodeUnsafe()},
     );
@@ -64,9 +64,9 @@ class CmsHasuraService {
   }) async {
     final result = await _graphQLService.mutate(
       client,
-      name: namingConvention(["update", table.name, "by", "pk"]),
+      name: namingConvention.field(["update", table.name, "by", "pk"]),
       arguments: {
-        namingConvention(["pk", "columns"]): keys.toValueNodeUnsafe(),
+        namingConvention.argument(["pk", "columns"]): keys.toValueNodeUnsafe(),
         "_set": object.toValueNodeUnsafe(),
       },
       fields: fields,
@@ -90,7 +90,7 @@ class CmsHasuraService {
   }) async {
     return _mutateReturning(
       client,
-      name: namingConvention(["delete", table.name]),
+      name: namingConvention.field(["delete", table.name]),
       fields: fields,
       arguments: {"where": buildFilter(filter)},
     );
@@ -104,7 +104,7 @@ class CmsHasuraService {
   }) async {
     final result = await _graphQLService.mutate(
       client,
-      name: namingConvention(["delete", table.name, "by", "pk"]),
+      name: namingConvention.field(["delete", table.name, "by", "pk"]),
       arguments: keys.map((key, value) => MapEntry(key, (value as Object).toValueNodeUnsafe())),
       fields: fields,
     );
@@ -143,14 +143,14 @@ class CmsHasuraService {
   }
 
   ValueNode _buildSorting(CmsFunctionsSortingParams params) =>
-      _buildNested(params.fieldKey, _buildSortingDirection(params).toEnumValueNode());
+      _buildNested(params.fieldKey, namingConvention.enumValue(_buildSortingDirection(params)).toEnumValueNode());
 
-  String _buildSortingDirection(CmsFunctionsSortingParams params) {
+  List<String> _buildSortingDirection(CmsFunctionsSortingParams params) {
     return switch ((params.sortDesc, params.invertNulls)) {
-      (false, false) => 'asc',
-      (false, true) => 'asc_nulls_first',
-      (true, false) => 'desc',
-      (true, true) => 'desc_nulls_last',
+      (false, false) => ['asc'],
+      (false, true) => ['asc', 'nulls', 'first'],
+      (true, false) => ['desc'],
+      (true, true) => ['desc', 'nulls', 'last'],
     };
   }
 

@@ -14,7 +14,7 @@ class CmsHasura {
   final CmsGraphQL graphQL;
   final CmsHasuraNamingConvention namingConvention;
 
-  const CmsHasura({this.graphQL = CmsGraphQL.instance, this.namingConvention = CmsHasuraNamingConvention.pascal});
+  const CmsHasura({this.graphQL = CmsGraphQL.instance, this.namingConvention = CmsHasuraNamingConvention.hasura});
 
   CmsHasuraService get service => CmsHasuraService(graphQL.service, namingConvention: namingConvention);
 

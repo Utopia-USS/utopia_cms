@@ -89,16 +89,16 @@ class CmsMediaField extends HookWidget {
 
   Widget _buildUploadedItem(dynamic item, double size) {
     final url = urlBuilder?.call(item) ?? item as String;
-    final type = CmsMediaType.doc;
+    final type = mediaTypeBuilder(item);
     switch (type) {
       case CmsMediaType.video:
         return CmsMediaFieldVideoPlayer(url: url, size: size);
       case CmsMediaType.image:
         return CmsMediaFieldImage(url: url);
       case CmsMediaType.doc:
-        throw Icon(Icons.picture_as_pdf);
+        return Icon(Icons.picture_as_pdf);
       case CmsMediaType.unknown:
-        throw Icon(Icons.question_mark_rounded);
+        return Icon(Icons.question_mark_rounded);
     }
   }
 }

@@ -1,13 +1,23 @@
-import 'package:utopia_cms_hasura/src/util/string_extensions.dart';
+import 'package:utopia_cms_hasura/src/util/string_case_utils.dart';
 
 enum CmsHasuraNamingConvention {
-  pascal,
-  camel;
+  hasura.uniform(StringCase.snake),
+  graphql(
+    field: StringCase.camel,
+    type: StringCase.camelCapitalized,
+    argument: StringCase.camel,
+    enumValue: StringCase.snakeUppercase,
+  );
 
-  String call(List<String> components) {
-    return switch(this) {
-      pascal => components.join("_"),
-      camel => components.first + components.skip(1).map((e) => e.capitalize()).join(),
-    };
-  }
+  const CmsHasuraNamingConvention({
+    required this.field,
+    required this.type,
+    required this.argument,
+    required this.enumValue,
+  });
+
+  const CmsHasuraNamingConvention.uniform(StringCase stringCase)
+      : this(field: stringCase, type: stringCase, argument: stringCase, enumValue: stringCase);
+
+  final StringCase field, type, argument, enumValue;
 }
