@@ -1,3 +1,22 @@
+## 0.2.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **FEAT**(utopia_cms_hasura): Refactor CmsHasuraNamingConvention.
+
+## 0.1.2
+
+ - **FEAT**(utopia_cms): fixes.
+ - **FEAT**(utopia_cms): warnings fixed.
+ - **FEAT**(utopia_cms): rename catalog.
+ - **FEAT**(utopia_cms): country, date - remove option. Cms table refactor.
+ - **FEAT**: cms_core delete photo fix.
+ - **FEAT**: cms_core cms media menu.
+ - **FEAT**(utopia_cms): Invert nulls in sorting.
+ - **FEAT**: cms_core remove media implemented.
+ - **FEAT**(utopia_cms): Add initial filter params.
+ - **FEAT**: cms_core media are now reorderable.
+
 ## 0.1.1
 
  - **FEAT**: cms_core upload adjustments.

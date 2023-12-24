@@ -3,6 +3,93 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-12-22
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`utopia_cms` - `v0.2.0`](#utopia_cms---v020)
+ - [`utopia_cms_firebase` - `v0.2.0`](#utopia_cms_firebase---v020)
+ - [`utopia_cms_graphql` - `v0.3.0`](#utopia_cms_graphql---v030)
+ - [`utopia_cms_hasura` - `v0.3.0`](#utopia_cms_hasura---v030)
+
+Packages with other changes:
+
+ - There are no other changes in this release.
+
+---
+
+#### `utopia_cms` - `v0.2.0`
+
+ - **BREAKING** **FEAT**(utopia_cms_hasura): Refactor CmsHasuraNamingConvention.
+
+#### `utopia_cms_firebase` - `v0.2.0`
+
+ - **BREAKING** **FEAT**(utopia_cms_hasura): Refactor CmsHasuraNamingConvention.
+
+#### `utopia_cms_graphql` - `v0.3.0`
+
+ - **BREAKING** **FEAT**(utopia_cms_hasura): Refactor CmsHasuraNamingConvention.
+
+#### `utopia_cms_hasura` - `v0.3.0`
+
+ - **BREAKING** **FEAT**(utopia_cms_hasura): Refactor CmsHasuraNamingConvention.
+
+
+## 2023-11-21
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`utopia_cms_graphql` - `v0.2.0`](#utopia_cms_graphql---v020)
+ - [`utopia_cms_hasura` - `v0.2.0`](#utopia_cms_hasura---v020)
+
+Packages with other changes:
+
+ - [`utopia_cms` - `v0.1.2`](#utopia_cms---v012)
+ - [`utopia_cms_firebase` - `v0.1.2`](#utopia_cms_firebase---v012)
+
+---
+
+#### `utopia_cms_graphql` - `v0.2.0`
+
+ - **FEAT**(utopia_cms): Invert nulls in sorting.
+ - **FEAT**: cms_graphql fix on empty fields mutate.
+ - **FEAT**: cms_core media are now reorderable.
+ - **BREAKING** **FEAT**(utopia_cms_graphql): Make CmsGraphQL non-static.
+
+#### `utopia_cms_hasura` - `v0.2.0`
+
+ - **FEAT**(utopia_cms): warnings fixed.
+ - **FEAT**(utopia_cms): Invert nulls in sorting.
+ - **FEAT**: cms_core media are now reorderable.
+ - **BREAKING** **FEAT**(utopia_cms_hasura): Make CmsHasura non-static.
+
+#### `utopia_cms` - `v0.1.2`
+
+ - **FEAT**(utopia_cms): fixes.
+ - **FEAT**(utopia_cms): warnings fixed.
+ - **FEAT**(utopia_cms): rename catalog.
+ - **FEAT**(utopia_cms): country, date - remove option. Cms table refactor.
+ - **FEAT**: cms_core delete photo fix.
+ - **FEAT**: cms_core cms media menu.
+ - **FEAT**(utopia_cms): Invert nulls in sorting.
+ - **FEAT**: cms_core remove media implemented.
+ - **FEAT**(utopia_cms): Add initial filter params.
+ - **FEAT**: cms_core media are now reorderable.
+
+#### `utopia_cms_firebase` - `v0.1.2`
+
+ - **FEAT**(utopia_cms): Invert nulls in sorting.
+ - **FEAT**: cms_core media are now reorderable.
+
+
 ## 2023-10-09
 
 ### Changes
