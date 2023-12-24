@@ -5,7 +5,7 @@ import 'package:utopia_cms/src/ui/widget/dropdown/cms_dropdown_field.dart';
 import 'package:utopia_cms/src/ui/widget/table/cms_table_preview_text.dart';
 
 /// [CmsEntry] for handling offline items picker
-class CmsDropdownEntry<T> extends CmsEntry<T> {
+class CmsDropdownEntry<T> extends CmsEntry<T?> {
   final List<T> values;
   final T? defaultValue;
   final String Function(T? value) valueLabelBuilder;
@@ -49,7 +49,7 @@ class CmsDropdownEntry<T> extends CmsEntry<T> {
   Widget buildEditField({
     required BuildContext context,
     required T? value,
-    required void Function(T value) onChanged,
+    required void Function(T? value) onChanged,
   }) {
     return IgnorePointer(
       ignoring: !modifier.editable,

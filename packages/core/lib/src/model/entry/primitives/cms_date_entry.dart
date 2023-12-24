@@ -7,12 +7,16 @@ import 'package:utopia_cms/src/util/date_time_extension.dart';
 import 'package:utopia_utils/utopia_utils.dart';
 
 /// [CmsEntry] for handling basic dates
+
+enum CmsDateRepresentation { seconds, milliseconds, text }
+
 class CmsDateEntry extends CmsEntry<DateTime?> {
   CmsDateEntry({
     required this.key,
     this.label,
     this.modifier = const CmsEntryModifier(),
     this.flex = 2,
+    this.representation = CmsDateRepresentation.text,
   });
 
   @override
@@ -26,6 +30,8 @@ class CmsDateEntry extends CmsEntry<DateTime?> {
 
   @override
   final CmsEntryModifier modifier;
+
+  final CmsDateRepresentation representation;
 
   @override
   Widget buildPreview(BuildContext context, DateTime? value) {
@@ -43,7 +49,7 @@ class CmsDateEntry extends CmsEntry<DateTime?> {
 
   @override
   String? toJson(DateTime? value) => value?.toString();
-
+//TODO
   @override
   DateTime? fromJson(Object? json) => json?.let((it) => DateTime.parse(it as String));
 }

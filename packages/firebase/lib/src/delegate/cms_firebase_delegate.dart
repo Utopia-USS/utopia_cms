@@ -1,13 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:utopia_cms/utopia_cms.dart';
+import 'package:utopia_cms_firebase/src/service/cms_firebase_service.dart';
 
 class CmsFirebaseDelegate implements CmsDelegate {
+  final CmsFirebaseService _firebaseService = CmsFirebaseService();
   final String collection;
 
   @override
   final String idKey;
 
-  const CmsFirebaseDelegate(this.collection, {this.idKey = 'id'});
+  CmsFirebaseDelegate({required this.collection, this.idKey = 'id'});
 
   @override
   Future<void> delete(JsonMap value) async {
@@ -22,8 +24,13 @@ class CmsFirebaseDelegate implements CmsDelegate {
     CmsFilter? filter,
     required CmsFunctionsPagingParams paging,
   }) async {
-    final values = await FirebaseFirestore.instance.collection(collection).limit(30).get();
-    return values.docs.map((e) => {...e.data(), idKey: e.id}).toList();
+    return _firebaseService.query(
+      collection: collection,
+      idKey: idKey,
+      filter: filter!,//TODO null check
+      paging: paging,
+      sorting: sorting,
+    );
   }
 
   @override
