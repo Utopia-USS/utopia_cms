@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:utopia_arch/utopia_arch.dart';
 import 'package:utopia_cms/src/model/menu/cms_widget_menu_params.dart';
 import 'package:utopia_cms/src/theme/cms_theme_data.dart';
@@ -28,8 +27,8 @@ class CmsWidget extends HookWidget {
     final selectedPageIdState =
         selectedPageId ?? useState(useMemoized(() => items.whereType<CmsWidgetItemPage>().first.id));
 
-    return Provider.value(
-      value: theme ?? CmsThemeData.defaultTheme,
+    return ValueProvider(
+      theme ?? CmsThemeData.defaultTheme,
       child: Scaffold(
         backgroundColor: context.colors.canvas,
         body: LayoutBuilder(

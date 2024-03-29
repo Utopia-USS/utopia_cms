@@ -1,6 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:utopia_arch/utopia_arch.dart';
 import 'package:utopia_cms/src/model/cms_table_page_params.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry.dart';
@@ -37,8 +36,8 @@ class CmsItemManagement extends HookWidget {
       args: args,
       moveBack: (value) => context.navigator.pop(value),
     );
-    return Provider<CmsItemManagementBaseState>.value(
-      value: state,
+    return ValueProvider(
+      state,
       child: CmsItemManagementView(state: state, animation: animation),
     );
   }

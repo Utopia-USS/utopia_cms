@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry_modifier.dart';
 import 'package:utopia_cms/src/model/entry/primitives/cms_bool_entry.dart';
 import 'package:utopia_cms/src/model/entry/primitives/cms_date_entry.dart';
