@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:simple_shadow/simple_shadow.dart';
 import 'package:utopia_cms/src/ui/cms_widget/cms_widget_item.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
-import 'package:utopia_widgets/misc/collapsible.dart';
+import 'package:utopia_widgets/utopia_widgets.dart';
 
 class CmsMenuTile extends StatelessWidget {
   final CmsWidgetItem item;

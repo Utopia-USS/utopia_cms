@@ -7,6 +7,7 @@ import 'package:utopia_cms/src/ui/item_management/cms_item_management_page.dart'
 import 'package:utopia_cms/src/util/json_map.dart';
 import 'package:utopia_cms/src/util/map_extensions.dart';
 import 'package:utopia_hooks/utopia_hooks.dart';
+import 'package:utopia_hooks/src/hook/flutter/misc/use_scroll_controller.dart';
 
 typedef OnSavedCallback = Future<void> Function(JsonMap);
 
@@ -64,10 +65,10 @@ CmsItemManagementState useCmsItemManagementState({
   required CmsItemManagementArgs args,
   required void Function(bool) moveBack,
 }) {
-  final state = useState<JsonMap>({...?args.initialValue});
+  final state = useState<IJsonMap>(IJsonMap({...?args.initialValue}));
 
   void onValueChanged(String key, Object? value) {
-    state.mutate((it) => it.setAtPath(key, value));
+    state.value = state.value.add(key, value);
   }
 
   final onSavedCallbacksState = useState<IList<OnSavedCallback>>(IList());
@@ -75,7 +76,7 @@ CmsItemManagementState useCmsItemManagementState({
   final uploadSubmitState = useSubmitState();
   Future<void> onSubmit() async {
     await uploadSubmitState.run(() async {
-      final result = await args.uploadChanges(state.value, args.initialValue);
+      final result = await args.uploadChanges(state.value.unlock, args.initialValue);
       await Future.wait([for (final callback in onSavedCallbacksState.value) callback(result)]);
       moveBack(true);
     });
@@ -97,7 +98,7 @@ CmsItemManagementState useCmsItemManagementState({
   return CmsItemManagementState(
     onDelete: onDelete,
     addOnSavedCallback: (callback) => onSavedCallbacksState.value = onSavedCallbacksState.value.add(callback),
-    values: state.value,
+    values: state.value.unlock,
     isSubmitEnabled: submitEnabled,
     onSubmit: onSubmit,
     onValueChanged: onValueChanged,

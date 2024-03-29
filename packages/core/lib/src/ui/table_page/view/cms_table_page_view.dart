@@ -14,7 +14,7 @@ import 'package:utopia_cms/src/ui/widget/table/cms_table.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
 import 'package:utopia_cms/src/util/entries_extensions.dart';
 import 'package:utopia_hooks/utopia_hooks.dart';
-import 'package:utopia_widgets/misc/multi_widget.dart';
+import 'package:utopia_widgets/utopia_widgets.dart';
 
 class CmsTablePageView extends HookWidget {
   final CmsTablePageState state;

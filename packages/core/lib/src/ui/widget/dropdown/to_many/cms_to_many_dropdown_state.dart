@@ -5,7 +5,6 @@ import 'package:utopia_cms/src/model/cms_filter.dart';
 import 'package:utopia_cms/src/ui/item_management/state/cms_item_management_state.dart';
 import 'package:utopia_cms/src/util/json_map.dart';
 import 'package:utopia_hooks/utopia_hooks.dart';
-import 'package:utopia_utils/utopia_utils.dart';
 
 class CmsToManyDropdownState {
   final ISet<JsonMap> selectedValues;
@@ -34,7 +33,7 @@ CmsToManyDropdownState useCmsToManyDropdownState({
   final selectedItemsState = useState<ISet<JsonMap>>(ISet());
   final searchState = useFieldState(initialValue: '');
   final initialSelectedValuesState = useAutoComputedState<ISet<JsonMap>>(
-    compute: () async {
+    () async {
       if (originId != null) {
         final result = await delegate.get(originId: originId);
         selectedItemsState.value = result.toISet();
@@ -46,7 +45,7 @@ CmsToManyDropdownState useCmsToManyDropdownState({
     keys: [],
   );
 
-  useSimpleEffect(() {
+  useEffect(() {
     baseState.addOnSavedCallback((value) async {
       final oldIds = initialSelectedValuesState.valueOrNull!.map((it) => it[delegate.foreignIdKey] as Object).toISet();
       final newIds = selectedItemsState.value.map((it) => it[delegate.foreignIdKey] as Object).toISet();
@@ -69,7 +68,7 @@ CmsToManyDropdownState useCmsToManyDropdownState({
   }
 
   return CmsToManyDropdownState(
-    isReady: initialSelectedValuesState.valueOrPreviousOrNull != null,
+    isReady: usePreviousIfNull(initialSelectedValuesState.value) != null,
     searchState: searchState,
     selectedValues: selectedItemsState.value,
     getItems: getItems,

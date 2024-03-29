@@ -95,7 +95,7 @@ class CmsMediaFieldItemWrapper extends HookWidget {
 
   Widget _buildHoverItem({
     required String title,
-    required ValueNotifier<bool> state,
+    required ListenableMutableValue<bool> state,
     required Color color,
     required void Function() onPressed,
     required BuildContext context,

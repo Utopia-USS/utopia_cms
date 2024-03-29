@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
-import 'package:utopia_widgets/misc/multi_widget.dart';
+import 'package:utopia_widgets/utopia_widgets.dart';
 
 class CmsTablePreviewText extends StatelessWidget {
   final String? text;

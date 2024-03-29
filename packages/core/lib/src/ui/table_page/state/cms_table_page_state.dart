@@ -10,6 +10,7 @@ import 'package:utopia_cms/src/ui/item_management/cms_item_management_page.dart'
 import 'package:utopia_cms/src/util/json_map.dart';
 import 'package:utopia_cms/src/util/map_extensions.dart';
 import 'package:utopia_hooks/utopia_hooks.dart';
+import 'package:utopia_hooks/src/hook/flutter/misc/use_scroll_controller.dart';
 
 class CmsTablePageState {
   final MutableComputedState<void> computedState;
@@ -85,7 +86,7 @@ CmsTablePageState useCmsTablePageState({
   }
 
   final state = useAutoComputedState<void>(
-    compute: () async {
+    () async {
       if (pagingEnabledState.value) {
         final result = await delegate.get(
           sorting: sortingParamsState.value,

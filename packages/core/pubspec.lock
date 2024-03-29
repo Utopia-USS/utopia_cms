@@ -286,14 +286,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.12"
-  flutter_hooks:
-    dependency: transitive
-    description:
-      name: flutter_hooks
-      sha256: "6a126f703b89499818d73305e4ce1e3de33b4ae1c5512e3b8eab4b986f46774c"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.18.6"
   flutter_spinkit:
     dependency: "direct main"
     description:
@@ -471,18 +463,18 @@ packages:
     dependency: transitive
     description:
       name: material_color_utilities
-      sha256: "9528f2f296073ff54cb9fee677df673ace1218163c3bc7628093e7eed5203d41"
+      sha256: "0e0a020085b65b6083975e499759762399b4475f766c21668c4ecca34ea74e5a"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.0"
+    version: "0.8.0"
   meta:
     dependency: transitive
     description:
       name: meta
-      sha256: "3c74dbf8763d36539f114c799d8a2d87343b5067e9d796ca22b5eb8437090ee3"
+      sha256: d584fa6707a52763a52446f02cc621b077888fb63b93bbcb1143a7be5a0c0c04
       url: "https://pub.dev"
     source: hosted
-    version: "1.9.1"
+    version: "1.11.0"
   mime:
     dependency: transitive
     description:
@@ -804,18 +796,26 @@ packages:
     dependency: "direct main"
     description:
       name: utopia_arch
-      sha256: "51cf7c2ff80888f816d7caa8bf5158862eaa738dacaf9d850a05bcf728df7cee"
+      sha256: "73a37a8e3d2dc13cab44642131628dd919062449cf9b716c40b3723b3432bca0"
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.5"
+    version: "0.5.0+16"
+  utopia_collections:
+    dependency: transitive
+    description:
+      name: utopia_collections
+      sha256: "6ce2aeb4d5f151b9c5c55cc0c56f9c1da90c3c36b547872d84c8f70278c49d77"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0"
   utopia_hooks:
     dependency: "direct main"
     description:
       name: utopia_hooks
-      sha256: "83e44cd014fb5f102fa4f5fdb1d153f71d5021b3be63bde7e7218aac98eb8401"
+      sha256: "2168439fae51681b085af1d7cf3dcf90afd3e9e1fee84d55938529bcfb2d3a78"
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.11"
+    version: "0.4.3+9"
   utopia_platform_utils:
     dependency: transitive
     description:
@@ -824,30 +824,46 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.6"
+  utopia_reporter:
+    dependency: transitive
+    description:
+      name: utopia_reporter
+      sha256: ba0cbb328344180d9fe4ada2e538b8b83f88ae634b04bdf0c5c5929da001fc1f
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0+1"
   utopia_save_file:
     dependency: "direct main"
     description:
       name: utopia_save_file
-      sha256: "28860a769704a218342c0fabc4f1ad68c4ddb5c917eed7acce2ecbe165756431"
+      sha256: "761e3737bc2df99a37e4d6029edc050ee6d9b842eeb09e98544de97380945e16"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.0"
+    version: "0.2.0+1"
   utopia_utils:
     dependency: "direct main"
     description:
       name: utopia_utils
-      sha256: fdebad3db1e0dd47fce525c12fe731961fa40a6192514498fedf2ce689316ed5
+      sha256: "079ebf15d66b9f12217db2354fdc89a5747dc53f4c9f39ab403c6382dc943000"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.27"
+    version: "0.3.1"
+  utopia_validation:
+    dependency: transitive
+    description:
+      name: utopia_validation
+      sha256: "66ad409a7926771ba85ac7dd7ef756f655b2103e738526c0a94455344fdd6245"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0+1"
   utopia_widgets:
     dependency: "direct main"
     description:
       name: utopia_widgets
-      sha256: "0ae711befc008ba220e27644871dcfefa68135e51e62e1d88a43a754ab6cfc15"
+      sha256: ed263f8c4036308cb4fe3c16395129796ca1d3051be7ca2e96d58acf388a630b
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.10+27"
+    version: "0.1.0+1"
   vector_math:
     dependency: transitive
     description:
@@ -904,14 +920,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
-  web:
-    dependency: transitive
-    description:
-      name: web
-      sha256: dc8ccd225a2005c1be616fe02951e2e342092edf968cf0844220383757ef8f10
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.4-beta"
   web_socket_channel:
     dependency: transitive
     description:
@@ -945,5 +953,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.1.0-185.0.dev <4.0.0"
+  dart: ">=3.2.0-0 <4.0.0"
   flutter: ">=3.7.0"
