@@ -29,49 +29,53 @@ class CmsWidget extends HookWidget {
 
     return ValueProvider(
       theme ?? CmsThemeData.defaultTheme,
-      child: Scaffold(
-        backgroundColor: context.colors.canvas,
-        body: LayoutBuilder(
-          builder: (context, constraints) {
-            final width = constraints.maxWidth;
-            return Row(
-              children: [
-                CmsMenu(
-                  canExpand: width > contentWidth * 1.3,
-                  items: items,
-                  selectedPageId: selectedPageIdState.value,
-                  menuParams: menuParams,
-                  onPressed: (index) => items[index].map(
-                    page: (it) => selectedPageIdState.value = it.id,
-                    action: (it) => it.onPressed(),
-                    custom: (it) {
-                      return null;
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 32),
-                    child: CrossFadeIndexedStack(
-                      duration: const Duration(milliseconds: 400),
-                      index: items.indexWhere((it) => it is CmsWidgetItemPage && it.id == selectedPageIdState.value),
-                      lazy: true,
-                      children: [
-                        for (final item in items)
-                          item.map(
-                            page: (it) => it.content,
-                            action: (_) => const SizedBox.shrink(),
-                            custom: (_) => const SizedBox.shrink(),
-                          ),
-                      ],
+      child: Builder(
+        builder: (context) {
+          return Scaffold(
+            backgroundColor: context.colors.canvas,
+            body: LayoutBuilder(
+              builder: (context, constraints) {
+                final width = constraints.maxWidth;
+                return Row(
+                  children: [
+                    CmsMenu(
+                      canExpand: width > contentWidth * 1.3,
+                      items: items,
+                      selectedPageId: selectedPageIdState.value,
+                      menuParams: menuParams,
+                      onPressed: (index) => items[index].map(
+                        page: (it) => selectedPageIdState.value = it.id,
+                        action: (it) => it.onPressed(),
+                        custom: (it) {
+                          return null;
+                        },
+                      ),
                     ),
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
-      ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 32),
+                        child: CrossFadeIndexedStack(
+                          duration: const Duration(milliseconds: 400),
+                          index: items.indexWhere((it) => it is CmsWidgetItemPage && it.id == selectedPageIdState.value),
+                          lazy: true,
+                          children: [
+                            for (final item in items)
+                              item.map(
+                                page: (it) => it.content,
+                                action: (_) => const SizedBox.shrink(),
+                                custom: (_) => const SizedBox.shrink(),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          );
+        },
+      )
     );
   }
 }
