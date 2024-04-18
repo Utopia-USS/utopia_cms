@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
+import 'package:utopia_arch/utopia_arch.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry.dart';
 import 'package:utopia_cms/src/model/filter_entry/cms_filter_entry.dart';
 import 'package:utopia_cms/src/model/table_action/cms_table_action.dart';
@@ -65,15 +66,9 @@ class CmsTablePageView extends HookWidget {
       children: [
         SizedBox(height: context.theme.pageTopPadding),
         _buildTopRow(context),
-        Expanded(
-          child:
-
-              _buildTable(context),
-        ),
+        Expanded(child: _buildTable(context)),
         if (values.isNotEmpty && state.computedState.value is ComputedStateValueInProgress)
-          const Center(
-            child: CmsLoader(),
-          ),
+          const Center(child: CmsLoader()),
       ],
     );
   }
@@ -98,29 +93,8 @@ class CmsTablePageView extends HookWidget {
                 ),
             ],
           ),
-          const SizedBox(height: 12),
-          Row(
-            children: filterEntries.map(
-              (e) {
-                return Flexible(
-                  key: Key(e.entryKey),
-                  flex: e.flex,
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 12.0),
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: _filterWidthFactor * e.flex),
-                      child: e.buildField(
-                        context: context,
-                        value: e.fromJson(state.filterValues[e.entryKey]),
-                        onChanged: (value) => state.onFilterChanged(e.entryKey, e.toJson(value)),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ).toList(),
-          )
-        ],
+          _buildFilters(context),
+        ].separatedWith(const SizedBox(height: 12)),
       ),
     );
   }
@@ -178,6 +152,30 @@ class CmsTablePageView extends HookWidget {
         );
         return null;
       },
+    );
+  }
+
+  Widget _buildFilters(BuildContext context) {
+    return Row(
+      children: filterEntries.map(
+        (e) {
+          return Flexible(
+            key: Key(e.entryKey),
+            flex: e.flex,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 12.0),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: _filterWidthFactor * e.flex),
+                child: e.buildField(
+                  context: context,
+                  value: e.fromJson(state.filterValues[e.entryKey]),
+                  onChanged: (value) => state.onFilterChanged(e.entryKey, e.toJson(value)),
+                ),
+              ),
+            ),
+          );
+        },
+      ).toList(),
     );
   }
 }

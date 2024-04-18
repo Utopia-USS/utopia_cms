@@ -42,7 +42,7 @@ class CmsTextField extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final state = useFieldState(initialValue: value);
-    useEffect(() => onChanged(value.isEmpty ? null : value), [state.value]);
+    useEffect(() => onChanged(state.value.isEmpty ? null : state.value), [state.value]);
     final textStyles = context.textStyles;
     final colors = context.colors;
     return StatelessTextEditingControllerWrapper(
