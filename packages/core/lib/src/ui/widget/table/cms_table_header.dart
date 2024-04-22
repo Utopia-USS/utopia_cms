@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:utopia_cms/src/ui/widget/table/cms_table.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
 import 'package:utopia_cms/utopia_cms.dart';
-import 'package:utopia_widgets/misc/multi_widget.dart';
+import 'package:utopia_widgets/utopia_widgets.dart';
 
 class CmsTableHeader extends StatelessWidget {
   final IList<CmsEntry<dynamic>> entries;

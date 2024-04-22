@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:gql/language.dart';
 import 'package:graphql/client.dart';
-import 'package:utopia_utils/utopia_utils.dart';
+import 'package:utopia_reporter/utopia_reporter.dart';
 
 class CmsGraphQLClientService {
   const CmsGraphQLClientService();

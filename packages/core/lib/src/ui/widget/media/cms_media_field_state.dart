@@ -10,8 +10,6 @@ import 'package:utopia_cms/src/ui/attachment_preview/cms_media_preview_page.dart
 import 'package:utopia_cms/src/ui/attachment_preview/cms_media_type.dart';
 import 'package:utopia_cms/src/ui/item_management/state/cms_item_management_state.dart';
 import 'package:utopia_cms/src/ui/widget/dialog/cms_dialog.dart';
-import 'package:utopia_hooks/utopia_hooks.dart';
-import 'package:utopia_utils/utopia_utils.dart';
 
 class CmsMediaFieldState {
   final CmsMediaDelegate delegate;
@@ -64,7 +62,7 @@ CmsMediaFieldState useCmsMediaFieldState({
   final deletedFilesState = useState<IList<dynamic>>(IList());
   final uploadedItems = filesState.value.where((e) => e is! XFile).toIList();
 
-  final context = useContext();
+  final context = useBuildContext();
 
   Future<bool> checkMIME(dynamic event, DropzoneViewController controller) async {
     final mime = await controller.getFileMIME(event);
@@ -109,13 +107,13 @@ CmsMediaFieldState useCmsMediaFieldState({
     }
   }
 
-  useSimpleEffect(() {
+  useEffect(() {
     final values = filesState.value;
     onChanged(values.isEmpty ? null : uploadedItems.unlock);
   }, [filesState.value]);
 
 
-  useSimpleEffect(() {
+  useEffect(() {
     baseState.addOnSavedCallback((value) async {
       await Future.wait(deletedFilesState.value.map((e) async=> await delegate.delete(e)));
     });
@@ -144,7 +142,7 @@ CmsMediaFieldState useCmsMediaFieldState({
   }
 
   return CmsMediaFieldState(
-    isHighlighted: isHighlightedState.asMutableValue(),
+    isHighlighted: isHighlightedState,
     setHighlightedTrue: () => isHighlightedState.value = true,
     setHighlightedFalse: () => isHighlightedState.value = false,
     onCreated: (value) => controller.value = value,

@@ -19,7 +19,12 @@ class CmsHeader extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (navigateBack) _buildNavigateBack(context),
-        Text(text, style: context.textStyles.header),
+        Text(
+          text,
+          style: context.textStyles.header,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+        ),
       ],
     );
   }

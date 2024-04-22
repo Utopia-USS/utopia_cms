@@ -6,7 +6,7 @@ import 'package:utopia_cms_hasura/src/delegate/cms_hasura_to_many_delegate.dart'
 import 'package:utopia_cms_hasura/src/model/cms_hasura_naming_convention.dart';
 import 'package:utopia_cms_hasura/src/model/cms_hasura_table.dart';
 import 'package:utopia_cms_hasura/src/service/cms_hasura_service.dart';
-import 'package:utopia_utils/utopia_utils.dart';
+import 'package:utopia_reporter/utopia_reporter.dart';
 
 class CmsHasura {
   static const instance = CmsHasura();
