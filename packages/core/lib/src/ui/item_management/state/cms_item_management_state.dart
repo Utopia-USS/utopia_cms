@@ -68,7 +68,9 @@ CmsItemManagementState useCmsItemManagementState({
   final state = useState<IJsonMap>(IJsonMap({...?args.initialValue}));
 
   void onValueChanged(String key, Object? value) {
-    state.value = state.value.add(key, value);
+    final current = state.value.unlock;
+    current.setAtPath(key, value);
+    state.value = current.lock;
   }
 
   final onSavedCallbacksState = useState<IList<OnSavedCallback>>(IList());
