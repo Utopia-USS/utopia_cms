@@ -9,7 +9,7 @@ import 'package:utopia_hooks/utopia_hooks.dart';
 class CmsTableItem extends HookWidget {
   final JsonMap data;
   final IList<CmsEntry<dynamic>> entries;
-  final Widget Function(JsonMap)? actionsBuilder;
+  final Widget? Function(JsonMap)? actionsBuilder;
   final double tileHeight;
   final double actionsWidth;
   final Color color;
@@ -17,7 +17,8 @@ class CmsTableItem extends HookWidget {
   final EdgeInsets itemPadding;
   final void Function()? onManagePressed;
 
-  const CmsTableItem({super.key, 
+  const CmsTableItem({
+    super.key,
     required this.data,
     required this.entries,
     required this.actionsWidth,
