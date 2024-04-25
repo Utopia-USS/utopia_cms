@@ -12,7 +12,7 @@ import 'package:utopia_cms/src/util/json_map.dart';
 class CmsTableAction {
   final String label;
   final bool shouldUpdateTable;
-  final Future<JsonMap?> Function(JsonMap value) onPressed;
+  final Future<JsonMap?> Function(JsonMap value, int index) onPressed;
 
   CmsTableAction({
     required this.label,

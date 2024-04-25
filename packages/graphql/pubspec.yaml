@@ -10,7 +10,8 @@ environment:
 dependencies:
 
   # utopia
-  utopia_cms: ^0.2.0
+  utopia_cms:
+    path: ../core
   utopia_utils: ^0.3.1
   utopia_reporter: ^0.1.0+1
 

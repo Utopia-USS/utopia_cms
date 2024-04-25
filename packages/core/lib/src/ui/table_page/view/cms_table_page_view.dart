@@ -114,22 +114,23 @@ class CmsTablePageView extends HookWidget {
               ///workaround: force actions to the end of the [DataTable]
               return CmsTableActionsButton(
                 value: e,
+                index: index,
                 onUpdate: (value) => state.updateItem(value, index),
                 actions: [
-                  _buildManageAction(index),
+                  _buildManageAction(),
                   if (customActions.isNotEmpty) ...customActions,
-                  if (state.params.canDelete) _buildDeleteAction(index),
+                  if (state.params.canDelete) _buildDeleteAction(),
                 ],
               );
             },
     );
   }
 
-  CmsTableAction _buildDeleteAction(int index) {
+  CmsTableAction _buildDeleteAction() {
     return CmsTableAction(
       label: "Delete",
       shouldUpdateTable: false,
-      onPressed: (value) async {
+      onPressed: (value, index) async {
         WidgetsBinding.instance.addPostFrameCallback(
           (_) async {
             await state.onDeletePressed(value, index);
@@ -140,11 +141,11 @@ class CmsTablePageView extends HookWidget {
     );
   }
 
-  CmsTableAction _buildManageAction(int index) {
+  CmsTableAction _buildManageAction() {
     return CmsTableAction(
       label: "Manage",
       shouldUpdateTable: false,
-      onPressed: (value) async {
+      onPressed: (value, index) async {
         WidgetsBinding.instance.addPostFrameCallback(
           (_) async {
             state.onEditPressed(value, index);

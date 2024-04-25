@@ -8,11 +8,13 @@ import 'package:utopia_hooks/utopia_hooks.dart';
 class CmsTableActionsButton extends HookWidget {
   final List<CmsTableAction> actions;
   final JsonMap value;
+  final int index;
   final void Function(JsonMap) onUpdate;
 
   const CmsTableActionsButton({
     super.key,
     required this.value,
+    required this.index,
     required this.onUpdate,
     required this.actions,
   });
@@ -33,7 +35,7 @@ class CmsTableActionsButton extends HookWidget {
                     child: Text(e.label, style: style),
                     onTap: () async {
                       loadingState.value = true;
-                      final result = await e.onPressed(value);
+                      final result = await e.onPressed(value, index);
                       if (result != null && e.shouldUpdateTable) onUpdate(result);
                       loadingState.value = false;
                     },
