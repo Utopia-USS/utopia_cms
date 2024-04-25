@@ -50,5 +50,5 @@ abstract class CmsFilterEntry<T> {
   /// Real display of the field. If null, last segment of [key] is displayed
   String get fixedLabel => label ?? '';
 
-
+  bool get hidden => false;
 }

@@ -19,7 +19,7 @@ class CmsTable extends HookWidget {
   final CmsFunctionsSortingParams? currentSortParams;
   final void Function(JsonMap, int index)? onManagePressed;
   final void Function(CmsEntry) onSortPressed;
-  final Widget Function(JsonMap, int index)? actionsBuilder;
+  final Widget? Function(JsonMap, int index)? actionsBuilder;
 
   const CmsTable({
     super.key,
@@ -54,25 +54,24 @@ class CmsTable extends HookWidget {
         else
           Expanded(
             child: ListView.builder(
-                padding: const EdgeInsets.only(right: 14),
-                controller: scrollController,
-                itemCount: values.length,
-                itemExtent: tileHeight,
-                itemBuilder: (context, index) {
-                  return CmsTableItem(
-                    onManagePressed: () => onManagePressed?.call(values[index], index),
-                    data: values[index],
-                    entries: entries,
-                    actionsWidth: actionsWidth,
-                    tileHeight: tileHeight,
-                    contentPadding: contentPadding,
-                    itemPadding: itemPadding,
-                    color: index.isOdd ? Colors.transparent : context.colors.field,
-                    actionsBuilder: actionsBuilder?.let(
-                      (it) => (e) => it(e, index),
-                    ),
-                  );
-                }),
+              padding: const EdgeInsets.only(right: 14),
+              controller: scrollController,
+              itemCount: values.length,
+              itemExtent: tileHeight,
+              itemBuilder: (context, index) {
+                return CmsTableItem(
+                  onManagePressed: () => onManagePressed?.call(values[index], index),
+                  data: values[index],
+                  entries: entries,
+                  actionsWidth: actionsWidth,
+                  tileHeight: tileHeight,
+                  contentPadding: contentPadding,
+                  itemPadding: itemPadding,
+                  color: index.isOdd ? Colors.transparent : context.colors.field,
+                  actionsBuilder: actionsBuilder?.let((it) => (e) => it(e, index)),
+                );
+              },
+            ),
           ),
       ],
     );
