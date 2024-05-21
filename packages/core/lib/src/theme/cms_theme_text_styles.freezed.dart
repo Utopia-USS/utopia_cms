@@ -12,7 +12,7 @@ part of 'cms_theme_text_styles.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$CmsThemeTextStyles {
@@ -93,11 +93,11 @@ class _$CmsThemeTextStylesCopyWithImpl<$Res, $Val extends CmsThemeTextStyles>
 }
 
 /// @nodoc
-abstract class _$$_CmsThemeTextStylesCopyWith<$Res>
+abstract class _$$CmsThemeTextStylesImplCopyWith<$Res>
     implements $CmsThemeTextStylesCopyWith<$Res> {
-  factory _$$_CmsThemeTextStylesCopyWith(_$_CmsThemeTextStyles value,
-          $Res Function(_$_CmsThemeTextStyles) then) =
-      __$$_CmsThemeTextStylesCopyWithImpl<$Res>;
+  factory _$$CmsThemeTextStylesImplCopyWith(_$CmsThemeTextStylesImpl value,
+          $Res Function(_$CmsThemeTextStylesImpl) then) =
+      __$$CmsThemeTextStylesImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -110,11 +110,11 @@ abstract class _$$_CmsThemeTextStylesCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_CmsThemeTextStylesCopyWithImpl<$Res>
-    extends _$CmsThemeTextStylesCopyWithImpl<$Res, _$_CmsThemeTextStyles>
-    implements _$$_CmsThemeTextStylesCopyWith<$Res> {
-  __$$_CmsThemeTextStylesCopyWithImpl(
-      _$_CmsThemeTextStyles _value, $Res Function(_$_CmsThemeTextStyles) _then)
+class __$$CmsThemeTextStylesImplCopyWithImpl<$Res>
+    extends _$CmsThemeTextStylesCopyWithImpl<$Res, _$CmsThemeTextStylesImpl>
+    implements _$$CmsThemeTextStylesImplCopyWith<$Res> {
+  __$$CmsThemeTextStylesImplCopyWithImpl(_$CmsThemeTextStylesImpl _value,
+      $Res Function(_$CmsThemeTextStylesImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -127,7 +127,7 @@ class __$$_CmsThemeTextStylesCopyWithImpl<$Res>
     Object? caption = null,
     Object? button = null,
   }) {
-    return _then(_$_CmsThemeTextStyles(
+    return _then(_$CmsThemeTextStylesImpl(
       header: null == header
           ? _value.header
           : header // ignore: cast_nullable_to_non_nullable
@@ -158,8 +158,8 @@ class __$$_CmsThemeTextStylesCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_CmsThemeTextStyles extends _CmsThemeTextStyles {
-  const _$_CmsThemeTextStyles(
+class _$CmsThemeTextStylesImpl extends _CmsThemeTextStyles {
+  const _$CmsThemeTextStylesImpl(
       {required this.header,
       required this.label,
       required this.text,
@@ -187,10 +187,10 @@ class _$_CmsThemeTextStyles extends _CmsThemeTextStyles {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CmsThemeTextStyles &&
+            other is _$CmsThemeTextStylesImpl &&
             (identical(other.header, header) || other.header == header) &&
             (identical(other.label, label) || other.label == label) &&
             (identical(other.text, text) || other.text == text) &&
@@ -206,8 +206,8 @@ class _$_CmsThemeTextStyles extends _CmsThemeTextStyles {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_CmsThemeTextStylesCopyWith<_$_CmsThemeTextStyles> get copyWith =>
-      __$$_CmsThemeTextStylesCopyWithImpl<_$_CmsThemeTextStyles>(
+  _$$CmsThemeTextStylesImplCopyWith<_$CmsThemeTextStylesImpl> get copyWith =>
+      __$$CmsThemeTextStylesImplCopyWithImpl<_$CmsThemeTextStylesImpl>(
           this, _$identity);
 }
 
@@ -218,7 +218,7 @@ abstract class _CmsThemeTextStyles extends CmsThemeTextStyles {
       required final TextStyle text,
       required final TextStyle title,
       required final TextStyle caption,
-      required final TextStyle button}) = _$_CmsThemeTextStyles;
+      required final TextStyle button}) = _$CmsThemeTextStylesImpl;
   const _CmsThemeTextStyles._() : super._();
 
   @override
@@ -235,6 +235,6 @@ abstract class _CmsThemeTextStyles extends CmsThemeTextStyles {
   TextStyle get button;
   @override
   @JsonKey(ignore: true)
-  _$$_CmsThemeTextStylesCopyWith<_$_CmsThemeTextStyles> get copyWith =>
+  _$$CmsThemeTextStylesImplCopyWith<_$CmsThemeTextStylesImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

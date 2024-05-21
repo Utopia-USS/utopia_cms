@@ -21,7 +21,11 @@ class CmsFilter with _$CmsFilter {
 
   const factory CmsFilter.greaterOrEq(String field, Object value) = CmsFilterGreaterOrEq;
 
+  const factory CmsFilter.greater(String field, Object value) = CmsFilterGreater;
+
   const factory CmsFilter.lesserOrEq(String field, Object value) = CmsFilterLesserOrEq;
+
+  const factory CmsFilter.lesser(String field, Object value) = CmsFilterLesser;
 
   const factory CmsFilter.not(CmsFilter filter) = CmsFilterNot;
 }

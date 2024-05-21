@@ -124,6 +124,8 @@ class CmsHasuraService {
       not: (filter) => {"_not": buildFilter(filter)}.toValueNode(),
       greaterOrEq: (field, value) => _buildNested(field, {"_gte": value.toValueNodeUnsafe()}.toValueNode()),
       lesserOrEq: (field, value) => _buildNested(field, {"_lte": value.toValueNodeUnsafe()}.toValueNode()),
+      greater: (String field, Object value) => _buildNested(field, {"_gt": value.toValueNodeUnsafe()}.toValueNode()),
+      lesser: (String field, Object value) => _buildNested(field, {"_lt": value.toValueNodeUnsafe()}.toValueNode()),
     );
   }
 

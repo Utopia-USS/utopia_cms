@@ -12,7 +12,7 @@ part of 'cms_theme_data.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$CmsThemeData {
@@ -126,11 +126,11 @@ class _$CmsThemeDataCopyWithImpl<$Res, $Val extends CmsThemeData>
 }
 
 /// @nodoc
-abstract class _$$_CmsThemeDataCopyWith<$Res>
+abstract class _$$CmsThemeDataImplCopyWith<$Res>
     implements $CmsThemeDataCopyWith<$Res> {
-  factory _$$_CmsThemeDataCopyWith(
-          _$_CmsThemeData value, $Res Function(_$_CmsThemeData) then) =
-      __$$_CmsThemeDataCopyWithImpl<$Res>;
+  factory _$$CmsThemeDataImplCopyWith(
+          _$CmsThemeDataImpl value, $Res Function(_$CmsThemeDataImpl) then) =
+      __$$CmsThemeDataImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -150,11 +150,11 @@ abstract class _$$_CmsThemeDataCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_CmsThemeDataCopyWithImpl<$Res>
-    extends _$CmsThemeDataCopyWithImpl<$Res, _$_CmsThemeData>
-    implements _$$_CmsThemeDataCopyWith<$Res> {
-  __$$_CmsThemeDataCopyWithImpl(
-      _$_CmsThemeData _value, $Res Function(_$_CmsThemeData) _then)
+class __$$CmsThemeDataImplCopyWithImpl<$Res>
+    extends _$CmsThemeDataCopyWithImpl<$Res, _$CmsThemeDataImpl>
+    implements _$$CmsThemeDataImplCopyWith<$Res> {
+  __$$CmsThemeDataImplCopyWithImpl(
+      _$CmsThemeDataImpl _value, $Res Function(_$CmsThemeDataImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -169,7 +169,7 @@ class __$$_CmsThemeDataCopyWithImpl<$Res>
     Object? menuRadius = null,
     Object? shortButtonWidth = null,
   }) {
-    return _then(_$_CmsThemeData(
+    return _then(_$CmsThemeDataImpl(
       colors: null == colors
           ? _value.colors
           : colors // ignore: cast_nullable_to_non_nullable
@@ -208,8 +208,8 @@ class __$$_CmsThemeDataCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_CmsThemeData extends _CmsThemeData {
-  const _$_CmsThemeData(
+class _$CmsThemeDataImpl extends _CmsThemeData {
+  const _$CmsThemeDataImpl(
       {required this.colors,
       required this.textStyles,
       required this.borderRadius,
@@ -250,10 +250,10 @@ class _$_CmsThemeData extends _CmsThemeData {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CmsThemeData &&
+            other is _$CmsThemeDataImpl &&
             (identical(other.colors, colors) || other.colors == colors) &&
             (identical(other.textStyles, textStyles) ||
                 other.textStyles == textStyles) &&
@@ -286,8 +286,8 @@ class _$_CmsThemeData extends _CmsThemeData {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_CmsThemeDataCopyWith<_$_CmsThemeData> get copyWith =>
-      __$$_CmsThemeDataCopyWithImpl<_$_CmsThemeData>(this, _$identity);
+  _$$CmsThemeDataImplCopyWith<_$CmsThemeDataImpl> get copyWith =>
+      __$$CmsThemeDataImplCopyWithImpl<_$CmsThemeDataImpl>(this, _$identity);
 }
 
 abstract class _CmsThemeData extends CmsThemeData {
@@ -299,7 +299,7 @@ abstract class _CmsThemeData extends CmsThemeData {
       required final double pageTopPadding,
       required final List<BoxShadow> menuShadow,
       required final BorderRadius menuRadius,
-      required final double shortButtonWidth}) = _$_CmsThemeData;
+      required final double shortButtonWidth}) = _$CmsThemeDataImpl;
   const _CmsThemeData._() : super._();
 
   @override
@@ -320,6 +320,6 @@ abstract class _CmsThemeData extends CmsThemeData {
   double get shortButtonWidth;
   @override
   @JsonKey(ignore: true)
-  _$$_CmsThemeDataCopyWith<_$_CmsThemeData> get copyWith =>
+  _$$CmsThemeDataImplCopyWith<_$CmsThemeDataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

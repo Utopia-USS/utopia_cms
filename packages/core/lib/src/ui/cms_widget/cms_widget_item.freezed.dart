@@ -12,7 +12,7 @@ part of 'cms_widget_item.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$CmsWidgetItem {
@@ -89,20 +89,20 @@ class _$CmsWidgetItemCopyWithImpl<$Res, $Val extends CmsWidgetItem>
 }
 
 /// @nodoc
-abstract class _$$CmsWidgetItemPageCopyWith<$Res> {
-  factory _$$CmsWidgetItemPageCopyWith(
-          _$CmsWidgetItemPage value, $Res Function(_$CmsWidgetItemPage) then) =
-      __$$CmsWidgetItemPageCopyWithImpl<$Res>;
+abstract class _$$CmsWidgetItemPageImplCopyWith<$Res> {
+  factory _$$CmsWidgetItemPageImplCopyWith(_$CmsWidgetItemPageImpl value,
+          $Res Function(_$CmsWidgetItemPageImpl) then) =
+      __$$CmsWidgetItemPageImplCopyWithImpl<$Res>;
   @useResult
   $Res call({Widget icon, Widget title, String id, Widget content});
 }
 
 /// @nodoc
-class __$$CmsWidgetItemPageCopyWithImpl<$Res>
-    extends _$CmsWidgetItemCopyWithImpl<$Res, _$CmsWidgetItemPage>
-    implements _$$CmsWidgetItemPageCopyWith<$Res> {
-  __$$CmsWidgetItemPageCopyWithImpl(
-      _$CmsWidgetItemPage _value, $Res Function(_$CmsWidgetItemPage) _then)
+class __$$CmsWidgetItemPageImplCopyWithImpl<$Res>
+    extends _$CmsWidgetItemCopyWithImpl<$Res, _$CmsWidgetItemPageImpl>
+    implements _$$CmsWidgetItemPageImplCopyWith<$Res> {
+  __$$CmsWidgetItemPageImplCopyWithImpl(_$CmsWidgetItemPageImpl _value,
+      $Res Function(_$CmsWidgetItemPageImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -113,7 +113,7 @@ class __$$CmsWidgetItemPageCopyWithImpl<$Res>
     Object? id = null,
     Object? content = null,
   }) {
-    return _then(_$CmsWidgetItemPage(
+    return _then(_$CmsWidgetItemPageImpl(
       icon: null == icon
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
@@ -136,8 +136,8 @@ class __$$CmsWidgetItemPageCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$CmsWidgetItemPage extends CmsWidgetItemPage {
-  _$CmsWidgetItemPage(
+class _$CmsWidgetItemPageImpl extends CmsWidgetItemPage {
+  _$CmsWidgetItemPageImpl(
       {required this.icon,
       required this.title,
       required this.id,
@@ -159,10 +159,10 @@ class _$CmsWidgetItemPage extends CmsWidgetItemPage {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CmsWidgetItemPage &&
+            other is _$CmsWidgetItemPageImpl &&
             (identical(other.icon, icon) || other.icon == icon) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.id, id) || other.id == id) &&
@@ -175,8 +175,9 @@ class _$CmsWidgetItemPage extends CmsWidgetItemPage {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$CmsWidgetItemPageCopyWith<_$CmsWidgetItemPage> get copyWith =>
-      __$$CmsWidgetItemPageCopyWithImpl<_$CmsWidgetItemPage>(this, _$identity);
+  _$$CmsWidgetItemPageImplCopyWith<_$CmsWidgetItemPageImpl> get copyWith =>
+      __$$CmsWidgetItemPageImplCopyWithImpl<_$CmsWidgetItemPageImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -260,7 +261,7 @@ abstract class CmsWidgetItemPage extends CmsWidgetItem {
       {required final Widget icon,
       required final Widget title,
       required final String id,
-      required final Widget content}) = _$CmsWidgetItemPage;
+      required final Widget content}) = _$CmsWidgetItemPageImpl;
   CmsWidgetItemPage._() : super._();
 
   Widget get icon;
@@ -268,25 +269,25 @@ abstract class CmsWidgetItemPage extends CmsWidgetItem {
   String get id;
   Widget get content;
   @JsonKey(ignore: true)
-  _$$CmsWidgetItemPageCopyWith<_$CmsWidgetItemPage> get copyWith =>
+  _$$CmsWidgetItemPageImplCopyWith<_$CmsWidgetItemPageImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$CmsWidgetItemActionCopyWith<$Res> {
-  factory _$$CmsWidgetItemActionCopyWith(_$CmsWidgetItemAction value,
-          $Res Function(_$CmsWidgetItemAction) then) =
-      __$$CmsWidgetItemActionCopyWithImpl<$Res>;
+abstract class _$$CmsWidgetItemActionImplCopyWith<$Res> {
+  factory _$$CmsWidgetItemActionImplCopyWith(_$CmsWidgetItemActionImpl value,
+          $Res Function(_$CmsWidgetItemActionImpl) then) =
+      __$$CmsWidgetItemActionImplCopyWithImpl<$Res>;
   @useResult
   $Res call({Widget icon, Widget title, void Function() onPressed});
 }
 
 /// @nodoc
-class __$$CmsWidgetItemActionCopyWithImpl<$Res>
-    extends _$CmsWidgetItemCopyWithImpl<$Res, _$CmsWidgetItemAction>
-    implements _$$CmsWidgetItemActionCopyWith<$Res> {
-  __$$CmsWidgetItemActionCopyWithImpl(
-      _$CmsWidgetItemAction _value, $Res Function(_$CmsWidgetItemAction) _then)
+class __$$CmsWidgetItemActionImplCopyWithImpl<$Res>
+    extends _$CmsWidgetItemCopyWithImpl<$Res, _$CmsWidgetItemActionImpl>
+    implements _$$CmsWidgetItemActionImplCopyWith<$Res> {
+  __$$CmsWidgetItemActionImplCopyWithImpl(_$CmsWidgetItemActionImpl _value,
+      $Res Function(_$CmsWidgetItemActionImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -296,7 +297,7 @@ class __$$CmsWidgetItemActionCopyWithImpl<$Res>
     Object? title = null,
     Object? onPressed = null,
   }) {
-    return _then(_$CmsWidgetItemAction(
+    return _then(_$CmsWidgetItemActionImpl(
       icon: null == icon
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
@@ -315,8 +316,8 @@ class __$$CmsWidgetItemActionCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$CmsWidgetItemAction extends CmsWidgetItemAction {
-  _$CmsWidgetItemAction(
+class _$CmsWidgetItemActionImpl extends CmsWidgetItemAction {
+  _$CmsWidgetItemActionImpl(
       {required this.icon, required this.title, required this.onPressed})
       : super._();
 
@@ -333,10 +334,10 @@ class _$CmsWidgetItemAction extends CmsWidgetItemAction {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CmsWidgetItemAction &&
+            other is _$CmsWidgetItemActionImpl &&
             (identical(other.icon, icon) || other.icon == icon) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.onPressed, onPressed) ||
@@ -349,8 +350,8 @@ class _$CmsWidgetItemAction extends CmsWidgetItemAction {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$CmsWidgetItemActionCopyWith<_$CmsWidgetItemAction> get copyWith =>
-      __$$CmsWidgetItemActionCopyWithImpl<_$CmsWidgetItemAction>(
+  _$$CmsWidgetItemActionImplCopyWith<_$CmsWidgetItemActionImpl> get copyWith =>
+      __$$CmsWidgetItemActionImplCopyWithImpl<_$CmsWidgetItemActionImpl>(
           this, _$identity);
 
   @override
@@ -434,32 +435,32 @@ abstract class CmsWidgetItemAction extends CmsWidgetItem {
   factory CmsWidgetItemAction(
       {required final Widget icon,
       required final Widget title,
-      required final void Function() onPressed}) = _$CmsWidgetItemAction;
+      required final void Function() onPressed}) = _$CmsWidgetItemActionImpl;
   CmsWidgetItemAction._() : super._();
 
   Widget get icon;
   Widget get title;
   void Function() get onPressed;
   @JsonKey(ignore: true)
-  _$$CmsWidgetItemActionCopyWith<_$CmsWidgetItemAction> get copyWith =>
+  _$$CmsWidgetItemActionImplCopyWith<_$CmsWidgetItemActionImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$CmsWidgetItemCustomCopyWith<$Res> {
-  factory _$$CmsWidgetItemCustomCopyWith(_$CmsWidgetItemCustom value,
-          $Res Function(_$CmsWidgetItemCustom) then) =
-      __$$CmsWidgetItemCustomCopyWithImpl<$Res>;
+abstract class _$$CmsWidgetItemCustomImplCopyWith<$Res> {
+  factory _$$CmsWidgetItemCustomImplCopyWith(_$CmsWidgetItemCustomImpl value,
+          $Res Function(_$CmsWidgetItemCustomImpl) then) =
+      __$$CmsWidgetItemCustomImplCopyWithImpl<$Res>;
   @useResult
   $Res call({int? flex, Widget child});
 }
 
 /// @nodoc
-class __$$CmsWidgetItemCustomCopyWithImpl<$Res>
-    extends _$CmsWidgetItemCopyWithImpl<$Res, _$CmsWidgetItemCustom>
-    implements _$$CmsWidgetItemCustomCopyWith<$Res> {
-  __$$CmsWidgetItemCustomCopyWithImpl(
-      _$CmsWidgetItemCustom _value, $Res Function(_$CmsWidgetItemCustom) _then)
+class __$$CmsWidgetItemCustomImplCopyWithImpl<$Res>
+    extends _$CmsWidgetItemCopyWithImpl<$Res, _$CmsWidgetItemCustomImpl>
+    implements _$$CmsWidgetItemCustomImplCopyWith<$Res> {
+  __$$CmsWidgetItemCustomImplCopyWithImpl(_$CmsWidgetItemCustomImpl _value,
+      $Res Function(_$CmsWidgetItemCustomImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -468,7 +469,7 @@ class __$$CmsWidgetItemCustomCopyWithImpl<$Res>
     Object? flex = freezed,
     Object? child = null,
   }) {
-    return _then(_$CmsWidgetItemCustom(
+    return _then(_$CmsWidgetItemCustomImpl(
       flex: freezed == flex
           ? _value.flex
           : flex // ignore: cast_nullable_to_non_nullable
@@ -483,8 +484,9 @@ class __$$CmsWidgetItemCustomCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$CmsWidgetItemCustom extends CmsWidgetItemCustom {
-  _$CmsWidgetItemCustom({this.flex, this.child = const SizedBox()}) : super._();
+class _$CmsWidgetItemCustomImpl extends CmsWidgetItemCustom {
+  _$CmsWidgetItemCustomImpl({this.flex, this.child = const SizedBox()})
+      : super._();
 
   @override
   final int? flex;
@@ -498,10 +500,10 @@ class _$CmsWidgetItemCustom extends CmsWidgetItemCustom {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CmsWidgetItemCustom &&
+            other is _$CmsWidgetItemCustomImpl &&
             (identical(other.flex, flex) || other.flex == flex) &&
             (identical(other.child, child) || other.child == child));
   }
@@ -512,8 +514,8 @@ class _$CmsWidgetItemCustom extends CmsWidgetItemCustom {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$CmsWidgetItemCustomCopyWith<_$CmsWidgetItemCustom> get copyWith =>
-      __$$CmsWidgetItemCustomCopyWithImpl<_$CmsWidgetItemCustom>(
+  _$$CmsWidgetItemCustomImplCopyWith<_$CmsWidgetItemCustomImpl> get copyWith =>
+      __$$CmsWidgetItemCustomImplCopyWithImpl<_$CmsWidgetItemCustomImpl>(
           this, _$identity);
 
   @override
@@ -595,12 +597,12 @@ class _$CmsWidgetItemCustom extends CmsWidgetItemCustom {
 
 abstract class CmsWidgetItemCustom extends CmsWidgetItem {
   factory CmsWidgetItemCustom({final int? flex, final Widget child}) =
-      _$CmsWidgetItemCustom;
+      _$CmsWidgetItemCustomImpl;
   CmsWidgetItemCustom._() : super._();
 
   int? get flex;
   Widget get child;
   @JsonKey(ignore: true)
-  _$$CmsWidgetItemCustomCopyWith<_$CmsWidgetItemCustom> get copyWith =>
+  _$$CmsWidgetItemCustomImplCopyWith<_$CmsWidgetItemCustomImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

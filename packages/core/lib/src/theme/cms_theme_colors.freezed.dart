@@ -12,7 +12,7 @@ part of 'cms_theme_colors.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$CmsThemeColors {
@@ -100,11 +100,11 @@ class _$CmsThemeColorsCopyWithImpl<$Res, $Val extends CmsThemeColors>
 }
 
 /// @nodoc
-abstract class _$$_CmsThemeColorsCopyWith<$Res>
+abstract class _$$CmsThemeColorsImplCopyWith<$Res>
     implements $CmsThemeColorsCopyWith<$Res> {
-  factory _$$_CmsThemeColorsCopyWith(
-          _$_CmsThemeColors value, $Res Function(_$_CmsThemeColors) then) =
-      __$$_CmsThemeColorsCopyWithImpl<$Res>;
+  factory _$$CmsThemeColorsImplCopyWith(_$CmsThemeColorsImpl value,
+          $Res Function(_$CmsThemeColorsImpl) then) =
+      __$$CmsThemeColorsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -118,11 +118,11 @@ abstract class _$$_CmsThemeColorsCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_CmsThemeColorsCopyWithImpl<$Res>
-    extends _$CmsThemeColorsCopyWithImpl<$Res, _$_CmsThemeColors>
-    implements _$$_CmsThemeColorsCopyWith<$Res> {
-  __$$_CmsThemeColorsCopyWithImpl(
-      _$_CmsThemeColors _value, $Res Function(_$_CmsThemeColors) _then)
+class __$$CmsThemeColorsImplCopyWithImpl<$Res>
+    extends _$CmsThemeColorsCopyWithImpl<$Res, _$CmsThemeColorsImpl>
+    implements _$$CmsThemeColorsImplCopyWith<$Res> {
+  __$$CmsThemeColorsImplCopyWithImpl(
+      _$CmsThemeColorsImpl _value, $Res Function(_$CmsThemeColorsImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -136,7 +136,7 @@ class __$$_CmsThemeColorsCopyWithImpl<$Res>
     Object? disabled = null,
     Object? text = null,
   }) {
-    return _then(_$_CmsThemeColors(
+    return _then(_$CmsThemeColorsImpl(
       primary: null == primary
           ? _value.primary
           : primary // ignore: cast_nullable_to_non_nullable
@@ -171,8 +171,8 @@ class __$$_CmsThemeColorsCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_CmsThemeColors extends _CmsThemeColors {
-  _$_CmsThemeColors(
+class _$CmsThemeColorsImpl extends _CmsThemeColors {
+  _$CmsThemeColorsImpl(
       {required this.primary,
       required this.accent,
       required this.field,
@@ -203,10 +203,10 @@ class _$_CmsThemeColors extends _CmsThemeColors {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CmsThemeColors &&
+            other is _$CmsThemeColorsImpl &&
             (identical(other.primary, primary) || other.primary == primary) &&
             (identical(other.accent, accent) || other.accent == accent) &&
             (identical(other.field, field) || other.field == field) &&
@@ -224,8 +224,9 @@ class _$_CmsThemeColors extends _CmsThemeColors {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_CmsThemeColorsCopyWith<_$_CmsThemeColors> get copyWith =>
-      __$$_CmsThemeColorsCopyWithImpl<_$_CmsThemeColors>(this, _$identity);
+  _$$CmsThemeColorsImplCopyWith<_$CmsThemeColorsImpl> get copyWith =>
+      __$$CmsThemeColorsImplCopyWithImpl<_$CmsThemeColorsImpl>(
+          this, _$identity);
 }
 
 abstract class _CmsThemeColors extends CmsThemeColors {
@@ -236,7 +237,7 @@ abstract class _CmsThemeColors extends CmsThemeColors {
       required final Color canvas,
       required final Color error,
       required final Color disabled,
-      required final Color text}) = _$_CmsThemeColors;
+      required final Color text}) = _$CmsThemeColorsImpl;
   _CmsThemeColors._() : super._();
 
   @override
@@ -255,6 +256,6 @@ abstract class _CmsThemeColors extends CmsThemeColors {
   Color get text;
   @override
   @JsonKey(ignore: true)
-  _$$_CmsThemeColorsCopyWith<_$_CmsThemeColors> get copyWith =>
+  _$$CmsThemeColorsImplCopyWith<_$CmsThemeColorsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

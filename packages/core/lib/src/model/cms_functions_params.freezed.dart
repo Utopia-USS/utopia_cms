@@ -12,7 +12,7 @@ part of 'cms_functions_params.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$CmsFunctionsSortingParams {
@@ -70,25 +70,25 @@ class _$CmsFunctionsSortingParamsCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_CmsFunctionsSortingParamsCopyWith<$Res>
+abstract class _$$CmsFunctionsSortingParamsImplCopyWith<$Res>
     implements $CmsFunctionsSortingParamsCopyWith<$Res> {
-  factory _$$_CmsFunctionsSortingParamsCopyWith(
-          _$_CmsFunctionsSortingParams value,
-          $Res Function(_$_CmsFunctionsSortingParams) then) =
-      __$$_CmsFunctionsSortingParamsCopyWithImpl<$Res>;
+  factory _$$CmsFunctionsSortingParamsImplCopyWith(
+          _$CmsFunctionsSortingParamsImpl value,
+          $Res Function(_$CmsFunctionsSortingParamsImpl) then) =
+      __$$CmsFunctionsSortingParamsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({bool sortDesc, bool invertNulls, String fieldKey});
 }
 
 /// @nodoc
-class __$$_CmsFunctionsSortingParamsCopyWithImpl<$Res>
+class __$$CmsFunctionsSortingParamsImplCopyWithImpl<$Res>
     extends _$CmsFunctionsSortingParamsCopyWithImpl<$Res,
-        _$_CmsFunctionsSortingParams>
-    implements _$$_CmsFunctionsSortingParamsCopyWith<$Res> {
-  __$$_CmsFunctionsSortingParamsCopyWithImpl(
-      _$_CmsFunctionsSortingParams _value,
-      $Res Function(_$_CmsFunctionsSortingParams) _then)
+        _$CmsFunctionsSortingParamsImpl>
+    implements _$$CmsFunctionsSortingParamsImplCopyWith<$Res> {
+  __$$CmsFunctionsSortingParamsImplCopyWithImpl(
+      _$CmsFunctionsSortingParamsImpl _value,
+      $Res Function(_$CmsFunctionsSortingParamsImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -98,7 +98,7 @@ class __$$_CmsFunctionsSortingParamsCopyWithImpl<$Res>
     Object? invertNulls = null,
     Object? fieldKey = null,
   }) {
-    return _then(_$_CmsFunctionsSortingParams(
+    return _then(_$CmsFunctionsSortingParamsImpl(
       sortDesc: null == sortDesc
           ? _value.sortDesc
           : sortDesc // ignore: cast_nullable_to_non_nullable
@@ -117,8 +117,8 @@ class __$$_CmsFunctionsSortingParamsCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_CmsFunctionsSortingParams implements _CmsFunctionsSortingParams {
-  const _$_CmsFunctionsSortingParams(
+class _$CmsFunctionsSortingParamsImpl implements _CmsFunctionsSortingParams {
+  const _$CmsFunctionsSortingParamsImpl(
       {required this.sortDesc,
       this.invertNulls = false,
       required this.fieldKey});
@@ -137,10 +137,10 @@ class _$_CmsFunctionsSortingParams implements _CmsFunctionsSortingParams {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_CmsFunctionsSortingParams &&
+            other is _$CmsFunctionsSortingParamsImpl &&
             (identical(other.sortDesc, sortDesc) ||
                 other.sortDesc == sortDesc) &&
             (identical(other.invertNulls, invertNulls) ||
@@ -155,16 +155,16 @@ class _$_CmsFunctionsSortingParams implements _CmsFunctionsSortingParams {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_CmsFunctionsSortingParamsCopyWith<_$_CmsFunctionsSortingParams>
-      get copyWith => __$$_CmsFunctionsSortingParamsCopyWithImpl<
-          _$_CmsFunctionsSortingParams>(this, _$identity);
+  _$$CmsFunctionsSortingParamsImplCopyWith<_$CmsFunctionsSortingParamsImpl>
+      get copyWith => __$$CmsFunctionsSortingParamsImplCopyWithImpl<
+          _$CmsFunctionsSortingParamsImpl>(this, _$identity);
 }
 
 abstract class _CmsFunctionsSortingParams implements CmsFunctionsSortingParams {
   const factory _CmsFunctionsSortingParams(
       {required final bool sortDesc,
       final bool invertNulls,
-      required final String fieldKey}) = _$_CmsFunctionsSortingParams;
+      required final String fieldKey}) = _$CmsFunctionsSortingParamsImpl;
 
   @override
   bool get sortDesc;
@@ -174,6 +174,6 @@ abstract class _CmsFunctionsSortingParams implements CmsFunctionsSortingParams {
   String get fieldKey;
   @override
   @JsonKey(ignore: true)
-  _$$_CmsFunctionsSortingParamsCopyWith<_$_CmsFunctionsSortingParams>
+  _$$CmsFunctionsSortingParamsImplCopyWith<_$CmsFunctionsSortingParamsImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
