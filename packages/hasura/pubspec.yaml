@@ -14,3 +14,4 @@ dependencies:
   gql: ^1.0.1
   graphql: ^5.2.3
   fast_immutable_collections: ^11.1.0
+  utopia_reporter: ^0.1.0+5

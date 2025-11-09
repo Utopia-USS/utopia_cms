@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dropzone/flutter_dropzone.dart';
-import 'package:utopia_cms/src/ui/widget/media/cms_media_field_state.dart';
 import 'package:utopia_cms/src/ui/widget/media/cms_media_field_item_wrapper.dart';
+import 'package:utopia_cms/src/ui/widget/media/cms_media_field_state.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
 
 class CmsMediaFieldAddButton extends StatelessWidget {
@@ -40,7 +40,7 @@ class CmsMediaFieldAddButton extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Icon(Icons.upload, color: context.textStyles.text.color, size: 36),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       SizedBox(
                         width: size / 3 * 2,
                         child: Text(

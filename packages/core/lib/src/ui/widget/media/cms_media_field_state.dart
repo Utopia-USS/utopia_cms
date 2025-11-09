@@ -115,7 +115,7 @@ CmsMediaFieldState useCmsMediaFieldState({
 
   useEffect(() {
     baseState.addOnSavedCallback((value) async {
-      await Future.wait(deletedFilesState.value.map((e) async => await delegate.delete(e)));
+      await Future.wait(deletedFilesState.value.map((e) async => delegate.delete(e)));
     });
   }, []);
 

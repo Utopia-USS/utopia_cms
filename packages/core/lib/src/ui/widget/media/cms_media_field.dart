@@ -95,9 +95,9 @@ class CmsMediaField extends HookWidget {
       case CmsMediaType.image:
         return CmsMediaFieldImage(url: url);
       case CmsMediaType.doc:
-        return Icon(Icons.picture_as_pdf);
+        return const Icon(Icons.picture_as_pdf);
       case CmsMediaType.unknown:
-        return Icon(Icons.question_mark_rounded);
+        return const Icon(Icons.question_mark_rounded);
     }
   }
 }

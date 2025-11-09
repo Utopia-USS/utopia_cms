@@ -12,6 +12,6 @@ dependencies:
   graphql: ^5.2.3
   utopia_cms: ^0.2.0+1
   utopia_utils: ^0.3.3
-
+  utopia_reporter: ^0.1.0+5
 dependency_overrides:
   http: 1.0.0

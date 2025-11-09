@@ -1,8 +1,8 @@
 import 'package:utopia_cms/src/model/cms_functions_params.dart';
 import 'package:utopia_cms/src/model/table_action/cms_table_action.dart';
+import 'package:utopia_cms/src/ui/item_management/cms_item_management_page.dart';
 import 'package:utopia_cms/src/ui/widget/table/cms_table.dart';
 import 'package:utopia_cms/src/ui/widget/table/cms_table_item.dart';
-import 'package:utopia_cms/src/ui/item_management/cms_item_management_page.dart';
 
 /// Modifies basic actions' behavior in the [CmsTable]
 class CmsTableParams {

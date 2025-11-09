@@ -34,7 +34,7 @@ CmsVideoPlayerState useCmsVidePlayerState({
   final controllerValue = useValueListenable(
       controllerState.value ?? ValueNotifier(const VideoPlayerValue.uninitialized()));
   final focusNode = useMemoized(FocusNode.new);
-  final animationController = useAnimationController(duration: Duration(milliseconds: 300));
+  final animationController = useAnimationController(duration: const Duration(milliseconds: 300));
   final isPlayingState = useState<bool>(false);
 
   useListenable(focusNode);

@@ -622,14 +622,14 @@ packages:
       path: "../core"
       relative: true
     source: path
-    version: "0.2.0"
+    version: "0.2.0+1"
   utopia_cms_graphql:
     dependency: "direct main"
     description:
       path: "../graphql"
       relative: true
     source: path
-    version: "0.3.0"
+    version: "0.3.0+1"
   utopia_collections:
     dependency: transitive
     description:
@@ -655,7 +655,7 @@ packages:
     source: hosted
     version: "0.0.6+1"
   utopia_reporter:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: utopia_reporter
       sha256: "2cc4c3a4900a3d93149beefe2972761b8881b315da78253bb5053a40c4102c18"

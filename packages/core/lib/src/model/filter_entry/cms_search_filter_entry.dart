@@ -11,6 +11,7 @@ import 'package:utopia_cms/src/util/map_extensions.dart';
 /// [CmsFilterEntry] for handling basic search
 class CmsFilterSearchEntry extends CmsFilterEntry<String?> {
   final List<TextInputFormatter>? formatters;
+  @override
   final List<String> filterKeys;
 
   CmsFilterSearchEntry({
