@@ -1,3 +1,7 @@
+## 0.2.0+2
+
+ - **FIX**: linter issues.
+
 ## 0.2.0+1
 
  - **FIX**: Update dependencies.

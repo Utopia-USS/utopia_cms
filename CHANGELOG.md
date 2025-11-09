@@ -15,6 +15,42 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`utopia_cms` - `v0.2.0+2`](#utopia_cms---v0202)
+ - [`utopia_cms_firebase` - `v0.2.0+2`](#utopia_cms_firebase---v0202)
+ - [`utopia_cms_graphql` - `v0.3.0+2`](#utopia_cms_graphql---v0302)
+ - [`utopia_cms_hasura` - `v0.3.0+2`](#utopia_cms_hasura---v0302)
+
+---
+
+#### `utopia_cms` - `v0.2.0+2`
+
+ - **FIX**: linter issues.
+
+#### `utopia_cms_firebase` - `v0.2.0+2`
+
+ - **FIX**: linter issues.
+
+#### `utopia_cms_graphql` - `v0.3.0+2`
+
+ - **FIX**: linter issues.
+
+#### `utopia_cms_hasura` - `v0.3.0+2`
+
+ - **FIX**: linter issues.
+
+
+## 2025-11-09
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`utopia_cms` - `v0.2.0+1`](#utopia_cms---v0201)
  - [`utopia_cms_firebase` - `v0.2.0+1`](#utopia_cms_firebase---v0201)
  - [`utopia_cms_graphql` - `v0.3.0+1`](#utopia_cms_graphql---v0301)
