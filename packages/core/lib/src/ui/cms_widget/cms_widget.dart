@@ -6,9 +6,6 @@ import 'package:utopia_cms/src/theme/cms_theme_data.dart';
 import 'package:utopia_cms/src/ui/cms_widget/cms_widget_item.dart';
 import 'package:utopia_cms/src/ui/menu/cms_menu.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
-import 'package:utopia_hooks/utopia_hooks.dart';
-import 'package:utopia_utils/utopia_utils.dart';
-import 'package:utopia_widgets/misc/cross_fade_indexed_stack.dart';
 
 class CmsWidget extends HookWidget {
   final List<CmsWidgetItem> items;
@@ -29,7 +26,7 @@ class CmsWidget extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final selectedPageIdState =
-        selectedPageId ?? useState(useMemoized(() => items.whereType<CmsWidgetItemPage>().first.id)).asMutableValue();
+        selectedPageId ?? useState(useMemoized(() => items.whereType<CmsWidgetItemPage>().first.id));
 
     return Provider.value(
       value: theme ?? CmsThemeData.defaultTheme,

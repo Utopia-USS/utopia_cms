@@ -1,7 +1,7 @@
 import 'package:graphql/client.dart';
 import 'package:utopia_cms_graphql/src/service/cms_graphql_client_service.dart';
 import 'package:utopia_cms_graphql/src/service/cms_graphql_service.dart';
-import 'package:utopia_utils/utopia_utils.dart';
+import 'package:utopia_reporter/utopia_reporter.dart';
 
 class CmsGraphQL {
   static const instance = CmsGraphQL();

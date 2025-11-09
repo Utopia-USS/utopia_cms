@@ -7,7 +7,6 @@ import 'package:utopia_cms/src/model/entry/cms_entry.dart';
 import 'package:utopia_cms/src/ui/item_management/state/cms_item_management_state.dart';
 import 'package:utopia_cms/src/ui/item_management/view/cms_item_management_view.dart';
 import 'package:utopia_cms/src/util/json_map.dart';
-import 'package:utopia_hooks/utopia_hooks.dart';
 
 class CmsItemManagementArgs {
   final JsonMap? initialValue;

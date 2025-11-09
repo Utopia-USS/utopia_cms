@@ -1,9 +1,9 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
+import 'package:utopia_arch/utopia_arch.dart';
 import 'package:utopia_cms/src/ui/widget/table/cms_table.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
 import 'package:utopia_cms/utopia_cms.dart';
-import 'package:utopia_widgets/misc/multi_widget.dart';
 
 class CmsTableHeader extends StatelessWidget {
   final IList<CmsEntry<dynamic>> entries;
@@ -75,7 +75,7 @@ class CmsTableHeader extends StatelessWidget {
     final colorBottom = isCurrent && !currentSortParams!.sortDesc;
     final colorTop = isCurrent && currentSortParams!.sortDesc;
 
-    Color getColor({required bool isActive}) => isActive ? color : color.withOpacity(0.25);
+    Color getColor({required bool isActive}) => isActive ? color : color.withValues(alpha: 0.25);
 
     ///giga hax: icons have some padding so they can't be in column
     return Padding(

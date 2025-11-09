@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:utopia_arch/utopia_arch.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
-import 'package:utopia_widgets/misc/multi_widget.dart';
 
 class CmsTablePreviewText extends StatelessWidget {
   final String? text;
@@ -31,7 +31,8 @@ class CmsTablePreviewText extends StatelessWidget {
   }
 
   Widget _buildContent({
-    required TextStyle style,required BuildContext context,
+    required TextStyle style,
+    required BuildContext context,
   }) {
     return _buildGestureDetector(
       context: context,

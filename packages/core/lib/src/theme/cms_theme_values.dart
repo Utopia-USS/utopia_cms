@@ -23,7 +23,7 @@ class CmsThemeValues {
     fieldContentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
     menuShadow: [
       BoxShadow(
-        color: Colors.black.withOpacity(0.35),
+        color: Colors.black.withValues(alpha: 0.35),
         offset: const Offset(3, 3), //(x,y)
         blurRadius: 14,
       ),

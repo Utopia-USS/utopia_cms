@@ -40,7 +40,9 @@ class CmsItemManagementState implements CmsItemManagementBaseState {
   final CmsTableParams params;
 
   bool get canDelete => isEdit && params.canDelete;
+
   bool get canCreate => !isEdit || params.canEdit;
+
   bool get isButtonAvailable =>
       !entries.where((e) => e.required && e.editable).any((element) => values.getAtPath(element.key) == null);
 
@@ -67,7 +69,9 @@ CmsItemManagementState useCmsItemManagementState({
   final state = useState<JsonMap>({...?args.initialValue});
 
   void onValueChanged(String key, Object? value) {
-    state.mutate((it) => it.setAtPath(key, value));
+    final newMap = Map.fromEntries(state.value.entries);
+    newMap.setAtPath(key, value);
+    state.value = newMap;
   }
 
   final onSavedCallbacksState = useState<IList<OnSavedCallback>>(IList());
@@ -92,7 +96,7 @@ CmsItemManagementState useCmsItemManagementState({
   final submitEnabled =
       !args.entries.any((e) => e.required && (state.value[e.key] == null || state.value[e.key].toString() == ''));
 
-  final scrollController = useScrollController();
+  final scrollController = useMemoized(ScrollController.new);
 
   return CmsItemManagementState(
     onDelete: onDelete,

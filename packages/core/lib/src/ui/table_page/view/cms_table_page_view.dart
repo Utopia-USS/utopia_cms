@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
+import 'package:utopia_arch/utopia_arch.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry.dart';
 import 'package:utopia_cms/src/model/filter_entry/cms_filter_entry.dart';
 import 'package:utopia_cms/src/model/table_action/cms_table_action.dart';
@@ -13,9 +14,6 @@ import 'package:utopia_cms/src/ui/widget/loading/cms_loader.dart';
 import 'package:utopia_cms/src/ui/widget/table/cms_table.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
 import 'package:utopia_cms/src/util/entries_extensions.dart';
-import 'package:utopia_hooks/utopia_hooks.dart';
-import 'package:utopia_widgets/misc/multi_widget.dart';
-
 class CmsTablePageView extends HookWidget {
   final CmsTablePageState state;
   final IList<CmsEntry<dynamic>> entries;

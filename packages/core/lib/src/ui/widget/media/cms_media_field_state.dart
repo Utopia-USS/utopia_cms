@@ -10,8 +10,6 @@ import 'package:utopia_cms/src/ui/attachment_preview/cms_media_preview_page.dart
 import 'package:utopia_cms/src/ui/attachment_preview/cms_media_type.dart';
 import 'package:utopia_cms/src/ui/item_management/state/cms_item_management_state.dart';
 import 'package:utopia_cms/src/ui/widget/dialog/cms_dialog.dart';
-import 'package:utopia_hooks/utopia_hooks.dart';
-import 'package:utopia_utils/utopia_utils.dart';
 
 class CmsMediaFieldState {
   final CmsMediaDelegate delegate;
@@ -23,7 +21,8 @@ class CmsMediaFieldState {
   final void Function() setHighlightedTrue;
   final void Function() setHighlightedFalse;
   final void Function(DropzoneViewController) onCreated;
-  final Future<void> Function(dynamic) onDropFile; //in flutter_dropzone docs this variable has to be dynamic
+  final Future<void> Function(DropzoneFileInterface)
+      onDropFile; //in flutter_dropzone docs this variable has to be dynamic
   final void Function(int index, dynamic value) onUploaded;
   final Future<void> Function() onSelectFilePressed;
 
@@ -64,9 +63,9 @@ CmsMediaFieldState useCmsMediaFieldState({
   final deletedFilesState = useState<IList<dynamic>>(IList());
   final uploadedItems = filesState.value.where((e) => e is! XFile).toIList();
 
-  final context = useContext();
+  final context = useBuildContext();
 
-  Future<bool> checkMIME(dynamic event, DropzoneViewController controller) async {
+  Future<bool> checkMIME(DropzoneFileInterface event, DropzoneViewController controller) async {
     final mime = await controller.getFileMIME(event);
 
     final isCorrect = supportedMedia.getMimes.contains(mime);
@@ -82,7 +81,7 @@ CmsMediaFieldState useCmsMediaFieldState({
     return isCorrect;
   }
 
-  Future<XFile> setUpXFile(dynamic file) async {
+  Future<XFile> setUpXFile(DropzoneFileInterface file) async {
     final data = await controller.value!.getFileData(file);
     final mime = await controller.value!.getFileMIME(file);
     final size = await controller.value!.getFileSize(file);
@@ -90,7 +89,7 @@ CmsMediaFieldState useCmsMediaFieldState({
     return XFile.fromData(data, name: name, length: size, mimeType: mime);
   }
 
-  Future<void> dropFile(dynamic file) async {
+  Future<void> dropFile(DropzoneFileInterface file) async {
     if (controller.value != null) {
       final isImage = await checkMIME(file, controller.value!);
       isHighlightedState.value = false;
@@ -109,18 +108,16 @@ CmsMediaFieldState useCmsMediaFieldState({
     }
   }
 
-  useSimpleEffect(() {
+  useEffect(() {
     final values = filesState.value;
     onChanged(values.isEmpty ? null : uploadedItems.unlock);
   }, [filesState.value]);
 
-
-  useSimpleEffect(() {
+  useEffect(() {
     baseState.addOnSavedCallback((value) async {
-      await Future.wait(deletedFilesState.value.map((e) async=> await delegate.delete(e)));
+      await Future.wait(deletedFilesState.value.map((e) async => await delegate.delete(e)));
     });
   }, []);
-
 
   Future<void> navigateToPreview(int index) async {
     await navigator.push<bool?>(
@@ -144,7 +141,7 @@ CmsMediaFieldState useCmsMediaFieldState({
   }
 
   return CmsMediaFieldState(
-    isHighlighted: isHighlightedState.asMutableValue(),
+    isHighlighted: isHighlightedState,
     setHighlightedTrue: () => isHighlightedState.value = true,
     setHighlightedFalse: () => isHighlightedState.value = false,
     onCreated: (value) => controller.value = value,
