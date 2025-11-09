@@ -6,7 +6,6 @@ import 'package:utopia_cms/src/ui/widget/header/cms_title.dart';
 import 'package:utopia_cms/src/ui/widget/media/cms_media_field_video_player.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
 import 'package:utopia_cms/utopia_cms.dart';
-import 'package:utopia_hooks/utopia_hooks.dart';
 
 class CmsMediaField extends HookWidget {
   final String Function(dynamic object)? urlBuilder;

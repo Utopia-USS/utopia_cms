@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:utopia_arch/utopia_arch.dart';
 import 'package:utopia_cms/src/ui/widget/wrapper/cms_field_wrapper.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
-import 'package:utopia_hooks/utopia_hooks.dart';
-import 'package:utopia_utils/utopia_utils.dart';
 
 class CmsTextField extends HookWidget {
   final String value;
@@ -43,13 +42,15 @@ class CmsTextField extends HookWidget {
   Widget build(BuildContext context) {
     final textStyles = context.textStyles;
     final colors = context.colors;
-    return StatelessTextEditingControllerWrapper(
-      value: value,
-      onChanged: (value) => onChanged(value.isEmpty ? null : value),
-      child: (controller) => Column(
+    final state = useFieldState(initialValue: value);
+    useEffect(() => onChanged(state.value.isEmpty ? null : state.value), [state.value]);
+
+    return TextEditingControllerWrapper(
+      text: state,
+      builder: (controller) => Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
+        children: <Widget>[
           if (error != null) DefaultTextStyle(style: textStyles.caption.copyWith(color: colors.error), child: error!),
           _buildField(context, controller),
         ].separatedWith(const SizedBox(height: 6)),

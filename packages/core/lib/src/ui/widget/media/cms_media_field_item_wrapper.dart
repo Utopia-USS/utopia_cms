@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
 import 'package:utopia_hooks/utopia_hooks.dart';
-import 'package:utopia_utils/utopia_utils.dart';
 
 class CmsMediaFieldItemWrapper extends HookWidget {
   final Widget child;
@@ -36,7 +35,7 @@ class CmsMediaFieldItemWrapper extends HookWidget {
           borderRadius: context.theme.borderRadius,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.16),
+              color: Colors.black.withValues(alpha: 0.16),
               blurRadius: 8,
               offset: const Offset(2, 2),
             ),
@@ -95,7 +94,7 @@ class CmsMediaFieldItemWrapper extends HookWidget {
 
   Widget _buildHoverItem({
     required String title,
-    required ValueNotifier<bool> state,
+    required MutableValue<bool> state,
     required Color color,
     required void Function() onPressed,
     required BuildContext context,
@@ -112,7 +111,7 @@ class CmsMediaFieldItemWrapper extends HookWidget {
           child: AnimatedContainer(
             width: size,
             duration: const Duration(milliseconds: 100),
-            color: state.value ? Colors.white.withOpacity(0.95) : defaultBackground,
+            color: state.value ? Colors.white.withValues(alpha: 0.95) : defaultBackground,
             child: Center(
               child: Text(
                 title,

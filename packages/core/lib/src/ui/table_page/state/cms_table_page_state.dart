@@ -85,7 +85,7 @@ CmsTablePageState useCmsTablePageState({
   }
 
   final state = useAutoComputedState<void>(
-    compute: () async {
+     () async {
       if (pagingEnabledState.value) {
         final result = await delegate.get(
           sorting: sortingParamsState.value,
@@ -169,7 +169,7 @@ CmsTablePageState useCmsTablePageState({
     }
   }
 
-  final scrollController = useScrollController();
+  final scrollController = useMemoized(ScrollController.new);
 
   Future<void> onSortPressed(CmsEntry entry) async {
     final currentValue = sortingParamsState.value;

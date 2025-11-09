@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:utopia_arch/utopia_arch.dart';
-import 'package:utopia_hooks/utopia_hooks.dart';
-import 'package:utopia_utils/utopia_utils.dart';
 import 'package:video_player/video_player.dart';
 
 class CmsVideoPlayerState {
@@ -22,9 +20,8 @@ CmsVideoPlayerState useCmsVidePlayerState({
   required String url,
 }) {
   final controllerState = useState<VideoPlayerController?>(null);
-  final dummyListenable = useState<VideoPlayerValue?>(null);
 
-  useSimpleEffect(() async {
+  useEffect(() async {
     controllerState.value = null;
     final controller = VideoPlayerController.networkUrl(Uri.parse(url));
     await controller.initialize().then((_) => controllerState.value = controller);
@@ -34,18 +31,19 @@ CmsVideoPlayerState useCmsVidePlayerState({
     return controllerState.value?.dispose;
   }, []);
 
-  final controllerValue = useValueListenable(controllerState.value ?? dummyListenable);
-  final focusNode = useFocusNode();
+  final controllerValue = useValueListenable(
+      controllerState.value ?? ValueNotifier(const VideoPlayerValue.uninitialized()));
+  final focusNode = useMemoized(FocusNode.new);
   final animationController = useAnimationController(duration: Duration(milliseconds: 300));
   final isPlayingState = useState<bool>(false);
 
   useListenable(focusNode);
 
-  useSimpleEffect(() {
+  useEffect(() {
     if (!focusNode.hasFocus) isPlayingState.value = false;
   }, [focusNode.hasFocus]);
 
-  useSimpleEffect(() async {
+  useEffect(() async {
     if (controllerState.value != null) {
       if (isPlayingState.value) {
         if (!focusNode.hasFocus) focusNode.requestFocus();
@@ -58,8 +56,8 @@ CmsVideoPlayerState useCmsVidePlayerState({
     }
   }, [isPlayingState.value]);
 
-  useSimpleEffect(() async {
-    if (controllerValue != null) {
+  useEffect(() async {
+    if (controllerValue.duration != Duration.zero) {
       if (controllerValue.position == controllerValue.duration) {
         isPlayingState.value = false;
         await controllerState.value!.seekTo(Duration.zero);
@@ -70,7 +68,7 @@ CmsVideoPlayerState useCmsVidePlayerState({
   return CmsVideoPlayerState(
     controller: controllerState.value,
     animationController: animationController,
-    isPlayingState: isPlayingState.asMutableValue(),
+    isPlayingState: isPlayingState,
     focusNode: focusNode,
   );
 }

@@ -29,7 +29,7 @@ class CmsMediaFieldAddButton extends StatelessWidget {
             children: [
               DropzoneView(
                 onCreated: state.onCreated,
-                onDrop: state.onDropFile,
+                onDropFile: state.onDropFile,
                 onHover: state.setHighlightedTrue,
                 onLeave: state.setHighlightedFalse,
               ),

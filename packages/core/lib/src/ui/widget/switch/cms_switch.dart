@@ -24,7 +24,7 @@ class CmsSwitch extends StatelessWidget {
           activeTrackColor: colors.primary,
           inactiveTrackColor: colors.disabled,
           inactiveThumbColor: Colors.white,
-          activeColor: Colors.white,
+          activeThumbColor: Colors.white,
           value: value,
           onChanged: onChanged,
         ),

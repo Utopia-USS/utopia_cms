@@ -8,7 +8,6 @@ import 'package:utopia_cms/src/ui/widget/table/cms_table_item.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
 import 'package:utopia_cms/src/util/json_map.dart';
 import 'package:utopia_hooks/utopia_hooks.dart';
-import 'package:utopia_utils/utopia_utils.dart';
 
 class CmsTable extends HookWidget {
   final bool showLoader;

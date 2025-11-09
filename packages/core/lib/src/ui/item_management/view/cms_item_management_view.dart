@@ -176,7 +176,7 @@ class CmsItemManagementView extends HookWidget {
           gradient: LinearGradient(
             begin: Alignment.bottomCenter,
             end: Alignment.topCenter,
-            colors: [context.colors.canvas, context.colors.canvas.withOpacity(0)],
+            colors: [context.colors.canvas, context.colors.canvas.withValues(alpha: 0)],
           ),
         ),
         child: Row(
@@ -185,7 +185,7 @@ class CmsItemManagementView extends HookWidget {
             if (state.canDelete)
               CmsButton(
                 maxWidth: context.theme.shortButtonWidth,
-                colors: [context.colors.error, context.colors.error.withOpacity(0.95)],
+                colors: [context.colors.error, context.colors.error.withValues(alpha: 0.95)],
                 onTap: state.onDelete,
                 loading: state.isDeleting,
                 dense: true,

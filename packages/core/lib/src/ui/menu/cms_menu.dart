@@ -5,9 +5,6 @@ import 'package:utopia_cms/src/ui/cms_widget/cms_widget_item.dart';
 import 'package:utopia_cms/src/ui/widget/layout/cms_gradient_background.dart';
 import 'package:utopia_cms/src/ui/menu/cms_menu_tile.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
-import 'package:utopia_hooks/utopia_hooks.dart';
-import 'package:utopia_widgets/layout/fill_viewport_scroll_view.dart';
-import 'package:utopia_widgets/misc/multi_widget.dart';
 
 class CmsMenu extends HookWidget {
   final bool canExpand;

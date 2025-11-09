@@ -20,7 +20,7 @@ class CmsMockLoadingBox extends StatelessWidget {
       padding: padding ?? EdgeInsets.zero,
       child: Shimmer.fromColors(
         baseColor: context.colors.field,
-        highlightColor: context.colors.field.withOpacity(0.2),
+        highlightColor: context.colors.field.withValues(alpha: 0.2),
         child: Container(
           height: height,
           width: width,

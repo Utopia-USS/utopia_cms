@@ -10,7 +10,7 @@ environment:
 dependencies:
   utopia_cms: ^0.2.0
   utopia_cms_graphql: ^0.3.0
-  utopia_utils: ^0.2.25
-  gql: ^1.0.0
-  graphql: ^5.1.3
-  fast_immutable_collections: ^7.4.3
+  utopia_utils: ^0.3.3
+  gql: ^1.0.1
+  graphql: ^5.2.3
+  fast_immutable_collections: ^11.1.0

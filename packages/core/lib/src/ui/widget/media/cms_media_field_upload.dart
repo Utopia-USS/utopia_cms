@@ -26,7 +26,7 @@ class CmsMediaFieldUpload extends HookWidget {
   Widget build(BuildContext context) {
     final uploadingState = useState<bool>(true);
     useAutoComputedState(
-      compute: () async {
+       () async {
         final result = await delegate.upload(file);
         final enhancedResult = valueBuilder?.call(result, file);
         state.onUploaded(index, enhancedResult ?? result.downloadUrl);

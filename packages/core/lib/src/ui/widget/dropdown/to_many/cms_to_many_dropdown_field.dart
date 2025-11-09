@@ -10,7 +10,6 @@ import 'package:utopia_cms/src/ui/widget/wrapper/cms_field_wrapper.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
 import 'package:utopia_cms/src/util/json_map.dart';
 import 'package:utopia_hooks/utopia_hooks.dart';
-import 'package:utopia_utils/utopia_utils.dart';
 
 class CmsToManyDropdownField extends HookWidget {
   final CmsToManyDelegate delegate;
@@ -49,19 +48,23 @@ class CmsToManyDropdownField extends HookWidget {
     final style = context.textStyles.text;
     final labelStyle = context.textStyles.label;
     return DropdownSearch<JsonMap>.multiSelection(
-      asyncItems: (filter) async {
+      items: (filter, props) async {
         return state.getItems(
           filter: filterBuilder?.call(filter) ?? _buildFilter(filter),
         );
       },
-      dropdownButtonProps: DropdownButtonProps(color: context.colors.accent),
+
+
+      suffixProps: DropdownSuffixProps(
+        dropdownButtonProps: DropdownButtonProps(color: context.colors.accent),
+        clearButtonProps: const ClearButtonProps(color: Colors.red)
+      ),
       itemAsString: valueLabelBuilder,
-      clearButtonProps: _buildClearButtonsProps(context),
       onChanged: (value) => state.onChanged(value.toISet()),
       selectedItems: state.selectedValues.toList(),
       compareFn: (a, b) => a[delegate.foreignIdKey] == b[delegate.foreignIdKey],
-      dropdownDecoratorProps: const DropDownDecoratorProps(
-        dropdownSearchDecoration: InputDecoration(
+      decoratorProps: const DropDownDecoratorProps(
+        decoration: InputDecoration(
           border: InputBorder.none,
           focusedBorder: InputBorder.none,
           enabledBorder: InputBorder.none,
@@ -85,12 +88,12 @@ class CmsToManyDropdownField extends HookWidget {
         showSearchBox: true,
         scrollbarProps: const ScrollbarProps(thumbColor: Colors.transparent, trackColor: Colors.transparent),
         loadingBuilder: (_, __) => const CmsLoader(),
-        itemBuilder: (context, value, isSelected) => Padding(
+        itemBuilder: (context, value,isDisabled, isSelected) => Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 18),
           child: Text(valueLabelBuilder(value), style: style),
         ),
-        validationWidgetBuilder: (context, value) => _buildValidator(context, value, state),
-        selectionWidget: (context, value, isSelected) => _buildCheckBox(isSelected, context),
+        validationBuilder: (context, value) => _buildValidator(context, value, state),
+        checkBoxBuilder: (context, value, isDisabled,isSelected) => _buildCheckBox(isSelected, context),
         searchFieldProps: _buildSearchProps(context),
       ),
     );
@@ -111,10 +114,6 @@ class CmsToManyDropdownField extends HookWidget {
         ),
       ),
     );
-  }
-
-  ClearButtonProps _buildClearButtonsProps(BuildContext context) {
-    return const ClearButtonProps(color: Colors.red);
   }
 
   TextFieldProps _buildSearchProps(BuildContext context) {
