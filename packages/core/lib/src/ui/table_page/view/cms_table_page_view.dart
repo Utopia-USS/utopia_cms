@@ -14,6 +14,7 @@ import 'package:utopia_cms/src/ui/widget/loading/cms_loader.dart';
 import 'package:utopia_cms/src/ui/widget/table/cms_table.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
 import 'package:utopia_cms/src/util/entries_extensions.dart';
+
 class CmsTablePageView extends HookWidget {
   final CmsTablePageState state;
   final IList<CmsEntry<dynamic>> entries;
@@ -30,7 +31,7 @@ class CmsTablePageView extends HookWidget {
     required this.filterEntries,
   });
 
-  static const double _filterWidthFactor = 120.0;
+  static const double _filterWidthFactor = 100.0;
 
   @override
   Widget build(BuildContext context) {
@@ -64,9 +65,7 @@ class CmsTablePageView extends HookWidget {
         SizedBox(height: context.theme.pageTopPadding),
         _buildTopRow(context),
         Expanded(
-          child:
-
-              _buildTable(context),
+          child: _buildTable(context),
         ),
         if (values.isNotEmpty && state.computedState.value is ComputedStateValueInProgress)
           const Center(
@@ -79,45 +78,48 @@ class CmsTablePageView extends HookWidget {
   Widget _buildTopRow(BuildContext context) {
     //todo revisit text
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 36.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      child: Row(
+        spacing: 16,
         children: [
-          Row(
-            children: [
-              CmsHeader(text: title),
-              const Spacer(),
-              if (state.params.canCreate)
-                CmsButton(
-                  maxWidth: context.theme.shortButtonWidth,
-                  onTap: state.onCreatePressed,
-                  dense: true,
-                  child: const Text("Create"),
-                ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: filterEntries.map(
-              (e) {
-                return Flexible(
-                  key: Key(e.entryKey),
-                  flex: e.flex,
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 12.0),
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: _filterWidthFactor * e.flex),
-                      child: e.buildField(
-                        context: context,
-                        value: e.fromJson(state.filterValues[e.entryKey]),
-                        onChanged: (value) => state.onFilterChanged(e.entryKey, e.toJson(value)),
+          Expanded(
+            child: Row(
+              spacing: 16,
+              children: [
+                CmsHeader(text: title),
+                ...filterEntries.map(
+                  (e) {
+                    return Flexible(
+                      key: Key(e.entryKey),
+                      flex: e.flex,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 12.0),
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(maxWidth: _filterWidthFactor * e.flex),
+                          child: e.buildField(
+                            context: context,
+                            value: e.fromJson(state.filterValues[e.entryKey]),
+                            onChanged: (value) => state.onFilterChanged(e.entryKey, e.toJson(value)),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                );
-              },
-            ).toList(),
-          )
+                    );
+                  },
+                ),
+
+              ],
+            ),
+          ),
+          if (state.params.canCreate)
+            Align(
+              alignment: AlignmentGeometry.centerRight,
+              child: CmsButton(
+                maxWidth: context.theme.shortButtonWidth,
+                onTap: state.onCreatePressed,
+                dense: true,
+                child: const Text("Create"),
+              ),
+            ),
         ],
       ),
     );
