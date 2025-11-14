@@ -24,22 +24,26 @@ class CmsTableActionsButton extends HookWidget {
     return IgnorePointer(
       ignoring: loadingState.value,
       child: PopupMenuButton<CmsTableAction>(
-          padding: EdgeInsets.zero,
-          icon: loadingState.value ? const CmsLoader() : null,
-          iconSize: 20,
-          itemBuilder: (context) => actions.map<PopupMenuEntry<CmsTableAction>>(
-                (e) {
-                  return PopupMenuItem(
-                    child: Text(e.label, style: style),
-                    onTap: () async {
-                      loadingState.value = true;
-                      final result = await e.onPressed(value);
-                      if (result != null && e.shouldUpdateTable) onUpdate(result);
-                      loadingState.value = false;
-                    },
-                  );
+        padding: EdgeInsets.zero,
+        icon: loadingState.value ? const CmsLoader() : null,
+        iconColor: context.theme.colors.text,
+        iconSize: 20,
+        itemBuilder: (context) {
+          return actions.map<PopupMenuEntry<CmsTableAction>>(
+            (e) {
+              return PopupMenuItem(
+                onTap: () async {
+                  loadingState.value = true;
+                  final result = await e.onPressed(value);
+                  if (result != null && e.shouldUpdateTable) onUpdate(result);
+                  loadingState.value = false;
                 },
-              ).toList()),
+                child: Text(e.label, style: style),
+              );
+            },
+          ).toList();
+        },
+      ),
     );
   }
 }
