@@ -1,3 +1,7 @@
+## 0.2.0+3
+
+ - **FIX**: UI updates.
+
 ## 0.2.0+2
 
  - **FIX**: linter issues.
