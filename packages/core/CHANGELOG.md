@@ -1,3 +1,7 @@
+## 0.2.1
+
+ - **FEAT**(utopia_cms): Custom management section.
+
 ## 0.2.0+3
 
  - **FIX**: UI updates.
