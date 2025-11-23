@@ -2,8 +2,9 @@ import 'dart:math';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
+import 'package:utopia_cms/src/model/cms_management_custom_section_data.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry.dart';
-import 'package:utopia_cms/src/ui/item_management/state/cms_item_management_state.dart';
+import 'package:utopia_cms/src/ui/management/state/cms_management_state.dart';
 import 'package:utopia_cms/src/ui/widget/button/cms_button.dart';
 import 'package:utopia_cms/src/ui/widget/header/cms_header.dart';
 import 'package:utopia_cms/src/ui/widget/header/cms_title.dart';
@@ -12,11 +13,12 @@ import 'package:utopia_cms/src/util/entries_extensions.dart';
 import 'package:utopia_cms/src/util/map_extensions.dart';
 import 'package:utopia_hooks/utopia_hooks.dart';
 
-class CmsItemManagementView extends HookWidget {
+class CmsManagementView extends HookWidget {
   final CmsItemManagementState state;
+  final CmsManagementCustomSectionData? customSection;
   final Animation<double> animation;
 
-  const CmsItemManagementView({super.key, required this.state, required this.animation});
+  const CmsManagementView({super.key, required this.state, required this.animation, required this.customSection});
 
   static const _itemWidth = 420.0;
 
@@ -82,6 +84,7 @@ class CmsItemManagementView extends HookWidget {
           .editable(isCreate: !state.isEdit, isPageEditable: state.params.canEdit)
           .where((e) => e.isExpanded)
           .toIList());
+
       return CustomScrollView(
         controller: state.scrollController,
         slivers: [
@@ -108,10 +111,20 @@ class CmsItemManagementView extends HookWidget {
           if (!state.isEdit) ...[
             _buildNestedSection(editableShort, canNest: canNest),
             _buildSingularSection(editableExpanded),
-          ]
+          ],
+          ..._buildCustomSection(context),
         ],
       );
     });
+  }
+
+  List<Widget> _buildCustomSection(BuildContext context) {
+    final edit = state.isEdit;
+    final data = customSection;
+    if (data != null && ((data.showEdit && edit) || data.showCreate && !edit))
+      return [_buildTitle(data.title, context), data.sliverBuilder(state.values, state.isEdit)];
+
+    return [];
   }
 
   String _buildHeader() {

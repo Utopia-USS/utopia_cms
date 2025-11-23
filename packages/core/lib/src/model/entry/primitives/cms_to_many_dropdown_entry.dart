@@ -6,7 +6,6 @@ import 'package:utopia_cms/src/model/entry/cms_entry_modifier.dart';
 import 'package:utopia_cms/src/ui/widget/dropdown/to_many/cms_to_many_dropdown_field.dart';
 import 'package:utopia_cms/src/ui/widget/table/cms_table.dart';
 import 'package:utopia_cms/src/ui/widget/table/cms_table_preview_text.dart';
-import 'package:utopia_cms/src/ui/item_management/view/cms_item_management_view.dart';
 import 'package:utopia_cms/src/util/json_map.dart';
 import 'package:utopia_hooks/utopia_hooks.dart';
 
@@ -20,7 +19,7 @@ class CmsToManyDropdownEntry extends CmsEntry<Object> {
   /// Refers to generic values loaded by [CmsDelegate]
   final String Function(JsonMap)? previewDisplayBuilder;
 
-  /// Builder for display of values in the [buildEditField] / [CmsItemManagementView]
+  /// Builder for display of values in the [buildEditField] / [CmsManagementView]
   ///
   /// Refers to values loaded by [CmsToManyDelegate]
   final String Function(JsonMap) fieldDisplayBuilder;

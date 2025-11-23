@@ -2,7 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:utopia_arch/utopia_arch.dart';
 import 'package:utopia_cms/src/delegate/cms_to_many_delegate.dart';
 import 'package:utopia_cms/src/model/cms_filter.dart';
-import 'package:utopia_cms/src/ui/item_management/state/cms_item_management_state.dart';
+import 'package:utopia_cms/src/ui/management/state/cms_management_state.dart';
 import 'package:utopia_cms/src/util/json_map.dart';
 
 class CmsToManyDropdownState {
@@ -28,7 +28,7 @@ CmsToManyDropdownState useCmsToManyDropdownState({
   required CmsToManyDelegate delegate,
   required Object? originId,
 }) {
-  final baseState = useProvided<CmsItemManagementBaseState>();
+  final baseState = useProvided<CmsManagementBaseState>();
   final selectedItemsState = useState<ISet<JsonMap>>(ISet());
   final searchState = useFieldState(initialValue: '');
   final initialSelectedValuesState = useAutoComputedState<ISet<JsonMap>>(

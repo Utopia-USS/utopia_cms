@@ -67,9 +67,7 @@ class CmsTable extends HookWidget {
                     contentPadding: contentPadding,
                     itemPadding: itemPadding,
                     color: index.isOdd ? Colors.transparent : context.colors.field,
-                    actionsBuilder: actionsBuilder?.let(
-                      (it) => (e) => it(e, index),
-                    ),
+                    actionsBuilder: actionsBuilder?.let((it) => (e) => it(e, index)),
                   );
                 }),
           ),
