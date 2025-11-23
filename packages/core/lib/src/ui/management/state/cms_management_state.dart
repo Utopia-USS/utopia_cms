@@ -3,21 +3,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:utopia_arch/utopia_arch.dart';
 import 'package:utopia_cms/src/model/cms_table_page_params.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry.dart';
-import 'package:utopia_cms/src/ui/item_management/cms_item_management_page.dart';
+import 'package:utopia_cms/src/ui/management/cms_management_page.dart';
 import 'package:utopia_cms/src/util/json_map.dart';
 import 'package:utopia_cms/src/util/map_extensions.dart';
 import 'package:utopia_hooks/utopia_hooks.dart';
 
 typedef OnSavedCallback = Future<void> Function(JsonMap);
 
-abstract class CmsItemManagementBaseState {
+abstract class CmsManagementBaseState {
   abstract final JsonMap values;
   abstract final void Function(String key, Object? value) onValueChanged;
 
   abstract final void Function(OnSavedCallback action) addOnSavedCallback;
 }
 
-class CmsItemManagementState implements CmsItemManagementBaseState {
+class CmsItemManagementState implements CmsManagementBaseState {
   @override
   final JsonMap values;
   final Future<void> Function() onSubmit;
@@ -63,7 +63,7 @@ class CmsItemManagementState implements CmsItemManagementBaseState {
 }
 
 CmsItemManagementState useCmsItemManagementState({
-  required CmsItemManagementArgs args,
+  required CmsManagementArgs args,
   required void Function(bool) moveBack,
 }) {
   final state = useState<JsonMap>({...?args.initialValue});

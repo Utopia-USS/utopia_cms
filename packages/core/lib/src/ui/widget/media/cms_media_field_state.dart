@@ -8,7 +8,7 @@ import 'package:utopia_arch/utopia_arch.dart';
 import 'package:utopia_cms/src/delegate/media/cms_media_delegate.dart';
 import 'package:utopia_cms/src/ui/attachment_preview/cms_media_preview_page.dart';
 import 'package:utopia_cms/src/ui/attachment_preview/cms_media_type.dart';
-import 'package:utopia_cms/src/ui/item_management/state/cms_item_management_state.dart';
+import 'package:utopia_cms/src/ui/management/state/cms_management_state.dart';
 import 'package:utopia_cms/src/ui/widget/dialog/cms_dialog.dart';
 
 class CmsMediaFieldState {
@@ -58,7 +58,7 @@ CmsMediaFieldState useCmsMediaFieldState({
   final controller = useState<DropzoneViewController?>(null);
   final isHighlightedState = useState<bool>(false);
 
-  final baseState = useProvided<CmsItemManagementBaseState>();
+  final baseState = useProvided<CmsManagementBaseState>();
   final filesState = useState<IList<dynamic>>(initialValues?.toIList() ?? IList());
   final deletedFilesState = useState<IList<dynamic>>(IList());
   final uploadedItems = filesState.value.where((e) => e is! XFile).toIList();

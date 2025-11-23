@@ -1,7 +1,6 @@
 
 import 'package:utopia_cms/src/delegate/cms_delegate.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry.dart';
-import 'package:utopia_cms/src/ui/item_management/view/cms_item_management_view.dart';
 import 'package:utopia_cms/src/ui/widget/table/cms_table.dart';
 
 /// Modifies the behavior of the [CmsEntry]
@@ -35,7 +34,7 @@ class CmsEntryModifier {
   /// Does nothing if [sortable] is false.
   final bool sortInvertNulls;
 
-  /// If true the entry will be placed in the separate row in the [CmsItemManagementView]
+  /// If true the entry will be placed in the separate row in the [CmsManagementView]
   final bool expanded;
 
   const CmsEntryModifier({

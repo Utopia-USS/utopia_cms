@@ -5,7 +5,6 @@ import 'package:utopia_cms/src/model/entry/primitives/cms_bool_entry.dart';
 import 'package:utopia_cms/src/model/entry/primitives/cms_date_entry.dart';
 import 'package:utopia_cms/src/model/entry/primitives/cms_text_entry.dart';
 import 'package:utopia_cms/src/model/entry/primitives/cms_to_many_dropdown_entry.dart';
-import 'package:utopia_cms/src/ui/item_management/state/cms_item_management_state.dart';
 import 'package:utopia_cms/src/ui/table_page/cms_table_page.dart';
 import 'package:utopia_cms/src/ui/widget/table/cms_table.dart';
 import 'package:utopia_cms/src/ui/widget/table/cms_table_item.dart';

@@ -20,7 +20,7 @@ class CmsToManyDropdownEntry extends CmsEntry<Object> {
   /// Refers to generic values loaded by [CmsDelegate]
   final String Function(JsonMap)? previewDisplayBuilder;
 
-  /// Builder for display of values in the [buildEditField] / [CmsItemManagementView]
+  /// Builder for display of values in the [buildEditField] / [CmsManagementView]
   ///
   /// Refers to values loaded by [CmsToManyDelegate]
   final String Function(JsonMap) fieldDisplayBuilder;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:utopia_arch/utopia_arch.dart';
 import 'package:utopia_cms/src/delegate/cms_delegate.dart';
+import 'package:utopia_cms/src/model/cms_management_custom_section_data.dart';
 import 'package:utopia_cms/src/model/cms_table_page_params.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry.dart';
 import 'package:utopia_cms/src/model/filter_entry/cms_filter_entry.dart';
@@ -19,6 +20,7 @@ class CmsTablePage extends HookWidget {
   final List<CmsFilterEntry<dynamic>>? filterEntries;
   final List<CmsTableAction>? customActions;
   final int? pagingLimit;
+  final CmsManagementCustomSectionData? managementCustomSection;
 
   const CmsTablePage({
     super.key,
@@ -28,6 +30,7 @@ class CmsTablePage extends HookWidget {
     required this.entries,
     this.customActions,
     this.filterEntries,
+    this.managementCustomSection,
     this.pagingLimit = 25,
   }) : assert(pagingLimit != 0);
 
@@ -42,6 +45,7 @@ class CmsTablePage extends HookWidget {
       filterEntries: (filterEntries ?? []).lock,
       confirmDelete: () async => CmsDialog.show(context),
       pagingLimit: pagingLimit,
+      managementCustomSection: managementCustomSection,
     );
     return CmsTablePageView(
       state: state,

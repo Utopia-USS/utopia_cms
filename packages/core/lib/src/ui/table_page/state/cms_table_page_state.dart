@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:utopia_cms/src/delegate/cms_delegate.dart';
 import 'package:utopia_cms/src/model/cms_filter.dart';
 import 'package:utopia_cms/src/model/cms_functions_params.dart';
+import 'package:utopia_cms/src/model/cms_management_custom_section_data.dart';
 import 'package:utopia_cms/src/model/cms_table_page_params.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry.dart';
 import 'package:utopia_cms/src/model/filter_entry/cms_filter_entry.dart';
-import 'package:utopia_cms/src/ui/item_management/cms_item_management_page.dart';
+import 'package:utopia_cms/src/ui/management/cms_management_page.dart';
 import 'package:utopia_cms/src/util/json_map.dart';
 import 'package:utopia_cms/src/util/map_extensions.dart';
 import 'package:utopia_hooks/utopia_hooks.dart';
@@ -55,6 +56,7 @@ CmsTablePageState useCmsTablePageState({
   required IList<CmsFilterEntry<dynamic>> filterEntries,
   required Future<bool?> Function() confirmDelete,
   required int? pagingLimit,
+  required CmsManagementCustomSectionData? managementCustomSection,
 }) {
   final sortingParamsState = useState<CmsFunctionsSortingParams?>(params.initialSortingParams);
 
@@ -85,7 +87,7 @@ CmsTablePageState useCmsTablePageState({
   }
 
   final state = useAutoComputedState<void>(
-     () async {
+    () async {
       if (pagingEnabledState.value) {
         final result = await delegate.get(
           sorting: sortingParamsState.value,
@@ -118,11 +120,12 @@ CmsTablePageState useCmsTablePageState({
         barrierColor: Colors.black45,
         transitionDuration: const Duration(milliseconds: 400),
         reverseTransitionDuration: const Duration(milliseconds: 400),
-        pageBuilder: (_, animation, ___) => CmsItemManagement(
-          args: CmsItemManagementArgs(
+        pageBuilder: (_, animation, ___) => CmsManagementOverlay(
+          args: CmsManagementArgs(
             uploadChanges: (json, _) => delegate.create(json),
             entries: entries,
             params: params,
+            customSection: managementCustomSection
           ),
           animation: animation,
         ),
@@ -151,13 +154,14 @@ CmsTablePageState useCmsTablePageState({
         barrierColor: Colors.black45,
         transitionDuration: const Duration(milliseconds: 400),
         reverseTransitionDuration: const Duration(milliseconds: 400),
-        pageBuilder: (_, animation, ___) => CmsItemManagement(
-          args: CmsItemManagementArgs(
+        pageBuilder: (_, animation, ___) => CmsManagementOverlay(
+          args: CmsManagementArgs(
             uploadChanges: (newJson, oldJson) => delegate.update(newJson, oldJson!),
             deleteItem: () => onDelete(value, index),
             entries: entries,
             initialValue: Map.of(value),
             params: params,
+            customSection: managementCustomSection
           ),
           animation: animation,
         ),

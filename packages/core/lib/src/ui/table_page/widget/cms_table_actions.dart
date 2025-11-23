@@ -27,6 +27,7 @@ class CmsTableActionsButton extends HookWidget {
         padding: EdgeInsets.zero,
         icon: loadingState.value ? const CmsLoader() : null,
         iconColor: context.theme.colors.text,
+        color: context.theme.colors.field,
         iconSize: 20,
         itemBuilder: (context) {
           return actions.map<PopupMenuEntry<CmsTableAction>>(
