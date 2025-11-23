@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:utopia_arch/utopia_arch.dart';
 import 'package:utopia_cms/src/model/menu/cms_widget_menu_params.dart';
 import 'package:utopia_cms/src/ui/cms_widget/cms_widget_item.dart';
-import 'package:utopia_cms/src/ui/widget/layout/cms_gradient_background.dart';
 import 'package:utopia_cms/src/ui/menu/cms_menu_tile.dart';
+import 'package:utopia_cms/src/ui/widget/layout/cms_gradient_background.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
 
 class CmsMenu extends HookWidget {

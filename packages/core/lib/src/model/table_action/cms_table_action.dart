@@ -1,6 +1,6 @@
 import 'package:utopia_cms/src/model/cms_table_page_params.dart';
-import 'package:utopia_cms/src/ui/widget/table/cms_table_item.dart';
 import 'package:utopia_cms/src/ui/table_page/widget/cms_table_actions.dart';
+import 'package:utopia_cms/src/ui/widget/table/cms_table_item.dart';
 import 'package:utopia_cms/src/util/json_map.dart';
 
 ///  * [CmsTableAction] appears in the [CmsTableItem] popUpMenu. Default actions "delete" and "edit" are generated

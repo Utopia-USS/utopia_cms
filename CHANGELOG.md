@@ -3,6 +3,112 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-11-18
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`utopia_cms` - `v0.2.0+3`](#utopia_cms---v0203)
+ - [`utopia_cms_supabase` - `v0.1.0+1`](#utopia_cms_supabase---v0101)
+ - [`utopia_cms_graphql` - `v0.3.0+3`](#utopia_cms_graphql---v0303)
+ - [`utopia_cms_hasura` - `v0.3.0+3`](#utopia_cms_hasura---v0303)
+ - [`utopia_cms_firebase` - `v0.2.0+3`](#utopia_cms_firebase---v0203)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `utopia_cms_supabase` - `v0.1.0+1`
+ - `utopia_cms_graphql` - `v0.3.0+3`
+ - `utopia_cms_hasura` - `v0.3.0+3`
+ - `utopia_cms_firebase` - `v0.2.0+3`
+
+---
+
+#### `utopia_cms` - `v0.2.0+3`
+
+ - **FIX**: UI updates.
+
+
+## 2025-11-09
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`utopia_cms` - `v0.2.0+2`](#utopia_cms---v0202)
+ - [`utopia_cms_firebase` - `v0.2.0+2`](#utopia_cms_firebase---v0202)
+ - [`utopia_cms_graphql` - `v0.3.0+2`](#utopia_cms_graphql---v0302)
+ - [`utopia_cms_hasura` - `v0.3.0+2`](#utopia_cms_hasura---v0302)
+
+---
+
+#### `utopia_cms` - `v0.2.0+2`
+
+ - **FIX**: linter issues.
+
+#### `utopia_cms_firebase` - `v0.2.0+2`
+
+ - **FIX**: linter issues.
+
+#### `utopia_cms_graphql` - `v0.3.0+2`
+
+ - **FIX**: linter issues.
+
+#### `utopia_cms_hasura` - `v0.3.0+2`
+
+ - **FIX**: linter issues.
+
+
+## 2025-11-09
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`utopia_cms` - `v0.2.0+1`](#utopia_cms---v0201)
+ - [`utopia_cms_firebase` - `v0.2.0+1`](#utopia_cms_firebase---v0201)
+ - [`utopia_cms_graphql` - `v0.3.0+1`](#utopia_cms_graphql---v0301)
+ - [`utopia_cms_hasura` - `v0.3.0+1`](#utopia_cms_hasura---v0301)
+
+---
+
+#### `utopia_cms` - `v0.2.0+1`
+
+ - **FIX**: Update dependencies.
+
+#### `utopia_cms_firebase` - `v0.2.0+1`
+
+ - **FIX**: Update dependencies.
+
+#### `utopia_cms_graphql` - `v0.3.0+1`
+
+ - **FIX**: Update dependencies.
+
+#### `utopia_cms_hasura` - `v0.3.0+1`
+
+ - **FIX**: Update dependencies.
+
+
 ## 2023-12-22
 
 ### Changes

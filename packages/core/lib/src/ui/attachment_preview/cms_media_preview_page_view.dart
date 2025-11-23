@@ -93,7 +93,7 @@ class CmsMediaPreviewPageView extends StatelessWidget {
   Widget _buildMedia() {
     return LoopPageView.builder(
       controller: state.controller,
-      physics: state.items.length > 1 ? null : NeverScrollableScrollPhysics(),
+      physics: state.items.length > 1 ? null : const NeverScrollableScrollPhysics(),
       itemCount: state.items.length,
       itemBuilder: (_, index) {
         return Center(
@@ -226,7 +226,7 @@ class CmsMediaPreviewPageView extends StatelessWidget {
     final type = mediaTypeBuilder(item);
     switch (type) {
       case CmsMediaType.video:
-        return SizedBox.shrink();
+        return const SizedBox.shrink();
       case CmsMediaType.image:
         return Image.network(url);
       case CmsMediaType.doc:

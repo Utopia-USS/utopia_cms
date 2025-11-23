@@ -6,9 +6,9 @@ import 'package:utopia_cms/src/model/cms_table_page_params.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry.dart';
 import 'package:utopia_cms/src/model/filter_entry/cms_filter_entry.dart';
 import 'package:utopia_cms/src/model/table_action/cms_table_action.dart';
-import 'package:utopia_cms/src/ui/widget/dialog/cms_dialog.dart';
 import 'package:utopia_cms/src/ui/table_page/state/cms_table_page_state.dart';
 import 'package:utopia_cms/src/ui/table_page/view/cms_table_page_view.dart';
+import 'package:utopia_cms/src/ui/widget/dialog/cms_dialog.dart';
 
 ///  * [CmsTablePage] by default is able to generate complete flow of data table preview, creation/edition flow.
 
