@@ -3,7 +3,6 @@ import 'package:utopia_cms/src/delegate/cms_delegate.dart';
 import 'package:utopia_cms/src/delegate/cms_to_many_delegate.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry_modifier.dart';
-import 'package:utopia_cms/src/ui/item_management/view/cms_item_management_view.dart';
 import 'package:utopia_cms/src/ui/widget/dropdown/to_many/cms_to_many_dropdown_field.dart';
 import 'package:utopia_cms/src/ui/widget/table/cms_table.dart';
 import 'package:utopia_cms/src/ui/widget/table/cms_table_preview_text.dart';
