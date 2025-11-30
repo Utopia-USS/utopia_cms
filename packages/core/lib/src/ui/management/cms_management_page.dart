@@ -2,7 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:utopia_arch/utopia_arch.dart';
-import 'package:utopia_cms/src/model/cms_management_custom_section_data.dart';
+import 'package:utopia_cms/src/model/cms_management_section_entry.dart';
 import 'package:utopia_cms/src/model/cms_table_page_params.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry.dart';
 import 'package:utopia_cms/src/ui/management/state/cms_management_state.dart';
@@ -13,7 +13,7 @@ import 'package:utopia_cms/src/util/json_map.dart';
 
 class CmsManagementArgs {
   final JsonMap? initialValue;
-  final CmsManagementCustomSectionData? customSection;
+  final List<CmsManagementSectionEntry> sectionEntries;
   final Future<JsonMap> Function(JsonMap newJson, JsonMap? oldJson) uploadChanges;
   final Future<void> Function()? deleteItem;
   final CmsTableParams params;
@@ -25,7 +25,7 @@ class CmsManagementArgs {
     this.deleteItem,
     required this.params,
     required this.entries,
-    required this.customSection,
+    required this.sectionEntries,
   });
 }
 
@@ -46,7 +46,7 @@ class CmsManagementOverlay extends HookWidget {
       child: CmsManagementView(
         state: state,
         animation: animation,
-        customSection: args.customSection,
+        sectionEntries: args.sectionEntries,
       ),
     );
   }
