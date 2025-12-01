@@ -622,14 +622,14 @@ packages:
       path: "../core"
       relative: true
     source: path
-    version: "0.2.1"
+    version: "0.2.1+1"
   utopia_cms_graphql:
     dependency: "direct main"
     description:
       path: "../graphql"
       relative: true
     source: path
-    version: "0.3.0+4"
+    version: "0.3.0+5"
   utopia_collections:
     dependency: transitive
     description:
