@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:utopia_cms/src/delegate/cms_delegate.dart';
 import 'package:utopia_cms/src/model/cms_filter.dart';
 import 'package:utopia_cms/src/model/cms_functions_params.dart';
-import 'package:utopia_cms/src/model/cms_management_custom_section_data.dart';
+import 'package:utopia_cms/src/model/cms_management_section_entry.dart';
 import 'package:utopia_cms/src/model/cms_table_page_params.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry.dart';
 import 'package:utopia_cms/src/model/filter_entry/cms_filter_entry.dart';
@@ -56,7 +56,7 @@ CmsTablePageState useCmsTablePageState({
   required IList<CmsFilterEntry<dynamic>> filterEntries,
   required Future<bool?> Function() confirmDelete,
   required int? pagingLimit,
-  required CmsManagementCustomSectionData? managementCustomSection,
+  required List<CmsManagementSectionEntry> managementSectionEntries,
 }) {
   final sortingParamsState = useState<CmsFunctionsSortingParams?>(params.initialSortingParams);
 
@@ -112,31 +112,6 @@ CmsTablePageState useCmsTablePageState({
     itemsState.value = itemsState.value.replace(index, value);
   }
 
-  Future<void> onCreate() async {
-    final result = await navigator.push<bool?>(
-      PageRouteBuilder(
-        opaque: false,
-        barrierDismissible: true,
-        barrierColor: Colors.black45,
-        transitionDuration: const Duration(milliseconds: 400),
-        reverseTransitionDuration: const Duration(milliseconds: 400),
-        pageBuilder: (_, animation, ___) => CmsManagementOverlay(
-          args: CmsManagementArgs(
-            uploadChanges: (json, _) => delegate.create(json),
-            entries: entries,
-            params: params,
-            customSection: managementCustomSection
-          ),
-          animation: animation,
-        ),
-      ),
-    );
-    if (result != null) {
-      resetState();
-      await state.refresh();
-    }
-  }
-
   Future<void> onDelete(JsonMap value, int index) async {
     final shouldDelete = await confirmDelete();
     if (shouldDelete != null && shouldDelete) {
@@ -146,7 +121,8 @@ CmsTablePageState useCmsTablePageState({
     }
   }
 
-  Future<void> onEdit(JsonMap value, int index) async {
+  ///not null params mean that it's edit
+  Future<void> onManage({JsonMap? value, int? index}) async {
     final result = await navigator.push<bool?>(
       PageRouteBuilder(
         opaque: false,
@@ -156,12 +132,13 @@ CmsTablePageState useCmsTablePageState({
         reverseTransitionDuration: const Duration(milliseconds: 400),
         pageBuilder: (_, animation, ___) => CmsManagementOverlay(
           args: CmsManagementArgs(
-            uploadChanges: (newJson, oldJson) => delegate.update(newJson, oldJson!),
-            deleteItem: () => onDelete(value, index),
+            uploadChanges: (newJson, oldJson) =>
+                value != null ? delegate.update(newJson, oldJson!) : delegate.create(newJson),
+            deleteItem: value != null && index != null ? () => onDelete(value, index) : null,
             entries: entries,
-            initialValue: Map.of(value),
+            initialValue: value != null ? Map.of(value) : null,
             params: params,
-            customSection: managementCustomSection
+            sectionEntries: managementSectionEntries,
           ),
           animation: animation,
         ),
@@ -172,6 +149,10 @@ CmsTablePageState useCmsTablePageState({
       await state.refresh();
     }
   }
+
+  Future<void> onCreate() async => onManage();
+
+  Future<void> onEdit(JsonMap value, int index) async => onManage(value: value, index: index);
 
   final scrollController = useMemoized(ScrollController.new);
 

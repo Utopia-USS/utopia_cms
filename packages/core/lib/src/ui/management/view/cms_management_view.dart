@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
-import 'package:utopia_cms/src/model/cms_management_custom_section_data.dart';
+import 'package:utopia_cms/src/model/cms_management_section_entry.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry.dart';
 import 'package:utopia_cms/src/ui/management/state/cms_management_state.dart';
 import 'package:utopia_cms/src/ui/widget/button/cms_button.dart';
@@ -15,10 +15,10 @@ import 'package:utopia_hooks/utopia_hooks.dart';
 
 class CmsManagementView extends HookWidget {
   final CmsItemManagementState state;
-  final CmsManagementCustomSectionData? customSection;
+  final List<CmsManagementSectionEntry> sectionEntries;
   final Animation<double> animation;
 
-  const CmsManagementView({super.key, required this.state, required this.animation, required this.customSection});
+  const CmsManagementView({super.key, required this.state, required this.animation, required this.sectionEntries});
 
   static const _itemWidth = 420.0;
 
@@ -112,17 +112,16 @@ class CmsManagementView extends HookWidget {
             _buildNestedSection(editableShort, canNest: canNest),
             _buildSingularSection(editableExpanded),
           ],
-          ..._buildCustomSection(context),
+          for (final entry in sectionEntries) ..._buildCustomSection(context, entry),
         ],
       );
     });
   }
 
-  List<Widget> _buildCustomSection(BuildContext context) {
+  List<Widget> _buildCustomSection(BuildContext context, CmsManagementSectionEntry entry) {
     final edit = state.isEdit;
-    final data = customSection;
-    if (data != null && ((data.showEdit && edit) || data.showCreate && !edit))
-      return [_buildTitle(data.title, context), data.sliverBuilder(state.values, state.isEdit)];
+    if ((entry.showEdit && edit) || (entry.showCreate && !edit))
+      return [_buildTitle(entry.title, context), entry.sliverBuilder(state.values, state.isEdit)];
 
     return [];
   }
