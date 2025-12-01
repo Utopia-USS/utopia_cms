@@ -1,5 +1,5 @@
 name: utopia_cms_firebase
-version: 0.2.0+5
+version: 0.2.0+6
 description: Utopia CMS - Firebase
 homepage: https://github.com/Utopia-USS/utopia_cms
 
@@ -9,5 +9,5 @@ environment:
 
 dependencies:
   cloud_firestore: ^6.1.0
-  utopia_cms: ^0.2.1+1
+  utopia_cms: ^0.2.2
   utopia_utils: ^0.3.3
