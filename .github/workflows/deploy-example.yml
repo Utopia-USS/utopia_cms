@@ -1,0 +1,115 @@
+name: Deploy example to cms.utopiasoft.io
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+# Only one deploy at a time: overlapping S3 syncs would interleave partial bundles.
+concurrency:
+  group: deploy-cms-example
+  cancel-in-progress: false
+
+env:
+  AWS_REGION: eu-central-1
+  S3_BUCKET: utopiasoft-site-cms
+  CLOUDFRONT_DISTRIBUTION_ID: E11EYVDOK5BX07
+  BUILD_DIR: packages/core/example/build/web
+
+jobs:
+  deploy:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+    permissions:
+      # Required to mint the OIDC token that configure-aws-credentials exchanges for the deploy role.
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # .fvmrc is the single source of truth for the SDK version, shared with local fvm.
+      - name: Read Flutter version from .fvmrc
+        id: fvm
+        uses: kuhnroyal/flutter-fvm-config-action/config@v3
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.fvm.outputs.FLUTTER_VERSION }}
+          channel: ${{ steps.fvm.outputs.FLUTTER_CHANNEL }}
+          cache: true
+
+      # The example is a pub workspace member, so this resolves the whole monorepo.
+      - name: Resolve dependencies
+        working-directory: packages/core/example
+        run: flutter pub get
+
+      # --no-web-resources-cdn keeps skwasm/canvaskit on our own origin, which the
+      # Cross-Origin-Embedder-Policy on the distribution requires.
+      # --pwa-strategy=none drops Flutter's deprecated service worker; CloudFront
+      # invalidation is what makes a deploy visible, and the SW only competes with it.
+      - name: Build web (WASM)
+        working-directory: packages/core/example
+        run: flutter build web --wasm --no-web-resources-cdn --pwa-strategy=none --base-href /
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Sync bundle to S3
+        working-directory: ${{ env.BUILD_DIR }}
+        run: |
+          set -euo pipefail
+
+          # Browsers revalidate after a minute; CloudFront holds the object until the
+          # deploy invalidates it. Nothing in a Flutter web bundle is content-hashed,
+          # so a long browser max-age would pin users to a stale build.
+          long='public, max-age=60, s-maxage=31536000'
+          short='no-cache, must-revalidate'
+
+          # Each pass owns one extension namespace. --delete is safe per-pass because
+          # s3 sync applies the filters to the bucket listing too, so an excluded key
+          # is never a deletion candidate.
+
+          # WebAssembly.compileStreaming rejects anything but application/wasm.
+          aws s3 sync . "s3://$S3_BUCKET" --delete --no-progress \
+            --exclude '*' --include '*.wasm' \
+            --content-type 'application/wasm' --cache-control "$long"
+
+          # main.dart.mjs is loaded through a dynamic import().
+          aws s3 sync . "s3://$S3_BUCKET" --delete --no-progress \
+            --exclude '*' --include '*.mjs' \
+            --content-type 'text/javascript' --cache-control "$long"
+
+          # Engine symbol maps, fetched by hand when symbolizing a stack trace.
+          aws s3 sync . "s3://$S3_BUCKET" --delete --no-progress \
+            --exclude '*' --include '*.symbols' \
+            --content-type 'text/plain; charset=utf-8' --cache-control "$long"
+
+          aws s3 sync . "s3://$S3_BUCKET" --delete --no-progress \
+            --cache-control "$long" \
+            --exclude '*.wasm' --exclude '*.mjs' --exclude '*.symbols' \
+            --exclude 'index.html' --exclude 'version.json' --exclude '.last_build_id'
+
+          # The entrypoints every load starts from - these must never be held by a browser.
+          aws s3 cp index.html "s3://$S3_BUCKET/index.html" --no-progress \
+            --content-type 'text/html; charset=utf-8' --cache-control "$short"
+          aws s3 cp version.json "s3://$S3_BUCKET/version.json" --no-progress \
+            --content-type 'application/json' --cache-control "$short"
+
+      - name: Invalidate CloudFront
+        run: |
+          set -euo pipefail
+          id=$(aws cloudfront create-invalidation \
+            --distribution-id "$CLOUDFRONT_DISTRIBUTION_ID" \
+            --paths '/*' \
+            --query 'Invalidation.Id' --output text)
+          echo "Invalidation $id created"
+          aws cloudfront wait invalidation-completed \
+            --distribution-id "$CLOUDFRONT_DISTRIBUTION_ID" --id "$id"
+          echo "https://cms.utopiasoft.io is live" >> "$GITHUB_STEP_SUMMARY"
