@@ -15,7 +15,7 @@ environment:
   sdk: ^3.11.0
 
 dependencies:
-  utopia_cms: '>=0.2.3 <0.4.0'
+  utopia_cms: ^0.4.0
   utopia_cms_graphql: ^0.3.0+7
 
   gql: ^1.0.1
