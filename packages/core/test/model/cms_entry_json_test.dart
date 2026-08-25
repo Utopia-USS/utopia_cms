@@ -110,14 +110,38 @@ void main() {
   });
 
   group('primitive fromJson', () {
-    // Documented sharp edges: the base fromJson is a raw cast, so stringified
-    // primitives coming from a backend crash instead of being widened.
-    test('num entry does not widen a stringified number', () {
-      expect(() => CmsNumEntry(key: 'price').fromJson('12.5'), throwsA(isA<TypeError>()));
+    // The base fromJson is a raw cast. Both primitives override it so a backend
+    // storing them as text renders instead of crashing the whole table with a
+    // TypeError raised from inside the row builder.
+    Matcher throwsFormatExceptionOn(Object? source) =>
+        throwsA(isA<FormatException>().having((it) => it.source, 'source', source));
+
+    test('num entry widens a stringified number and reports garbage', () {
+      final entry = CmsNumEntry(key: 'price');
+
+      expect(entry.fromJson('12.5'), 12.5);
+      expect(entry.fromJson('-3'), -3);
+      expect(entry.fromJson(12.5), 12.5);
+      expect(entry.fromJson(null), isNull);
+
+      expect(() => entry.fromJson('twelve'), throwsFormatExceptionOn('twelve'));
+      expect(() => entry.fromJson(''), throwsFormatExceptionOn(''));
+      expect(() => entry.fromJson(true), throwsFormatExceptionOn(true));
     });
 
-    test('bool entry does not parse a stringified bool', () {
-      expect(() => CmsBoolEntry(key: 'visible').fromJson('true'), throwsA(isA<TypeError>()));
+    test('bool entry parses the spellings a backend stores and reports garbage', () {
+      final entry = CmsBoolEntry(key: 'visible');
+
+      expect(entry.fromJson(true), isTrue);
+      expect(entry.fromJson('true'), isTrue);
+      expect(entry.fromJson('FALSE'), isFalse);
+      expect(entry.fromJson(1), isTrue);
+      expect(entry.fromJson(0), isFalse);
+      expect(entry.fromJson(null), isNull);
+
+      expect(() => entry.fromJson('yes'), throwsFormatExceptionOn('yes'));
+      expect(() => entry.fromJson(2), throwsFormatExceptionOn(2));
+      expect(() => entry.fromJson(const <String, dynamic>{}), throwsFormatExceptionOn(const <String, dynamic>{}));
     });
   });
 }
