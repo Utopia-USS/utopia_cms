@@ -53,7 +53,17 @@ void main() {
 
   CmsHasuraService service() => CmsHasuraService(graphQL, namingConvention: CmsHasuraNamingConvention.hasura);
 
-  String argument(String name) => printNode(graphQL.last.arguments[name]!);
+  /// The printed argument [name] of the last call, asserted to still parse as
+  /// part of a document - printing is only correct if a server can read it back.
+  String argument(String name) {
+    final printed = printNode(graphQL.last.arguments[name]!);
+    expect(
+      () => parseString('query operation { result($name: $printed) }'),
+      returnsNormally,
+      reason: 'printed an unparseable argument: $printed',
+    );
+    return printed;
+  }
 
   group('query', () {
     setUp(() => graphQL.response = <JsonMap>[]);
