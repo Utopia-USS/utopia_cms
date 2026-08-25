@@ -68,9 +68,15 @@ CmsToManyDropdownState useCmsToManyDropdownState({
     return null;
   }, []);
 
-  CmsFilter buildFilter(String query) =>
-      filterBuilder?.call(query) ??
-      CmsFilter.or([for (final field in filterFields ?? const <String>[]) CmsFilter.containsString(field, query)]);
+  CmsFilter buildFilter(String query) {
+    final custom = filterBuilder?.call(query);
+    if (custom != null) return custom;
+    final fields = filterFields ?? const <String>[];
+    // An empty OR group is always-false on supabase and hasura alike, so a field
+    // configured without search columns would silently show no options at all.
+    if (fields.isEmpty) return const CmsFilter.all();
+    return CmsFilter.or([for (final field in fields) CmsFilter.containsString(field, query)]);
+  }
 
   final itemsState = useAutoComputedState<IList<JsonMap>>(() async {
     final result = await delegate.get(filter: buildFilter(debouncedSearch));
