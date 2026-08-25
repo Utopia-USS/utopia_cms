@@ -10,8 +10,6 @@ class _RecorderLink extends Link {
 
   Response response = const Response(data: {'result': null}, response: {});
 
-  String get lastDocument => printNode(documents.last).trim();
-
   @override
   Stream<Response> request(Request request, [NextLink? forward]) {
     documents.add(request.operation.document);
@@ -37,17 +35,25 @@ void main() {
     );
   });
 
+  /// The document the service last sent, asserted to still parse - printing is
+  /// only correct if the server can read the result back.
+  String lastDocument() {
+    final printed = printNode(link.documents.last);
+    expect(() => parseString(printed), returnsNormally, reason: 'printed an unparseable document: $printed');
+    return printed.trim();
+  }
+
   group('document', () {
     test('aliases the root field to result', () async {
       await service.query(client, name: 'users', fields: const {CmsGraphQLField('id')});
 
-      expect(link.lastDocument, 'query operation {\n  result: users {\n    id\n  }\n}');
+      expect(lastDocument(), 'query operation {\n  result: users {\n    id\n  }\n}');
     });
 
     test('falls back to __typename for an empty field set', () async {
       await service.query(client, name: 'users', fields: const {});
 
-      expect(link.lastDocument, contains('__typename'));
+      expect(lastDocument(), contains('__typename'));
     });
 
     test('prints nested selection sets', () async {
@@ -59,7 +65,7 @@ void main() {
         },
       );
 
-      expect(link.lastDocument, contains('author {\n      name\n    }'));
+      expect(lastDocument(), contains('author {\n      name\n    }'));
     });
 
     test('prints arguments from their value nodes', () async {
@@ -73,13 +79,24 @@ void main() {
         },
       );
 
-      expect(link.lastDocument, contains('users(limit: 10, where: {id: 1})'));
+      expect(lastDocument(), contains('users(limit: 10, where: {id: 1})'));
+    });
+
+    test('escapes quotes, backslashes and control characters in string arguments', () async {
+      await service.query(
+        client,
+        name: 'users',
+        fields: const {CmsGraphQLField('id')},
+        arguments: {'where': 'say "hi"\\ok\nbye\t.'.toValueNodeUnsafe()},
+      );
+
+      expect(lastDocument(), contains(r'users(where: "say \"hi\"\\ok\nbye\t.")'));
     });
 
     test('omits the selection set when a mutation asks for no fields', () async {
       await service.mutate(client, name: 'deleteUser', arguments: {'id': 1.toValueNodeUnsafe()});
 
-      expect(link.lastDocument, 'mutation operation {\n  result: deleteUser(id: 1)\n}');
+      expect(lastDocument(), 'mutation operation {\n  result: deleteUser(id: 1)\n}');
     });
   });
 
