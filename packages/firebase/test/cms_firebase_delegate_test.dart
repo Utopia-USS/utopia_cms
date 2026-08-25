@@ -15,8 +15,9 @@ void main() {
   ({CmsFirebaseDelegate delegate, _QueryRecorder recorder}) setUpDelegate(
     Map<String, JsonMap> page, {
     String idKey = 'id',
+    Object? failure,
   }) {
-    final recorder = _QueryRecorder(page);
+    final recorder = _QueryRecorder(page, failure: failure);
     return (delegate: CmsFirebaseDelegate('users', idKey: idKey, firestore: _Firestore(recorder)), recorder: recorder);
   }
 
@@ -83,7 +84,14 @@ void main() {
         isA<CmsDelegateException>().having(
           (e) => e.message,
           'message',
-          allOf(contains('"id"'), contains('"users"'), contains('42 (int)')),
+          allOf(
+            contains('"id"'),
+            contains('"users"'),
+            contains('42 (int)'),
+            // A malformed row is a programmer error, not a Firestore failure, so
+            // it must not pick up the backend-failure prefix on its way out.
+            isNot(startsWith('Failed to')),
+          ),
         ),
       ),
     );
@@ -101,6 +109,43 @@ void main() {
     );
 
     expect(recorder.calls, ['collection(users)', 'limit(10)', 'get']);
+  });
+
+  group('backend failures', () {
+    Future<void> loadWith(Object failure) async {
+      final (delegate: delegate, recorder: _) = setUpDelegate(docs(0), failure: failure);
+      await delegate.get(paging: CmsFunctionsPagingParams(offset: 0, limit: 10));
+    }
+
+    test('a Firestore failure names the operation and the collection and carries the backend message', () async {
+      await expectLater(
+        () => loadWith(
+          FirebaseException(
+            plugin: 'cloud_firestore',
+            code: 'permission-denied',
+            message: 'Missing or insufficient permissions.',
+          ),
+        ),
+        throwsA(
+          isA<CmsDelegateException>().having(
+            (e) => e.message,
+            'message',
+            'Failed to load "users": Missing or insufficient permissions.',
+          ),
+        ),
+      );
+    });
+
+    test('a message-less Firestore failure falls back to the error code', () async {
+      await expectLater(
+        () => loadWith(FirebaseException(plugin: 'cloud_firestore', code: 'unavailable')),
+        throwsA(isA<CmsDelegateException>().having((e) => e.message, 'message', 'Failed to load "users": unavailable')),
+      );
+    });
+
+    test('an exception that is not a backend failure keeps its type', () async {
+      await expectLater(() => loadWith(ArgumentError('asked for a malformed query')), throwsA(isA<ArgumentError>()));
+    });
   });
 }
 
@@ -123,9 +168,13 @@ class _Firestore implements FirebaseFirestore {
 
 class _QueryRecorder implements CollectionReference<JsonMap> {
   final Map<String, JsonMap> page;
+
+  /// Thrown from [get] instead of answering, the way Firestore rejects a query.
+  final Object? failure;
+
   final List<String> calls = [];
 
-  _QueryRecorder(this.page);
+  _QueryRecorder(this.page, {this.failure});
 
   @override
   Query<JsonMap> limit(int limit) {
@@ -136,6 +185,8 @@ class _QueryRecorder implements CollectionReference<JsonMap> {
   @override
   Future<QuerySnapshot<JsonMap>> get([GetOptions? options]) async {
     calls.add('get');
+    final failure = this.failure;
+    if (failure != null) throw failure;
     return _Snapshot(page);
   }
 

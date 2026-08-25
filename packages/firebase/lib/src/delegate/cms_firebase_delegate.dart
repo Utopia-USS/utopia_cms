@@ -28,7 +28,7 @@ class CmsFirebaseDelegate implements CmsDelegate {
 
   @override
   Future<void> delete(JsonMap value) async {
-    await firestore.collection(collection).doc(_idOf(value)).delete();
+    await _guard('delete', () => firestore.collection(collection).doc(_idOf(value)).delete());
   }
 
   @override
@@ -43,21 +43,41 @@ class CmsFirebaseDelegate implements CmsDelegate {
     // requested page and drop the documents belonging to the previous ones.
     // A null limit means "fetch all", so no limit is applied at all.
     if (limit != null) query = query.limit(paging.offset + limit);
-    final snapshot = await query.get();
+    final snapshot = await _guard('load', query.get);
     return snapshot.docs.skip(paging.offset).map((e) => {...e.data(), idKey: e.id}).toList();
   }
 
   @override
   Future<JsonMap> update(JsonMap value, _) async {
     final map = JsonMap.from(value)..remove(idKey);
-    await firestore.collection(collection).doc(_idOf(value)).update(map);
+    await _guard('update', () => firestore.collection(collection).doc(_idOf(value)).update(map));
     return value;
   }
 
   @override
   Future<JsonMap> create(JsonMap value) async {
-    final result = await firestore.collection(collection).add(value);
+    final result = await _guard('create', () => firestore.collection(collection).add(value));
     return {...value, idKey: result.id};
+  }
+
+  /// Runs [run], reporting a Firestore failure as a [CmsDelegateException] so
+  /// the CMS can show it inline instead of crashing on an exception type it does
+  /// not know.
+  ///
+  /// Only [FirebaseException] is caught, so a programmer error - including the
+  /// [CmsDelegateException] [_idOf] raises for a malformed row - keeps its type
+  /// and is never wrapped twice. [CmsDelegateException] has nowhere to carry a
+  /// cause, so the Firestore message goes into the message and the original
+  /// stack trace is rethrown as is.
+  Future<T> _guard<T>(String action, Future<T> Function() run) async {
+    try {
+      return await run();
+    } on FirebaseException catch (e, stackTrace) {
+      Error.throwWithStackTrace(
+        CmsDelegateException('Failed to $action "$collection": ${e.message ?? e.code}'),
+        stackTrace,
+      );
+    }
   }
 
   String _idOf(JsonMap value) => switch (value[idKey]) {
