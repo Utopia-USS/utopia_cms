@@ -1,6 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:utopia_cms/utopia_cms.dart';
 
+/// A minimal Firestore-backed [CmsDelegate].
+///
+/// Known limitations of [get]:
+/// - [CmsFunctionsSortingParams] and [CmsFilter] are NOT applied: the table
+///   pages through the whole collection in document-id order even when the UI
+///   shows an active sort or filter. Override [get] to support either.
+/// - Paging is offset-based on top of a cursor-less API, so page N costs
+///   `offset + limit` document reads. For large collections override [get]
+///   with `startAfterDocument` cursor paging.
 class CmsFirebaseDelegate implements CmsDelegate {
   final String collection;
 
@@ -54,7 +63,7 @@ class CmsFirebaseDelegate implements CmsDelegate {
   String _idOf(JsonMap value) => switch (value[idKey]) {
     final String id => id,
     final other => throw CmsDelegateException(
-      'Expected a String document id under "$idKey" in collection "$collection", got: $other',
+      'Expected a String document id under "$idKey" in collection "$collection", got: $other (${other.runtimeType})',
     ),
   };
 }

@@ -8,8 +8,8 @@ import 'package:utopia_cms/utopia_cms.dart';
 import 'package:utopia_cms_firebase/utopia_cms_firebase.dart';
 
 /// Canned page keyed by document id, in the order Firestore would return it.
-Map<String, JsonMap> docs(int count, {int from = 0}) =>
-    Map.fromEntries(List.generate(count, (i) => MapEntry('id${from + i}', {'name': 'name${from + i}'})));
+Map<String, JsonMap> docs(int count) =>
+    Map.fromEntries(List.generate(count, (i) => MapEntry('id$i', {'name': 'name$i'})));
 
 void main() {
   ({CmsFirebaseDelegate delegate, _QueryRecorder recorder}) setUpDelegate(
@@ -74,19 +74,33 @@ void main() {
     ]);
   });
 
-  test('a non-String id fails with a message naming the collection and the key', () async {
+  test('a non-String id fails with a message naming the collection, key and runtime type', () async {
     final (delegate: delegate, recorder: _) = setUpDelegate(docs(0));
 
-    expect(
+    await expectLater(
       () => delegate.delete({'id': 42}),
       throwsA(
         isA<CmsDelegateException>().having(
           (e) => e.message,
           'message',
-          allOf(contains('"id"'), contains('"users"'), contains('42')),
+          allOf(contains('"id"'), contains('"users"'), contains('42 (int)')),
         ),
       ),
     );
+  });
+
+  test('sorting and filter are ignored: no orderBy or where reaches the query', () async {
+    // Characterization of a documented limitation; fails loudly if someone
+    // half-implements sorting or filtering without covering it.
+    final (delegate: delegate, recorder: recorder) = setUpDelegate(docs(1));
+
+    await delegate.get(
+      sorting: const CmsFunctionsSortingParams(fieldKey: 'name', sortDesc: true),
+      filter: const CmsFilter.equals('name', 'Ada'),
+      paging: CmsFunctionsPagingParams(offset: 0, limit: 10),
+    );
+
+    expect(recorder.calls, ['collection(users)', 'limit(10)', 'get']);
   });
 }
 

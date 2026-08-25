@@ -11,6 +11,11 @@ Firebase implementation of the server-layer for [utopia_cms](https://pub.dev/pac
 An implementation of
 the [CmsDelegate](https://pub.dev/documentation/utopia_cms/latest/utopia_cms/CmsDelegate-class.html) interface.
 
+Known limitations: sorting and filtering are not applied (override `get` to
+support them), and paging is offset-based, so page N costs `offset + limit`
+document reads. For large collections override `get` with
+`startAfterDocument` cursor paging.
+
 ## Contributions
 
 Contributions are welcomed! 
