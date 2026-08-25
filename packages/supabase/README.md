@@ -45,13 +45,15 @@ import 'package:utopia_cms_supabase/utopia_cms_supabase.dart';
 final supabase = Supabase.instance.client;
 
 // Create delegate
-final delegate = CmsSupabase.instance.delegate(
+final delegate = CmsSupabaseDelegate(
+  const CmsSupabaseService(),
   client: supabase,
-  table: CmsSupabaseDataTable('users', idKey: 'id'),
+  table: const CmsSupabaseDataTable('users', idKey: 'id'),
 );
 
 // Use in CMS
-CmsTable(
+CmsTablePage(
+  title: 'Users',
   delegate: delegate,
   entries: [...],
 )
