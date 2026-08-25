@@ -7,12 +7,20 @@ class CmsFirebaseDelegate implements CmsDelegate {
   @override
   final String idKey;
 
-  const CmsFirebaseDelegate(this.collection, {this.idKey = 'id'});
+  final FirebaseFirestore? _firestore;
+
+  /// Pass [firestore] to run against a non-default app or a test double.
+  /// Defaults to [FirebaseFirestore.instance], resolved lazily so that the
+  /// constructor stays `const`.
+  const CmsFirebaseDelegate(this.collection, {this.idKey = 'id', FirebaseFirestore? firestore})
+    : _firestore = firestore;
+
+  FirebaseFirestore get firestore => _firestore ?? FirebaseFirestore.instance;
 
   @override
   Future<void> delete(JsonMap value) async {
     final id = value[idKey]! as String;
-    final userRef = FirebaseFirestore.instance.collection(collection).doc(id);
+    final userRef = firestore.collection(collection).doc(id);
     await userRef.delete();
   }
 
@@ -22,7 +30,7 @@ class CmsFirebaseDelegate implements CmsDelegate {
     CmsFilter? filter,
     required CmsFunctionsPagingParams paging,
   }) async {
-    final values = await FirebaseFirestore.instance.collection(collection).limit(30).get();
+    final values = await firestore.collection(collection).limit(30).get();
     return values.docs.map((e) => {...e.data(), idKey: e.id}).toList();
   }
 
@@ -30,13 +38,13 @@ class CmsFirebaseDelegate implements CmsDelegate {
   Future<JsonMap> update(JsonMap value, _) async {
     final id = value[idKey]! as String;
     final map = JsonMap.from(value)..remove(idKey);
-    await FirebaseFirestore.instance.collection(collection).doc(id).update(map);
+    await firestore.collection(collection).doc(id).update(map);
     return value;
   }
 
   @override
   Future<JsonMap> create(JsonMap value) async {
-    final result = await FirebaseFirestore.instance.collection(collection).add(value);
+    final result = await firestore.collection(collection).add(value);
     return {...value, idKey: result.id};
   }
 }
