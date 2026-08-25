@@ -46,17 +46,17 @@ class CmsFilterDateEntry extends CmsFilterEntry<DateTime?> {
   }
 
   @override
-  Object? toJson(Object? value) {
+  Object? toJson(DateTime? value) {
     if (value == null) return null;
     switch (unit) {
       case CmsFilterDateEntryUnit.dateTime:
         return value.toString();
       case CmsFilterDateEntryUnit.secondsSinceEpoch:
-        return (value as DateTime).millisecondsSinceEpoch ~/ 1000;
+        return value.millisecondsSinceEpoch ~/ 1000;
       case CmsFilterDateEntryUnit.millisecondsSinceEpoch:
-        return (value as DateTime).millisecondsSinceEpoch;
+        return value.millisecondsSinceEpoch;
       case CmsFilterDateEntryUnit.microsecondsSinceEpoch:
-        return (value as DateTime).microsecondsSinceEpoch;
+        return value.microsecondsSinceEpoch;
     }
   }
 
@@ -69,9 +69,9 @@ class CmsFilterDateEntry extends CmsFilterEntry<DateTime?> {
       case CmsFilterDateEntryUnit.secondsSinceEpoch:
         return DateTime.fromMillisecondsSinceEpoch((json as num).toInt() * 1000);
       case CmsFilterDateEntryUnit.millisecondsSinceEpoch:
-        return DateTime.fromMillisecondsSinceEpoch(json as int);
+        return DateTime.fromMillisecondsSinceEpoch((json as num).toInt());
       case CmsFilterDateEntryUnit.microsecondsSinceEpoch:
-        return DateTime.fromMicrosecondsSinceEpoch(json as int);
+        return DateTime.fromMicrosecondsSinceEpoch((json as num).toInt());
     }
   }
 
