@@ -25,13 +25,33 @@ class CmsWidget extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final selectedPageIdState =
-        selectedPageId ?? useState(useMemoized(() => items.whereType<CmsWidgetItemPage>().first.id));
+    // Every hook runs unconditionally: `selectedPageId ?? useState(...)` would
+    // short-circuit the hook calls whenever the host app hoists the id, so a
+    // value that starts null and resolves later would change the hook count.
+    // The first page id is also resolved leniently - a shell built only from
+    // `.action` / `.custom` items simply has no selected page.
+    final firstPageId = useMemoized(() {
+      for (final item in items) {
+        if (item is CmsWidgetItemPage) return item.id;
+      }
+      return null;
+    });
+    final localSelectedPageIdState = useState<String?>(firstPageId);
+    final selectedPageIdValue = selectedPageId?.value ?? localSelectedPageIdState.value;
     final scaffoldKey = useMemoized(GlobalKey<ScaffoldState>.new);
+
+    void selectPage(String id) {
+      final hoistedSelectedPageId = selectedPageId;
+      if (hoistedSelectedPageId != null) {
+        hoistedSelectedPageId.value = id;
+      } else {
+        localSelectedPageIdState.value = id;
+      }
+    }
 
     void onItemPressed(int index, {required bool fromDrawer}) {
       items[index].map(
-        page: (it) => selectedPageIdState.value = it.id,
+        page: (it) => selectPage(it.id),
         action: (it) => it.onPressed(),
         custom: (_) => null,
       );
@@ -46,7 +66,7 @@ class CmsWidget extends HookWidget {
           // Shell breakpoint is measured on the full window width, before the
           // sidebar takes its share - tablet and phone both fall to the drawer.
           final isDrawer = constraints.maxWidth < CmsBreakpoints.sidebarMin;
-          final content = _buildContent(selectedPageIdState.value);
+          final content = _buildContent(selectedPageIdValue);
 
           return Scaffold(
             key: scaffoldKey,
@@ -56,7 +76,7 @@ class CmsWidget extends HookWidget {
                 ? CmsMenu(
                     presentation: CmsMenuPresentation.drawer,
                     items: items,
-                    selectedPageId: selectedPageIdState.value,
+                    selectedPageId: selectedPageIdValue,
                     menuParams: menuParams,
                     onPressed: (index) => onItemPressed(index, fromDrawer: true),
                   )
@@ -72,7 +92,7 @@ class CmsWidget extends HookWidget {
                       children: [
                         CmsMenu(
                           items: items,
-                          selectedPageId: selectedPageIdState.value,
+                          selectedPageId: selectedPageIdValue,
                           menuParams: menuParams,
                           onPressed: (index) => onItemPressed(index, fromDrawer: false),
                         ),
@@ -94,10 +114,19 @@ class CmsWidget extends HookWidget {
     );
   }
 
-  Widget _buildContent(String selectedPageId) {
+  Widget _buildContent(String? selectedPageId) {
+    if (items.isEmpty) return const SizedBox.shrink();
+    // An id that matches nothing - a typo, or a page dropped by role gating
+    // while the hoisted id still points at it - must not reach the stack as -1.
+    final index = items.indexWhere((it) => it is CmsWidgetItemPage && it.id == selectedPageId);
+    final firstPageIndex = items.indexWhere((it) => it is CmsWidgetItemPage);
     return CrossFadeIndexedStack(
       duration: const Duration(milliseconds: 400),
-      index: items.indexWhere((it) => it is CmsWidgetItemPage && it.id == selectedPageId),
+      index: index >= 0
+          ? index
+          : firstPageIndex >= 0
+          ? firstPageIndex
+          : 0,
       lazy: true,
       children: [
         for (final item in items)

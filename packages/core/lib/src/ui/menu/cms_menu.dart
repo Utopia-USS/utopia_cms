@@ -16,7 +16,10 @@ enum CmsMenuPresentation { rail, drawer }
 
 class CmsMenu extends HookWidget {
   final CmsMenuPresentation presentation;
-  final String selectedPageId;
+
+  /// Null when the shell holds no page items at all, in which case no entry is
+  /// rendered as selected.
+  final String? selectedPageId;
   final List<CmsWidgetItem> items;
   final void Function(int index) onPressed;
   final CmsWidgetMenuParams menuParams;
