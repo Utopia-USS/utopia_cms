@@ -3,6 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:utopia_cms/utopia_cms.dart';
 import 'package:utopia_cms_supabase/src/model/cms_supabase_table.dart';
 import 'package:utopia_cms_supabase/src/service/cms_supabase_service.dart';
+import 'package:utopia_cms_supabase/src/util/cms_supabase_guard.dart';
 
 class CmsSupabaseOneToManyDelegate implements CmsToManyDelegate {
   final CmsSupabaseService _supabaseService;
@@ -31,7 +32,10 @@ class CmsSupabaseOneToManyDelegate implements CmsToManyDelegate {
   @override
   Future<List<JsonMap>> get({Object? originId, CmsFilter filter = const CmsFilter.all()}) async {
     final fixedFilter = archivedFilter == null ? filter : CmsFilterAnd([archivedFilter!, filter]);
-    return _supabaseService.query(client, table: foreignTable, filter: _buildFilter(originId, fixedFilter));
+    return guardSupabaseCall(
+      'load "${foreignTable.name}"',
+      () => _supabaseService.query(client, table: foreignTable, filter: _buildFilter(originId, fixedFilter)),
+    );
   }
 
   @override
@@ -40,10 +44,13 @@ class CmsSupabaseOneToManyDelegate implements CmsToManyDelegate {
     required ISet<Object> addedForeignIds,
     required ISet<Object> removedForeignIds,
   }) async {
-    await Future.wait([
-      for (final id in addedForeignIds) _update(id: id, originId: originId),
-      for (final id in removedForeignIds) _update(id: id, originId: null),
-    ]);
+    await guardSupabaseCall(
+      'update "${foreignTable.name}"',
+      () => Future.wait([
+        for (final id in addedForeignIds) _update(id: id, originId: originId),
+        for (final id in removedForeignIds) _update(id: id, originId: null),
+      ]),
+    );
   }
 
   CmsFilter _buildFilter(Object? originId, CmsFilter filter) =>
@@ -74,7 +81,10 @@ class CmsSupabaseManyToManyDelegate implements CmsToManyDelegate {
   String get foreignIdKey => associationTable.foreignTable.idKey;
 
   @override
-  Future<List<JsonMap>> get({Object? originId, CmsFilter filter = const CmsFilter.all()}) async {
+  Future<List<JsonMap>> get({Object? originId, CmsFilter filter = const CmsFilter.all()}) =>
+      guardSupabaseCall('load "${associationTable.foreignTable.name}"', () => _get(originId: originId, filter: filter));
+
+  Future<List<JsonMap>> _get({required Object? originId, required CmsFilter filter}) async {
     final fixedFilter = archivedFilter == null ? filter : CmsFilterAnd([archivedFilter!, filter]);
 
     if (originId == null) {
@@ -108,10 +118,13 @@ class CmsSupabaseManyToManyDelegate implements CmsToManyDelegate {
     required ISet<Object> addedForeignIds,
     required ISet<Object> removedForeignIds,
   }) async {
-    await Future.wait([
-      if (addedForeignIds.isNotEmpty) _add(originId: originId, foreignIds: addedForeignIds),
-      if (removedForeignIds.isNotEmpty) _remove(originId: originId, foreignIds: removedForeignIds),
-    ]);
+    await guardSupabaseCall(
+      'update "${associationTable.name}"',
+      () => Future.wait([
+        if (addedForeignIds.isNotEmpty) _add(originId: originId, foreignIds: addedForeignIds),
+        if (removedForeignIds.isNotEmpty) _remove(originId: originId, foreignIds: removedForeignIds),
+      ]),
+    );
   }
 
   Future<void> _add({required Object originId, required ISet<Object> foreignIds}) async {

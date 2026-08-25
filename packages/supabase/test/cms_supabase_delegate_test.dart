@@ -27,6 +27,20 @@ class _ServiceRecorder extends CmsSupabaseService {
   }
 }
 
+/// Answers every write with [failure], the way the backend would reject it.
+class _FailingService extends CmsSupabaseService {
+  final Object failure;
+
+  _FailingService(this.failure);
+
+  @override
+  Future<JsonMap> updateById(
+    SupabaseClient client, {
+    required CmsSupabaseDataTable table,
+    required JsonMap object,
+  }) async => throw failure;
+}
+
 /// A delegate that records the update `_archive` performs, the way a business
 /// logic subclass would see it.
 class _RecordingDelegate extends CmsSupabaseDelegate {
@@ -126,6 +140,45 @@ void main() {
         'id': 7,
         'meta': {'archived': true},
       });
+    });
+  });
+
+  group('backend failures', () {
+    CmsSupabaseDelegate failing(Object failure) =>
+        CmsSupabaseDelegate(_FailingService(failure), client: client, table: table);
+
+    test('a Postgrest failure names the operation and the table and carries the backend message', () async {
+      final subject = failing(
+        const PostgrestException(message: 'duplicate key value violates unique constraint "users_pkey"'),
+      );
+
+      await expectLater(
+        () => subject.update({'id': 7}, {}),
+        throwsA(
+          isA<CmsDelegateException>().having(
+            (e) => e.message,
+            'message',
+            allOf(startsWith('Failed to update "users": '), contains('duplicate key value violates unique constraint')),
+          ),
+        ),
+      );
+    });
+
+    test('an auth failure is reported the same way', () async {
+      final subject = failing(const AuthException('JWT expired'));
+
+      await expectLater(
+        () => subject.update({'id': 7}, {}),
+        throwsA(
+          isA<CmsDelegateException>().having((e) => e.message, 'message', 'Failed to update "users": JWT expired'),
+        ),
+      );
+    });
+
+    test('an exception that is not a backend failure keeps its type', () async {
+      final subject = failing(ArgumentError('called with a malformed row'));
+
+      await expectLater(() => subject.update({'id': 7}, {}), throwsA(isA<ArgumentError>()));
     });
   });
 }
