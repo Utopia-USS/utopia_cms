@@ -2,6 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:graphql/client.dart';
 import 'package:utopia_cms/utopia_cms.dart';
 import 'package:utopia_cms_graphql/utopia_cms_graphql.dart';
+import 'package:utopia_cms_hasura/src/delegate/cms_hasura_backend_guard.dart';
 import 'package:utopia_cms_hasura/src/model/cms_hasura_table.dart';
 import 'package:utopia_cms_hasura/src/service/cms_hasura_service.dart';
 
@@ -34,11 +35,14 @@ class CmsHasuraOneToManyDelegate implements CmsToManyDelegate {
   @override
   Future<List<JsonMap>> get({Object? originId, CmsFilter filter = const CmsFilter.all()}) async {
     final fixedFilter = archivedFilter == null ? filter : CmsFilterAnd([archivedFilter!, filter]);
-    return _hasuraService.query(
-      client,
-      table: foreignTable,
-      fields: foreignFields,
-      filter: _buildFilter(originId, fixedFilter),
+    return _guard(
+      'load',
+      () => _hasuraService.query(
+        client,
+        table: foreignTable,
+        fields: foreignFields,
+        filter: _buildFilter(originId, fixedFilter),
+      ),
     );
   }
 
@@ -49,14 +53,20 @@ class CmsHasuraOneToManyDelegate implements CmsToManyDelegate {
     required ISet<Object> addedForeignIds,
     required ISet<Object> removedForeignIds,
   }) async {
-    await Future.wait([
-      for (final id in addedForeignIds) _update(id: id, originId: originId),
-      for (final id in removedForeignIds) _update(id: id, originId: null),
-    ]);
+    await _guard(
+      'update',
+      () => Future.wait([
+        for (final id in addedForeignIds) _update(id: id, originId: originId),
+        for (final id in removedForeignIds) _update(id: id, originId: null),
+      ]),
+    );
   }
 
   CmsFilter _buildFilter(Object? originId, CmsFilter filter) =>
       originId != null ? filter & CmsFilter.equals(foreignKey, originId) : filter;
+
+  Future<T> _guard<T>(String operation, Future<T> Function() call) =>
+      guardHasuraCall(call, operation: operation, table: foreignTable);
 
   Future<void> _update({required Object id, required Object? originId}) async =>
       _hasuraService.updateById(client, table: foreignTable, object: {foreignTable.idKey: id, foreignKey: originId});
@@ -102,11 +112,15 @@ class CmsHasuraManyToManyDelegate implements CmsToManyDelegate {
   @override
   Future<List<JsonMap>> get({Object? originId, CmsFilter filter = const CmsFilter.all()}) async {
     final fixedFilter = archivedFilter == null ? filter : CmsFilterAnd([archivedFilter!, filter]);
-    return _hasuraService.query(
-      client,
-      table: associationTable.foreignTable,
-      fields: foreignFields,
-      filter: originId != null ? fixedFilter & _buildFilter(originId) : fixedFilter,
+    return _guard(
+      'load',
+      associationTable.foreignTable,
+      () => _hasuraService.query(
+        client,
+        table: associationTable.foreignTable,
+        fields: foreignFields,
+        filter: originId != null ? fixedFilter & _buildFilter(originId) : fixedFilter,
+      ),
     );
   }
 
@@ -116,11 +130,18 @@ class CmsHasuraManyToManyDelegate implements CmsToManyDelegate {
     required ISet<Object> addedForeignIds,
     required ISet<Object> removedForeignIds,
   }) async {
-    await Future.wait([
-      if (addedForeignIds.isNotEmpty) _add(originId: originId, foreignIds: addedForeignIds),
-      if (removedForeignIds.isNotEmpty) _remove(originId: originId, foreignIds: removedForeignIds),
-    ]);
+    await _guard(
+      'update',
+      associationTable,
+      () => Future.wait([
+        if (addedForeignIds.isNotEmpty) _add(originId: originId, foreignIds: addedForeignIds),
+        if (removedForeignIds.isNotEmpty) _remove(originId: originId, foreignIds: removedForeignIds),
+      ]),
+    );
   }
+
+  Future<T> _guard<T>(String operation, CmsHasuraTable table, Future<T> Function() call) =>
+      guardHasuraCall(call, operation: operation, table: table);
 
   CmsFilter _buildFilter(Object originId) => CmsFilter.equals(
     "${relationshipName ?? associationTable.originTable.name}.${associationTable.originKey}",

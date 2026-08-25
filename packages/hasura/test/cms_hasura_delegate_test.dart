@@ -9,6 +9,9 @@ class _ServiceRecorder extends CmsHasuraService {
   CmsFilter? queriedFilter;
   JsonMap? deletedKeys;
 
+  /// Thrown by [query] instead of answering, standing in for the backend.
+  Object? queryFailure;
+
   _ServiceRecorder() : super(const CmsGraphQLService(), namingConvention: CmsHasuraNamingConvention.hasura);
 
   @override
@@ -20,6 +23,7 @@ class _ServiceRecorder extends CmsHasuraService {
     CmsFilter filter = const CmsFilter.all(),
     CmsFunctionsSortingParams? sorting,
   }) async {
+    if (queryFailure != null) throw queryFailure!;
     queriedFilter = filter;
     return [];
   }
@@ -117,6 +121,48 @@ void main() {
         'id': 7,
         'meta': {'archived': false},
       });
+    });
+  });
+
+  group('a failing backend', () {
+    Future<void> loading() => delegate().get(paging: CmsFunctionsPagingParams(offset: 0, limit: 10));
+
+    test('surfaces a server error as a message naming the operation and the table', () async {
+      service.queryFailure = OperationException(
+        graphqlErrors: const [GraphQLError(message: 'permission denied for table "user"')],
+      );
+
+      await expectLater(
+        loading(),
+        throwsA(
+          isA<CmsDelegateException>().having(
+            (it) => it.message,
+            'message',
+            'Could not load "user": permission denied for table "user"',
+          ),
+        ),
+      );
+    });
+
+    test('surfaces a response that carries neither data nor errors the same way', () async {
+      service.queryFailure = StateError('GraphQL operation "user" returned no data and no errors.');
+
+      await expectLater(
+        loading(),
+        throwsA(
+          isA<CmsDelegateException>().having(
+            (it) => it.message,
+            'message',
+            'Could not load "user": GraphQL operation "user" returned no data and no errors.',
+          ),
+        ),
+      );
+    });
+
+    test('lets a programmer error through unwrapped, since no operator can act on it', () async {
+      service.queryFailure = ArgumentError('fields must not be empty');
+
+      await expectLater(loading(), throwsArgumentError);
     });
   });
 }
