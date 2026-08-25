@@ -175,6 +175,21 @@ void main() {
       );
     });
 
+    test('a write matching no rows reports the likely rls cause inline', () async {
+      final subject = failing(StateError('Expected at least one row from Supabase, got none.'));
+
+      await expectLater(
+        () => subject.update({'id': 7}, {}),
+        throwsA(
+          isA<CmsDelegateException>().having(
+            (e) => e.message,
+            'message',
+            'Failed to update "users": Expected at least one row from Supabase, got none.',
+          ),
+        ),
+      );
+    });
+
     test('an exception that is not a backend failure keeps its type', () async {
       final subject = failing(ArgumentError('called with a malformed row'));
 

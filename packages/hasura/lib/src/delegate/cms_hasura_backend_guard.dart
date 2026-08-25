@@ -24,6 +24,9 @@ Future<T> guardHasuraCall<T>(
   try {
     return await call();
   } on OperationException catch (exception) {
+    // In the standard stack CmsGraphQLService already wraps this into a
+    // CmsDelegateException (which passes through untouched above); this clause
+    // covers custom services that surface the raw client exception.
     throw CmsDelegateException(_message(operation, table, _describe(exception)));
   } on StateError catch (error) {
     throw CmsDelegateException(_message(operation, table, error.message));

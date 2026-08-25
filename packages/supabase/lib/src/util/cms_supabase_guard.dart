@@ -19,5 +19,9 @@ Future<T> guardSupabaseCall<T>(String description, Future<T> Function() run) asy
     Error.throwWithStackTrace(CmsDelegateException('Failed to $description: ${e.message}'), stackTrace);
   } on AuthException catch (e, stackTrace) {
     Error.throwWithStackTrace(CmsDelegateException('Failed to $description: ${e.message}'), stackTrace);
+  } on StateError catch (e, stackTrace) {
+    // The service raises this when a write matches no rows, which in practice
+    // is usually row-level security silently filtering the target row.
+    Error.throwWithStackTrace(CmsDelegateException('Failed to $description: ${e.message}'), stackTrace);
   }
 }
