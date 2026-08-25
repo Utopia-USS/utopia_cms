@@ -1,19 +1,25 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gql/ast.dart';
 import 'package:gql/language.dart';
 import 'package:graphql/client.dart';
+import 'package:utopia_cms/utopia_cms.dart';
 import 'package:utopia_cms_graphql/utopia_cms_graphql.dart';
 
-/// Records the document the service builds and answers with [response].
+/// Records the document the service builds and answers with [response], or fails
+/// the request with [failure] the way the transport would.
 class _RecorderLink extends Link {
   final List<DocumentNode> documents = [];
 
   Response response = const Response(data: {'result': null}, response: {});
+  Object? failure;
 
   @override
   Stream<Response> request(Request request, [NextLink? forward]) {
     documents.add(request.operation.document);
-    return Stream.value(response);
+    final failure = this.failure;
+    return failure != null ? Stream.error(failure) : Stream.value(response);
   }
 }
 
@@ -118,7 +124,7 @@ void main() {
       ]);
     });
 
-    test('rethrows the operation exception when the response carries errors', () async {
+    test('server errors surface as a CmsDelegateException naming the operation', () async {
       link.response = const Response(
         errors: [GraphQLError(message: 'permission denied')],
         response: {},
@@ -126,7 +132,46 @@ void main() {
 
       expect(
         () => service.query(client, name: 'users', fields: const {CmsGraphQLField('id')}),
-        throwsA(isA<OperationException>()),
+        throwsA(
+          isA<CmsDelegateException>().having(
+            (it) => it.message,
+            'message',
+            'Failed to run GraphQL query "users": permission denied',
+          ),
+        ),
+      );
+    });
+
+    test('a mutation names itself as a mutation', () async {
+      link.response = const Response(
+        errors: [GraphQLError(message: 'permission denied')],
+        response: {},
+      );
+
+      expect(
+        () => service.mutate(client, name: 'deleteUser'),
+        throwsA(
+          isA<CmsDelegateException>().having(
+            (it) => it.message,
+            'message',
+            startsWith('Failed to run GraphQL mutation "deleteUser": '),
+          ),
+        ),
+      );
+    });
+
+    test('a link failure is described by its cause, without the stack trace its own toString carries', () async {
+      link.failure = const ServerException(originalException: SocketException('Connection refused'), statusCode: 503);
+
+      expect(
+        () => service.query(client, name: 'users', fields: const {CmsGraphQLField('id')}),
+        throwsA(
+          isA<CmsDelegateException>().having(
+            (it) => it.message,
+            'message',
+            allOf(contains('Connection refused'), isNot(contains('ServerException('))),
+          ),
+        ),
       );
     });
 
@@ -135,8 +180,38 @@ void main() {
 
       expect(
         () => service.query(client, name: 'users', fields: const {CmsGraphQLField('id')}),
-        throwsA(isA<StateError>().having((it) => it.message, 'message', contains('users'))),
+        throwsA(
+          isA<CmsDelegateException>().having(
+            (it) => it.message,
+            'message',
+            allOf(startsWith('Failed to run GraphQL query "users": '), contains('no data and no errors')),
+          ),
+        ),
+      );
+    });
+
+    test('an exception that is not a GraphQL failure keeps its type', () async {
+      final throwing = _ThrowingClient(
+        ArgumentError('asked for a malformed operation'),
+        link: link,
+        cache: GraphQLCache(),
+      );
+
+      expect(
+        () => service.query(throwing, name: 'users', fields: const {CmsGraphQLField('id')}),
+        throwsA(isA<ArgumentError>()),
       );
     });
   });
+}
+
+/// Fails every operation with [failure], the way a caller error would before the
+/// request ever leaves the client.
+class _ThrowingClient extends GraphQLClient {
+  final Object failure;
+
+  _ThrowingClient(this.failure, {required super.link, required super.cache});
+
+  @override
+  Future<QueryResult<TParsed>> query<TParsed>(QueryOptions<TParsed> options) => throw failure;
 }
