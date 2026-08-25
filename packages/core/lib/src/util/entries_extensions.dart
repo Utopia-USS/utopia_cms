@@ -5,7 +5,7 @@ import 'package:utopia_cms/src/util/foundation.dart';
 
 extension EntriesExtensions on IList<CmsEntry<dynamic>> {
   IList<CmsEntry<dynamic>> editable({required bool isCreate, required bool isPageEditable}) =>
-      !isPageEditable ? IList() : where((e) => isCreate ? e.initializable : e.editable).toIList();
+      !isPageEditable ? IList() : where((e) => e.isWritable(isCreate: isCreate)).toIList();
 
   IList<CmsEntry<dynamic>> pinnedFor(CmsPageType pageType) => where((e) => e.modifier.pinned(pageType)).toIList();
 

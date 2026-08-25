@@ -86,5 +86,13 @@ abstract class CmsEntry<T> {
 
   bool get expanded => modifier.expanded;
 
+  /// Whether the management flow renders this entry as a writable field: create
+  /// writes the initializable entries, edit the editable ones.
+  ///
+  /// The single source of that rule - the field list and the submit-button
+  /// validation must agree on it, or a required entry one of them hides becomes
+  /// unsatisfiable.
+  bool isWritable({required bool isCreate}) => isCreate ? initializable : editable;
+
   Future<void> onSaved() async {}
 }

@@ -44,13 +44,13 @@ class CmsItemManagementState implements CmsManagementBaseState {
   bool get canCreate => !isEdit || params.canEdit;
 
   bool get isButtonAvailable {
-    // Validate exactly the entries the flow renders as writable (the same rule
-    // `EntriesExtensions.editable` applies): create writes the initializable
-    // ones, edit the editable ones. The old `required && editable` filter both
-    // skipped a required initializable-only entry and demanded a value for a
-    // required editable-only entry that create never shows.
+    // Validate exactly the entries the flow renders as writable, through the
+    // same `CmsEntry.isWritable` rule `EntriesExtensions.editable` applies. The
+    // old `required && editable` filter both skipped a required
+    // initializable-only entry and demanded a value for a required
+    // editable-only entry that create never shows.
     final requiredFieldsFilled = !entries
-        .where((e) => e.required && (isEdit ? e.editable : e.initializable))
+        .where((e) => e.required && e.isWritable(isCreate: !isEdit))
         .any((e) => values.getAtPath(e.key) == null);
     if (!requiredFieldsFilled) return false;
     if (!isEdit) return true;
