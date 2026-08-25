@@ -19,9 +19,7 @@ class CmsFirebaseDelegate implements CmsDelegate {
 
   @override
   Future<void> delete(JsonMap value) async {
-    final id = value[idKey]! as String;
-    final userRef = firestore.collection(collection).doc(id);
-    await userRef.delete();
+    await firestore.collection(collection).doc(_idOf(value)).delete();
   }
 
   @override
@@ -42,9 +40,8 @@ class CmsFirebaseDelegate implements CmsDelegate {
 
   @override
   Future<JsonMap> update(JsonMap value, _) async {
-    final id = value[idKey]! as String;
     final map = JsonMap.from(value)..remove(idKey);
-    await firestore.collection(collection).doc(id).update(map);
+    await firestore.collection(collection).doc(_idOf(value)).update(map);
     return value;
   }
 
@@ -53,4 +50,11 @@ class CmsFirebaseDelegate implements CmsDelegate {
     final result = await firestore.collection(collection).add(value);
     return {...value, idKey: result.id};
   }
+
+  String _idOf(JsonMap value) => switch (value[idKey]) {
+    final String id => id,
+    final other => throw CmsDelegateException(
+      'Expected a String document id under "$idKey" in collection "$collection", got: $other',
+    ),
+  };
 }
