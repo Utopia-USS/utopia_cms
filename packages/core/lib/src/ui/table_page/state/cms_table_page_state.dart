@@ -133,14 +133,17 @@ CmsTablePageState useCmsTablePageState({
 
   Future<bool> onDelete(JsonMap value, int index) async {
     // Guards a double tap: without it the confirmation opens twice and the row
-    // is deleted twice.
+    // is deleted twice. The confirmation runs inside the submit state so the
+    // guard already holds while the dialog is open.
     if (deleteSubmitState.inProgress) return false;
-    if (await confirmDelete() != true) return false;
+    var isDeleted = false;
     // `run` routes a failing delete through the app's error handling (and makes
     // it retryable) instead of dropping it as an unhandled async error; inside
     // the management overlay `deleteItem` maps it onto the error message.
     await deleteSubmitState.run(() async {
+      if (await confirmDelete() != true) return;
       await delegate.delete(value);
+      isDeleted = true;
       // The captured index spans the confirmation and the request, so a reload
       // in that window may have shifted or replaced the rows.
       final items = itemsState.value;
@@ -152,7 +155,7 @@ CmsTablePageState useCmsTablePageState({
       itemsState.value = items.removeAt(currentIndex);
       if (pagingOffsetState.value > 0) pagingOffsetState.value--;
     });
-    return true;
+    return isDeleted;
   }
 
   // The overlay is pushed onto the app Navigator, outside the CmsWidget theme
