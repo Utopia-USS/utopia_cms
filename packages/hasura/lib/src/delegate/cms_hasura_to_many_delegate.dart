@@ -70,12 +70,27 @@ class CmsHasuraManyToManyDelegate implements CmsToManyDelegate {
   final CmsGraphQLFields foreignFields;
   final CmsFilterNotEquals? archivedFilter;
 
+  /// Name of the Hasura relationship that leads from the foreign table back to
+  /// the association rows, used to filter the foreign rows down to one origin:
+  /// `where: {<relationshipName>: {<originKey>: {_eq: originId}}}`.
+  ///
+  /// It must match the array (or object) relationship Hasura tracks on
+  /// [CmsHasuraAssociationTable.foreignTable] over the association table - the
+  /// name from the Hasura metadata, which need not be any table name. For a
+  /// `user` / `role` pair joined through `user_role`, this is the relationship
+  /// on `role` pointing at `user_role`, commonly named `user_roles`.
+  ///
+  /// Defaults to the origin table name, which only resolves when the
+  /// relationship happens to be named exactly like the origin table.
+  final String? relationshipName;
+
   const CmsHasuraManyToManyDelegate(
     this._hasuraService, {
     required this.client,
     required this.associationTable,
     required this.foreignFields,
     this.archivedFilter,
+    this.relationshipName,
   });
 
   @override
@@ -107,8 +122,10 @@ class CmsHasuraManyToManyDelegate implements CmsToManyDelegate {
     ]);
   }
 
-  CmsFilter _buildFilter(Object originId) =>
-      CmsFilter.equals("${associationTable.originTable.name}.${associationTable.originKey}", originId);
+  CmsFilter _buildFilter(Object originId) => CmsFilter.equals(
+    "${relationshipName ?? associationTable.originTable.name}.${associationTable.originKey}",
+    originId,
+  );
 
   Future<void> _add({required Object originId, required ISet<Object> foreignIds}) async {
     await _hasuraService.insert(
