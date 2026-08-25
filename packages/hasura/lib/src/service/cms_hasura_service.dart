@@ -21,7 +21,7 @@ class CmsHasuraService {
   }) async {
     final result = await _graphQLService.query(
       client,
-      name: table.name,
+      name: namingConvention.field([table.name]),
       fields: fields,
       arguments: {
         if (paging != null) 'limit': paging.limit.toValueNodeUnsafe(),
@@ -61,12 +61,17 @@ class CmsHasuraService {
     required JsonMap object,
     CmsGraphQLFields fields = const {},
   }) async {
+    // The primary key is addressed through `pk_columns`; leaving it in `_set` as
+    // well makes Hasura reject the mutation for any role that lacks update
+    // permission on the key columns.
+    final set = JsonMap.from(object)..removeWhere((key, _) => keys.containsKey(key));
+
     final result = await _graphQLService.mutate(
       client,
       name: namingConvention.field(["update", table.name, "by", "pk"]),
       arguments: {
         namingConvention.argument(["pk", "columns"]): keys.toValueNodeUnsafe(),
-        "_set": object.toValueNodeUnsafe(),
+        "_set": set.toValueNodeUnsafe(),
       },
       fields: fields,
     );
@@ -115,8 +120,10 @@ class CmsHasuraService {
       all: () => const ObjectValueNode(),
       equals: (field, value) => _buildNested(field, {"_eq": value.toValueNodeUnsafe()}.toValueNode()),
       notEquals: (field, value) => _buildNested(field, {"_neq": value.toValueNodeUnsafe()}.toValueNode()),
-      containsString: (field, value, caseSensitive) =>
-          _buildNested(field, {caseSensitive ? "_like" : "_ilike": "%$value%".toValueNode()}.toValueNode()),
+      containsString: (field, value, caseSensitive) => _buildNested(
+        field,
+        {caseSensitive ? "_like" : "_ilike": "%${_escapeLikeWildcards(value)}%".toValueNode()}.toValueNode(),
+      ),
       inList: (field, values) => _buildNested(field, {"_in": values.toValueNodeUnsafe()}.toValueNode()),
       and: (filters) => {"_and": filters.map(buildFilter).toValueNode()}.toValueNode(),
       or: (filters) => {"_or": filters.map(buildFilter).toValueNode()}.toValueNode(),
@@ -152,6 +159,12 @@ class CmsHasuraService {
       (true, true) => ['desc', 'nulls', 'last'],
     };
   }
+
+  /// Escapes the `_like`/`_ilike` wildcards `%` and `_` so a search term matches
+  /// literally. Postgres uses `\` as the default `LIKE` escape character, so the
+  /// backslash itself has to be doubled first.
+  String _escapeLikeWildcards(String value) =>
+      value.replaceAll(r'\', r'\\').replaceAll('%', r'\%').replaceAll('_', r'\_');
 
   ObjectValueNode _buildNested(String path, ValueNode value) {
     final parts = path.split(".");
