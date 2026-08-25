@@ -16,6 +16,7 @@ class CmsTableActionsButton extends HookWidget {
   Widget build(BuildContext context) {
     final style = context.textStyles.label;
     final loadingState = useState<bool>(false);
+    final isMounted = useIsMounted();
     return IgnorePointer(
       ignoring: loadingState.value,
       child: PopupMenuButton<CmsTableAction>(
@@ -29,9 +30,14 @@ class CmsTableActionsButton extends HookWidget {
             return PopupMenuItem(
               onTap: () async {
                 loadingState.value = true;
-                final result = await e.onPressed(value);
-                if (result != null && e.shouldUpdateTable) onUpdate(result);
-                loadingState.value = false;
+                try {
+                  final result = await e.onPressed(value);
+                  if (result != null && e.shouldUpdateTable) onUpdate(result);
+                } finally {
+                  // Without the `finally` a throwing action leaves the row
+                  // spinner-locked behind `IgnorePointer` for good.
+                  if (isMounted()) loadingState.value = false;
+                }
               },
               child: Text(e.label, style: style),
             );
