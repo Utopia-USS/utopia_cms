@@ -21,7 +21,7 @@ class CmsDatePicker extends HookWidget {
         onTap: () async {
           final result = await showDatePicker(
             context: context,
-            initialDate: date ?? now,
+            initialDate: date?.toLocal() ?? now,
             firstDate: now.copyWith(year: now.year - 50),
             lastDate: now.copyWith(year: now.year + 50),
             builder: (context, child) {
@@ -36,7 +36,8 @@ class CmsDatePicker extends HookWidget {
               );
             },
           );
-          if (result != null) onDateChanged?.call(result);
+          // Keep the stored flavor: a UTC-backed value stays UTC after re-picking.
+          if (result != null) onDateChanged?.call(date?.isUtc ?? false ? result.toUtc() : result);
         },
         child: CmsTextField(
           value: date?.toDisplayStringWithoutHours() ?? '',
