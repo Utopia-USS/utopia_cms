@@ -1,10 +1,10 @@
 class CmsSupabaseTable {
   final String name;
+
+  /// Exposed Postgres schema holding the table, or `null` for the default one.
   final String? schema;
 
   const CmsSupabaseTable(this.name, {this.schema});
-
-  String get fullName => schema != null ? '$schema.$name' : name;
 }
 
 class CmsSupabaseDataTable extends CmsSupabaseTable {
