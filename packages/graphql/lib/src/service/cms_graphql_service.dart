@@ -24,8 +24,7 @@ class CmsGraphQLService {
       arguments: arguments,
     );
     final result = await client.query(QueryOptions(document: document, variables: variables));
-    _checkResult(result);
-    return result.data!["result"];
+    return _readResult(result, name: name);
   }
 
   Future<Object?> mutate(
@@ -44,8 +43,7 @@ class CmsGraphQLService {
       arguments: arguments,
     );
     final result = await client.mutate(MutationOptions(document: document, variables: variables));
-    _checkResult(result);
-    return result.data!["result"];
+    return _readResult(result, name: name);
   }
 
   DocumentNode _buildDocument({
@@ -89,7 +87,17 @@ class CmsGraphQLService {
     return FieldNode(name: field.key.toNameNode(), selectionSet: field.fields?.let(_buildSelectionSet));
   }
 
-  void _checkResult(QueryResult result) {
+  /// Unwraps the aliased root field, or reports why it is missing.
+  ///
+  /// A result can carry neither data nor an exception - a cache-only lookup, or a
+  /// response whose `data` is null without any `errors` - and that has to surface
+  /// as a described failure rather than a null-check error.
+  Object? _readResult(QueryResult result, {required String name}) {
     if (result.hasException) throw result.exception!;
+    final data = result.data;
+    if (data == null) {
+      throw StateError('GraphQL operation "$name" returned no data and no errors (source: ${result.source}).');
+    }
+    return data["result"];
   }
 }
