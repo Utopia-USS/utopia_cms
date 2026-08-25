@@ -155,6 +155,13 @@ void main() {
       expect(argument('_set'), '{name: "ann"}');
     });
 
+    test('sends nothing when only the primary key was given, since _set may not be empty', () async {
+      final result = await service().updateById(client, table: table, object: {'id': 1});
+
+      expect(graphQL.calls, isEmpty);
+      expect(result, {'id': 1});
+    });
+
     test('leaves the object it was given untouched', () async {
       final object = <String, dynamic>{'id': 1, 'name': 'ann'};
 

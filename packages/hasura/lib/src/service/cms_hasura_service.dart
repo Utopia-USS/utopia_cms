@@ -66,6 +66,10 @@ class CmsHasuraService {
     // permission on the key columns.
     final set = JsonMap.from(object)..removeWhere((key, _) => keys.containsKey(key));
 
+    // Nothing but the primary key was given, and Hasura rejects an empty `_set`.
+    // There is nothing to write, so the row is reported back as it came in.
+    if (set.isEmpty) return object;
+
     final result = await _graphQLService.mutate(
       client,
       name: namingConvention.field(["update", table.name, "by", "pk"]),
