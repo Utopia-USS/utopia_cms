@@ -43,6 +43,10 @@ void main() {
   /// The single query parameter named [key] of the last recorded request.
   String? param(String key) => recorder.last?.url.queryParameters[key];
 
+  /// Every value sent under [key] - PostgREST takes a repeated key as a
+  /// conjunction, so a single-value read would hide all but the first term.
+  List<String>? params(String key) => recorder.last?.url.queryParametersAll[key];
+
   Future<void> get({
     CmsFilter filter = const CmsFilter.all(),
     CmsFunctionsSortingParams? sorting,
@@ -147,6 +151,17 @@ void main() {
       expect(param('or'), '(not.and(a.eq.1,b.eq.2))');
     });
 
+    test('and of two negations sends both, as two separate or parameters', () async {
+      await get(
+        filter: const CmsFilter.and([
+          CmsFilter.not(CmsFilter.equals('a', 1)),
+          CmsFilter.not(CmsFilter.equals('b', 2)),
+        ]),
+      );
+
+      expect(params('or'), ['(a.not.eq.1)', '(b.not.eq.2)']);
+    });
+
     test('double negation collapses to the plain condition', () async {
       await get(filter: const CmsFilter.not(CmsFilter.not(CmsFilter.equals('a', 1))));
 
@@ -170,6 +185,20 @@ void main() {
         await get(filter: const CmsFilter.all() & const CmsFilter.equals('active', true));
 
         expect(param('active'), 'eq.true');
+      });
+    });
+
+    group('an empty group', () {
+      test('or([]) matches no row, so no request is sent at all', () async {
+        expect(await service.query(client, table: table, filter: const CmsFilter.or([])), isEmpty);
+
+        expect(recorder.requests, isEmpty);
+      });
+
+      test('and([]) matches every row, so the request goes out unfiltered', () async {
+        await get(filter: const CmsFilter.and([]));
+
+        expect(recorder.last!.url.queryParameters.keys, ['select']);
       });
     });
 
