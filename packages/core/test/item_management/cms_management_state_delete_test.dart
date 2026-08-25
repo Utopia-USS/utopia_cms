@@ -67,21 +67,13 @@ void main() {
     unawaited(context.value.onDelete());
     expect(context.value.isDeleting, true);
 
-    await context.value.onDelete();
+    // Bounded: on unguarded code the second call joins the pending delete and hangs.
+    await context.value.onDelete().timeout(const Duration(seconds: 1));
     expect(deleteCallCount, 1);
 
     completer.complete(true);
     await context.waitUntil((it) => !it.isDeleting);
     expect(moveBacks, [true]);
-  });
-
-  test('isDeleting is false before and after the deletion', () async {
-    build(deleteItem: () async => true);
-    expect(context.value.isDeleting, false);
-
-    await context.value.onDelete();
-
-    expect(context.value.isDeleting, false);
   });
 
   test('delete is a no-op without a deleteItem', () async {

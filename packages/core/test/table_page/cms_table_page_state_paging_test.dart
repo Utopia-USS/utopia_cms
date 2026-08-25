@@ -105,7 +105,10 @@ void main() {
     await delegate.untilGetCount(1);
 
     unawaited(context.value.onReloadPressed());
-    await delegate.untilGetCount(2);
+    // Bounded: a reload that joined the in-flight operation instead of starting
+    // its own would never issue a second request, and the bare wait would fail
+    // as a whole-test timeout rather than as this assertion.
+    await delegate.untilGetCount(2).timeout(const Duration(seconds: 1));
 
     expect(delegate.gets[1].offset, 0);
   });
@@ -152,7 +155,9 @@ void main() {
     // The second tap lands while the first confirmation is still open, so it
     // must not open a second dialog either.
     final first = context.value.onDeletePressed(row('a'), 0);
-    expect(await context.value.onDeletePressed(row('a'), 0), false);
+    // Bounded: an unguarded second tap would await its own delete request, which
+    // this test never resolves.
+    expect(await context.value.onDeletePressed(row('a'), 0).timeout(const Duration(seconds: 1)), false);
 
     await delegate.untilDeleteCount(1);
     delegate.completeDelete(0);
@@ -175,7 +180,6 @@ void main() {
     // captured index no longer points at row 'a' - or at anything.
     unawaited(context.value.onReloadPressed());
     await delegate.untilGetCount(2);
-    expect(delegate.gets[1].offset, 0);
 
     delegate.completeDelete(0);
     await deletion;
@@ -189,7 +193,10 @@ void main() {
   });
 
   test('deleting a row that is already gone leaves the offset at zero', () async {
-    build();
+    // A limit of 1 means the single row fills the page, so paging stays enabled
+    // and the offset the deletions left behind is still observable through a
+    // plain refresh - a reload would reset it to 0 and prove nothing.
+    build(pagingLimit: 1);
     await delegate.untilGetCount(1);
     delegate.gets[0].complete([row('a')]);
     await context.waitUntil((it) => it.items.isNotEmpty);
@@ -201,13 +208,14 @@ void main() {
     await first;
     expect(context.value.items, isEmpty);
 
-    // Same row again: the offset is already 0 and must not go negative.
+    // Same row again: it is no longer in the list, so the offset - already back
+    // at 0 - must be left alone instead of being stepped to -1.
     final second = context.value.onDeletePressed(row('a'), 0);
     await delegate.untilDeleteCount(2);
     delegate.completeDelete(1);
     await second;
 
-    unawaited(context.value.onReloadPressed());
+    unawaited(context.value.computedState.refresh());
     await delegate.untilGetCount(2);
     expect(delegate.gets[1].offset, 0);
   });

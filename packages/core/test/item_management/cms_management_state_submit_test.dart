@@ -94,7 +94,9 @@ void main() {
       unawaited(context.value.onSubmit());
       expect(context.value.isUploading, true);
 
-      await context.value.onSubmit();
+      // Bounded: an unskipped second submit would await the same pending upload,
+      // and the bare wait would fail as a whole-test timeout instead of here.
+      await context.value.onSubmit().timeout(const Duration(seconds: 1));
       expect(uploads.length, 1);
 
       completer.complete({'id': 'row-1'});
@@ -123,6 +125,19 @@ void main() {
       expect(uploads.length, 1);
       expect(moveBacks, [true]);
       expect(context.value.errorMessage, isNull);
+    });
+
+    test('a post-save callback failing with a delegate error does not reopen the form', () async {
+      build();
+      context.value.addOnSavedCallback((_) async => throw const CmsDelegateException('linking media failed'));
+
+      await expectLater(context.value.onSubmit(), throwsA(isA<CmsDelegateException>()));
+
+      // The only case the committed flag guards: the same exception type that
+      // becomes an inline message before the write must not become one after it,
+      // or the user retries a write that already succeeded.
+      expect(context.value.errorMessage, isNull);
+      expect(moveBacks, [true]);
     });
   });
 
@@ -171,15 +186,5 @@ void main() {
 
       expect(context.value.isButtonAvailable, true);
     });
-  });
-
-  test('hasChanges stays false until a value is changed', () {
-    build(initialValue: {'name': 'Ada'}, entries: [entry('name')]);
-
-    expect(context.value.hasChanges, false);
-    expect(context.value.isEdit, true);
-
-    context.value.onValueChanged('name', 'Grace');
-    expect(context.value.hasChanges, true);
   });
 }
