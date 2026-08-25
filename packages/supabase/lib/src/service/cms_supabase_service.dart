@@ -234,6 +234,8 @@ class CmsSupabaseService {
   /// Escapes the `LIKE`/`ILIKE` wildcards `%` and `_` so a search term matches
   /// literally. Postgres uses `\` as the default `LIKE` escape character, so the
   /// backslash itself has to be doubled first.
+  // `*` is deliberately left alone: PostgREST may also read it as a pattern alias for `%`, pending verification
+  // against the deployed PostgREST version.
   String _escapeLikeWildcards(String value) =>
       value.replaceAll(r'\', r'\\').replaceAll('%', r'\%').replaceAll('_', r'\_');
 

@@ -47,7 +47,7 @@ final supabase = Supabase.instance.client;
 // Create delegate
 final delegate = CmsSupabase.instance.delegate(
   client: supabase,
-  table: CmsSupabaseDataTable(name: 'users', idKey: 'id'),
+  table: CmsSupabaseDataTable('users', idKey: 'id'),
 );
 
 // Use in CMS
