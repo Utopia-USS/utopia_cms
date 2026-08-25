@@ -55,8 +55,10 @@ class CmsHasuraDelegate implements CmsDelegate {
       : hasuraService.deleteByPk(client, table: table, fields: fields, keys: {table.idKey: value[table.idKey]});
 
   Future<void> _archive(JsonMap value) async {
-    final map = value;
+    // A deep copy - the archived field may sit on a dotted path, and `value` is
+    // the row the table still renders, so no nested map may be shared with it.
+    final map = value.deepCopy();
     map.setAtPath(archivedFilter!.field, archivedFilter!.value);
-    await update(value, value);
+    await update(map, value);
   }
 }
