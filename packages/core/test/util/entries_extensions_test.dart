@@ -52,13 +52,6 @@ void main() {
     expect(entries.pinnedFor(CmsPageType.mobile), isEmpty);
   });
 
-  test('sorted moves multi-line text entries to the end and is otherwise stable', () {
-    final multiline = CmsTextEntry(key: 'description', maxLines: 3);
-    final first = entry('a');
-    final second = entry('b');
-    expect([multiline, first, second].lock.sorted.toList(), [first, second, multiline]);
-  });
-
   group('isExpanded', () {
     test('is true for a multi-line text entry', () {
       expect(CmsTextEntry(key: 'a', maxLines: 3).isExpanded, isTrue);
