@@ -1,0 +1,28 @@
+name: test
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  analyze-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.44.0
+          channel: stable
+          cache: true
+
+      - run: flutter pub get
+
+      - run: flutter analyze
+
+      - name: Run every package test suite
+        # melos.yaml points sdkPath at .fvm/flutter_sdk, which does not exist on CI.
+        env:
+          MELOS_SDK_PATH: ${{ env.FLUTTER_ROOT }}
+        run: dart run melos run test
