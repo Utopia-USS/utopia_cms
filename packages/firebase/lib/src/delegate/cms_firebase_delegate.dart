@@ -30,8 +30,14 @@ class CmsFirebaseDelegate implements CmsDelegate {
     CmsFilter? filter,
     required CmsFunctionsPagingParams paging,
   }) async {
-    final values = await firestore.collection(collection).limit(30).get();
-    return values.docs.map((e) => {...e.data(), idKey: e.id}).toList();
+    Query<JsonMap> query = firestore.collection(collection);
+    final limit = paging.limit;
+    // Firestore has no offset queries, so fetch everything up to the end of the
+    // requested page and drop the documents belonging to the previous ones.
+    // A null limit means "fetch all", so no limit is applied at all.
+    if (limit != null) query = query.limit(paging.offset + limit);
+    final snapshot = await query.get();
+    return snapshot.docs.skip(paging.offset).map((e) => {...e.data(), idKey: e.id}).toList();
   }
 
   @override
