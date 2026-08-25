@@ -16,7 +16,6 @@ class CmsTableActionsButton extends HookWidget {
   Widget build(BuildContext context) {
     final style = context.textStyles.label;
     final loadingState = useState<bool>(false);
-    final isMounted = useIsMounted();
     return IgnorePointer(
       ignoring: loadingState.value,
       child: PopupMenuButton<CmsTableAction>(
@@ -36,7 +35,7 @@ class CmsTableActionsButton extends HookWidget {
                 } finally {
                   // Without the `finally` a throwing action leaves the row
                   // spinner-locked behind `IgnorePointer` for good.
-                  if (isMounted()) loadingState.value = false;
+                  loadingState.setIfMounted(false);
                 }
               },
               child: Text(e.label, style: style),

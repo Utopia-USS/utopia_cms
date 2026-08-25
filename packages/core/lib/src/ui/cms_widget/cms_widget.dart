@@ -30,13 +30,7 @@ class CmsWidget extends HookWidget {
     // value that starts null and resolves later would change the hook count.
     // The first page id is also resolved leniently - a shell built only from
     // `.action` / `.custom` items simply has no selected page.
-    final firstPageId = useMemoized(() {
-      for (final item in items) {
-        if (item is CmsWidgetItemPage) return item.id;
-      }
-      return null;
-    });
-    final localSelectedPageIdState = useState<String?>(firstPageId);
+    final localSelectedPageIdState = useState<String?>(items.whereType<CmsWidgetItemPage>().firstOrNull()?.id);
     final selectedPageIdValue = selectedPageId?.value ?? localSelectedPageIdState.value;
     final scaffoldKey = useMemoized(GlobalKey<ScaffoldState>.new);
 

@@ -137,8 +137,7 @@ CmsItemManagementState useCmsItemManagementState({
     );
   }
 
-  final scrollController = useMemoized(ScrollController.new);
-  useEffect(() => scrollController.dispose, [scrollController]);
+  final scrollController = useMemoized(ScrollController.new, const [], (it) => it.dispose());
 
   return CmsItemManagementState(
     onDelete: onDelete,

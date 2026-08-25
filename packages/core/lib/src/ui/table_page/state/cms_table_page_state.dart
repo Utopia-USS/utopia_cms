@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:utopia_cms/src/delegate/cms_delegate.dart';
@@ -109,8 +111,10 @@ CmsTablePageState useCmsTablePageState({
           filter: buildFilter(),
         );
         // Cancelling the operation this compute belongs to does not stop the
-        // closure, so the discarded page has to be dropped explicitly.
-        if (generation != requestGenerationState.value) return;
+        // closure, so the discarded page has to be dropped explicitly - and a
+        // page arriving after the table is gone must not touch the states at
+        // all, because writing an unmounted one throws.
+        if (!itemsState.mounted || generation != requestGenerationState.value) return;
         if (pagingLimit == null || result.length < pagingLimit) pagingEnabledState.value = false;
 
         if (result.isNotEmpty) {
@@ -144,6 +148,9 @@ CmsTablePageState useCmsTablePageState({
       if (await confirmDelete() != true) return;
       await delegate.delete(value);
       isDeleted = true;
+      // The row is gone either way, but the table it belonged to may have been
+      // disposed while the request was open.
+      if (!itemsState.mounted) return;
       // The captured index spans the confirmation and the request, so a reload
       // in that window may have shifted or replaced the rows.
       final items = itemsState.value;
@@ -168,9 +175,12 @@ CmsTablePageState useCmsTablePageState({
   Future<void> reload() async {
     resetState();
     // `refresh` joins an operation that is already in progress and would hand
-    // back its stale page instead of refetching, so cancel it first.
+    // back its stale page instead of refetching, so cancel it first. The new
+    // operation is deliberately not awaited: the next `clear` cancels it, and a
+    // cancelled `CancelableOperation.value` never completes, so overlapping
+    // reloads would strand the awaited future forever.
     state.clear();
-    await state.refresh();
+    unawaited(state.refresh());
   }
 
   ///not null params mean that it's edit
@@ -209,8 +219,7 @@ CmsTablePageState useCmsTablePageState({
 
   Future<void> onEdit(JsonMap value, int index) async => onManage(value: value, index: index);
 
-  final scrollController = useMemoized(ScrollController.new);
-  useEffect(() => scrollController.dispose, [scrollController]);
+  final scrollController = useMemoized(ScrollController.new, const [], (it) => it.dispose());
 
   Future<void> onSortPressed(CmsEntry entry) async {
     final currentValue = sortingParamsState.value;
