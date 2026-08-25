@@ -10,5 +10,5 @@ pubspec.lock
 # FVM Version Cache
 .fvm/
 
-# FVM Version Cache
-.fvm/
+# Flutter build output (created by flutter test / build in any package)
+build/
