@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:utopia_cms/src/model/entry/cms_entry.dart';
+import 'package:utopia_cms/src/model/entry/cms_entry_modifier.dart';
 import 'package:utopia_cms/src/model/item_management/cms_management_section_entry.dart';
 import 'package:utopia_cms/src/ui/item_management/state/cms_management_state.dart';
 import 'package:utopia_cms/src/ui/widget/button/cms_button.dart';
@@ -201,12 +202,51 @@ class CmsManagementView extends HookWidget {
     );
   }
 
+  /// Full-width fields, one row each - unless consecutive entries share a
+  /// [CmsEntryModifier.rowGroup], in which case they split a single row
+  /// between them. Grouping keeps a set of small related fields (three cover
+  /// images, say) readable as a set instead of scrolling past one another.
   SliverList _buildSingularSection(IList<CmsEntry<dynamic>> entries, {bool readOnly = false}) {
+    final rows = _groupIntoRows(entries);
     return SliverList(
       delegate: SliverChildBuilderDelegate((context, index) {
-        return _buildTile(readOnly: readOnly, firstItem: _buildEditField(context, entries[index]));
-      }, childCount: entries.length),
+        final row = rows[index];
+        if (row.length == 1) {
+          return _buildTile(readOnly: readOnly, firstItem: _buildEditField(context, row.single));
+        }
+        final spacing = context.theme.fieldContentPadding.left;
+        return _buildTile(
+          readOnly: readOnly,
+          firstItem: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (var i = 0; i < row.length; i++) ...[
+                if (i > 0) SizedBox(width: spacing),
+                Expanded(child: _buildEditField(context, row[i])),
+              ],
+            ],
+          ),
+        );
+      }, childCount: rows.length),
     );
+  }
+
+  /// Splits [entries] into rows: entries without a [CmsEntryModifier.rowGroup]
+  /// get a row to themselves, and runs of CONSECUTIVE entries sharing a group
+  /// collapse into one. Only consecutive ones merge, so the declared order of
+  /// the form is never rearranged behind the author's back.
+  List<List<CmsEntry<dynamic>>> _groupIntoRows(IList<CmsEntry<dynamic>> entries) {
+    final rows = <List<CmsEntry<dynamic>>>[];
+    for (final entry in entries) {
+      final group = entry.modifier.rowGroup;
+      final canAppend = group != null && rows.isNotEmpty && rows.last.first.modifier.rowGroup == group;
+      if (canAppend) {
+        rows.last.add(entry);
+      } else {
+        rows.add([entry]);
+      }
+    }
+    return rows;
   }
 
   Widget _buildButtons(BuildContext context) {

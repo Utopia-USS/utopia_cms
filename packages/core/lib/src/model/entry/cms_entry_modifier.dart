@@ -47,6 +47,17 @@ class CmsEntryModifier {
   /// If true the entry will be placed in the separate row in the [CmsManagementView]
   final bool expanded;
 
+  /// Groups full-width entries into ONE shared row of the management form.
+  ///
+  /// Entries that are [expanded] normally take a row each. When several of
+  /// them carry the same non-null [rowGroup], they are laid out side by side
+  /// in a single row instead, splitting the width evenly. Useful for a set of
+  /// small, related fields - three cover images, for example - that read as a
+  /// set and waste a lot of vertical space stacked.
+  ///
+  /// Ignored for entries that are not [expanded]; those already share rows.
+  final String? rowGroup;
+
   const CmsEntryModifier({
     this.pinned = _alwaysPinned,
     this.editable = true,
@@ -54,6 +65,7 @@ class CmsEntryModifier {
     this.sortable = false,
     this.sortInvertNulls = false,
     this.expanded = false,
+    this.rowGroup,
     this.initializable = true,
   });
 }
