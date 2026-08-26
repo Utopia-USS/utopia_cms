@@ -1,10 +1,46 @@
 import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:utopia_cms/src/ui/media_preview/cms_media_type.dart';
 import 'package:utopia_cms/src/ui/media_preview/state/cms_media_preview_page_state.dart';
 import 'package:utopia_cms/src/ui/widget/video/cms_video_player.dart';
 import 'package:utopia_save_file/utopia_save_file.dart';
+
+/// Saves the previewed media to disk.
+///
+/// Goes through the BYTES rather than handing the remote URL straight to the
+/// browser. `UtopiaSaveFile.fromUrl` marks an anchor with the `download`
+/// attribute, and browsers ignore that attribute for cross-origin URLs - so a
+/// CMS asset served from a storage bucket (the usual setup) opened in a new
+/// tab instead of downloading. Fetching first makes the data same-origin, so
+/// the browser saves it and honours the filename.
+///
+/// The fetch needs the asset host to allow cross-origin GETs. When it fails
+/// for any reason - CORS, offline, a 404 - we fall back to the previous
+/// behaviour rather than leaving the button dead.
+Future<void> _download(String url) async {
+  try {
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode >= 400) throw http.ClientException('HTTP ${response.statusCode}', Uri.parse(url));
+    await UtopiaSaveFile.fromBytes(
+      response.bodyBytes,
+      mime: response.headers['content-type'] ?? 'application/octet-stream',
+      name: _fileNameFrom(url),
+    );
+  } catch (_) {
+    await UtopiaSaveFile.fromUrl(url);
+  }
+}
+
+/// Last path segment of [url], ignoring the query string (storage URLs carry
+/// access tokens there). Falls back to a generic name for URLs that end in a
+/// slash.
+String _fileNameFrom(String url) {
+  final segments = Uri.parse(url).pathSegments.where((it) => it.isNotEmpty);
+  if (segments.isEmpty) return 'download';
+  return segments.last.split('/').last;
+}
 
 class CmsMediaPreviewPageView extends StatelessWidget {
   final CmsMediaPreviewPageState state;
@@ -122,7 +158,7 @@ class CmsMediaPreviewPageView extends StatelessWidget {
               cursor: SystemMouseCursors.click,
               child: GestureDetector(
                 child: const Icon(Icons.download, color: Colors.white),
-                onTap: () async => UtopiaSaveFile.fromUrl(url), //=> download(mediaItems[controller.page.toInt()].url),
+                onTap: () => _download(url),
               ),
             ),
           ],
