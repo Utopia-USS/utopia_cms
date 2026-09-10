@@ -22,9 +22,15 @@ typedef CmsMenuHeaderBuilder = Widget Function(BuildContext context, bool isColl
 class CmsWidgetMenuParams {
   final List<Color>? backgroundColors;
 
+  /// Whether the rail may collapse. When `false` the sidebar is always shown at
+  /// its full width: no hover-peek, no toggle, and the content next to it keeps
+  /// a stable width instead of being pushed on every pass of the pointer.
+  /// Ignored in drawer presentation, which is always full width.
+  final bool isCollapsible;
+
   /// Builds the header shown at the top of the menu. Receives whether the rail
   /// is currently collapsed so the host can swap a full lockup for a bare mark.
   final CmsMenuHeaderBuilder? headerBuilder;
 
-  const CmsWidgetMenuParams({this.backgroundColors, this.headerBuilder});
+  const CmsWidgetMenuParams({this.backgroundColors, this.headerBuilder, this.isCollapsible = true});
 }

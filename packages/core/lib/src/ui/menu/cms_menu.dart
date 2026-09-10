@@ -41,6 +41,9 @@ class CmsMenu extends HookWidget {
 
   bool get _isDrawer => presentation == CmsMenuPresentation.drawer;
 
+  /// A gradient needs two stops; a single colour is a flat fill.
+  static List<Color> _gradientColors(List<Color> colors) => colors.length == 1 ? [colors.first, colors.first] : colors;
+
   @override
   Widget build(BuildContext context) {
     // Rail-only runtime state. Hooks run unconditionally (the drawer branch
@@ -49,6 +52,10 @@ class CmsMenu extends HookWidget {
     final isHovering = useState<bool>(false);
 
     if (_isDrawer) return _buildDrawer(context);
+
+    if (!menuParams.isCollapsible) {
+      return _buildRail(context, isExpanded: true, isPinned: true, onToggle: () {});
+    }
 
     final isExpanded = isPinnedExpanded.value || isHovering.value;
     return MouseRegion(
@@ -92,7 +99,15 @@ class CmsMenu extends HookWidget {
             clipBehavior: Clip.antiAlias,
             decoration: useCard
                 ? BoxDecoration(color: theme.colors.surface, borderRadius: radius, boxShadow: theme.cardShadow)
-                : BoxDecoration(boxShadow: theme.menuShadow, borderRadius: radius),
+                : BoxDecoration(
+                    boxShadow: theme.menuShadow,
+                    borderRadius: radius,
+                    gradient: LinearGradient(
+                      begin: Alignment.bottomLeft,
+                      end: Alignment.topRight,
+                      colors: _gradientColors(menuParams.backgroundColors!),
+                    ),
+                  ),
             foregroundDecoration: useCard
                 ? BoxDecoration(
                     borderRadius: radius,
@@ -103,13 +118,15 @@ class CmsMenu extends HookWidget {
               context,
               isExpanded: isExpanded,
               onColored: !useCard,
-              toolbar: _buildToolbar(
-                context,
-                isExpanded: isExpanded,
-                isPinned: isPinned,
-                onToggle: onToggle,
-                onColored: !useCard,
-              ),
+              toolbar: menuParams.isCollapsible
+                  ? _buildToolbar(
+                      context,
+                      isExpanded: isExpanded,
+                      isPinned: isPinned,
+                      onToggle: onToggle,
+                      onColored: !useCard,
+                    )
+                  : null,
             ),
           ),
         );
