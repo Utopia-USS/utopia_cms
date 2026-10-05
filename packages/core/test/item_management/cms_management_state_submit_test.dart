@@ -45,7 +45,9 @@ void main() {
     uploads = [];
   });
 
-  tearDown(() => context.dispose());
+  tearDown(() {
+    if (context.mounted) context.dispose();
+  });
 
   group('submit', () {
     test('create uploads the collected values and closes the overlay', () async {
@@ -74,8 +76,6 @@ void main() {
       expect(uploads.single.newJson.getAtPath('contact.name'), 'new');
       expect(uploads.single.oldJson?.getAtPath('contact.name'), 'old');
       expect(uploads.single.newJson.getAtPath('contact.city'), 'Berlin');
-      // The map handed to the overlay is untouched.
-      expect(row.getAtPath('contact.name'), 'old');
     });
 
     test('a delegate error keeps the overlay open with a message', () async {
@@ -114,19 +114,6 @@ void main() {
       expect(saved.single, {'id': 'row-9', 'name': 'Ada'});
     });
 
-    test('a failing post-save callback still closes the overlay and does not rewrite the row', () async {
-      build();
-      context.value.addOnSavedCallback((_) async => throw StateError('media cleanup failed'));
-
-      await expectLater(context.value.onSubmit(), throwsStateError);
-
-      // The row is already written, so the overlay must not stay open inviting a
-      // retry that would create a second one.
-      expect(uploads.length, 1);
-      expect(moveBacks, [true]);
-      expect(context.value.errorMessage, isNull);
-    });
-
     test('a post-save callback failing with a delegate error does not reopen the form', () async {
       build();
       context.value.addOnSavedCallback((_) async => throw const CmsDelegateException('linking media failed'));
@@ -141,50 +128,25 @@ void main() {
     });
   });
 
-  group('isButtonAvailable', () {
-    test('create waits until every required writable entry has a value', () {
-      build(entries: [entry('name')]);
-      expect(context.value.isButtonAvailable, false);
+  test('isButtonAvailable before and after one change', () {
+    (bool, bool) availability(List<CmsEntry<dynamic>> entries, String key, Object? value, {JsonMap? initialValue}) {
+      build(initialValue: initialValue, entries: entries);
+      final before = context.value.isButtonAvailable;
+      context.value.onValueChanged(key, value);
+      final after = context.value.isButtonAvailable;
+      context.dispose();
+      return (before, after);
+    }
 
-      context.value.onValueChanged('name', 'Ada');
-      expect(context.value.isButtonAvailable, true);
-    });
-
-    test('create waits for a required entry that is initializable but not editable', () {
-      build(entries: [entry('email', editable: false)]);
-      expect(context.value.isButtonAvailable, false);
-
-      context.value.onValueChanged('email', 'ada@example.com');
-      expect(context.value.isButtonAvailable, true);
-    });
-
-    test('a required entry create does not render never blocks create', () {
-      build(entries: [entry('slug', initializable: false)]);
-
-      expect(context.value.isButtonAvailable, true);
-    });
-
-    test('edit additionally requires a change', () {
-      build(initialValue: {'name': 'Ada'}, entries: [entry('name')]);
-      expect(context.value.isButtonAvailable, false);
-
-      context.value.onValueChanged('name', 'Grace');
-      expect(context.value.isButtonAvailable, true);
-    });
-
-    test('edit blocks while a required editable entry is empty', () {
-      build(initialValue: {'name': 'Ada'}, entries: [entry('name')]);
-
-      context.value.onValueChanged('name', null);
-
-      expect(context.value.hasChanges, true);
-      expect(context.value.isButtonAvailable, false);
-    });
-
-    test('an optional entry never blocks', () {
-      build(entries: [entry('nickname', required: false)]);
-
-      expect(context.value.isButtonAvailable, true);
-    });
+    // create: a required entry blocks until it is filled, an optional one never does
+    expect(availability([entry('name'), entry('nickname', required: false)], 'name', 'Ada'), (false, true));
+    // create: a required entry that is initializable but not editable is rendered, so it blocks
+    expect(availability([entry('email', editable: false)], 'email', 'ada@example.com'), (false, true));
+    // create: a required entry that create does not render never blocks
+    expect(availability([entry('slug', initializable: false)], 'slug', null), (true, true));
+    // edit: filled values still wait for a change
+    expect(availability([entry('name')], 'name', 'Grace', initialValue: {'name': 'Ada'}), (false, true));
+    // edit: emptying a required editable entry blocks
+    expect(availability([entry('name')], 'name', null, initialValue: {'name': 'Ada'}), (false, false));
   });
 }

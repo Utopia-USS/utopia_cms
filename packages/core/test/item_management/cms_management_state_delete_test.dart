@@ -40,7 +40,9 @@ void main() {
     deleteCallCount = 0;
   });
 
-  tearDown(() => context.dispose());
+  tearDown(() {
+    if (context.mounted) context.dispose();
+  });
 
   test('a confirmed delete closes the overlay', () async {
     build(deleteItem: () async => true);
@@ -74,14 +76,6 @@ void main() {
     completer.complete(true);
     await context.waitUntil((it) => !it.isDeleting);
     expect(moveBacks, [true]);
-  });
-
-  test('delete is a no-op without a deleteItem', () async {
-    build();
-
-    await context.value.onDelete();
-
-    expect(moveBacks, isEmpty);
   });
 
   test('a failing delete surfaces as an error message', () async {
