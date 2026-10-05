@@ -1,16 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:utopia_cms/utopia_cms.dart';
-
-/// Thrown by `CmsSupabaseService` when a write that should come back with the
-/// affected row comes back empty. In practice that is usually row-level
-/// security silently filtering the target row out.
-///
-/// It stays a [StateError] for direct callers of the service, but has a type of
-/// its own so [guardSupabaseCall] can report it without also swallowing every
-/// other bad state.
-class CmsSupabaseNoRowsError extends StateError {
-  CmsSupabaseNoRowsError() : super('Expected at least one row from Supabase, got none.');
-}
+import 'package:utopia_cms_supabase/src/service/cms_supabase_no_rows_error.dart';
 
 /// Runs [run], reporting a Supabase failure as a [CmsDelegateException] so the
 /// CMS can show it inline instead of crashing on an exception type it does not

@@ -1,7 +1,7 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:utopia_cms/utopia_cms.dart';
 import 'package:utopia_cms_supabase/src/model/cms_supabase_table.dart';
-import 'package:utopia_cms_supabase/src/util/cms_supabase_guard.dart';
+import 'package:utopia_cms_supabase/src/service/cms_supabase_no_rows_error.dart';
 
 typedef _Query = PostgrestTransformBuilder<PostgrestList>;
 

@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:utopia_cms/utopia_cms.dart';
-import 'package:utopia_cms_supabase/src/util/cms_supabase_guard.dart';
+import 'package:utopia_cms_supabase/src/service/cms_supabase_no_rows_error.dart';
 import 'package:utopia_cms_supabase/utopia_cms_supabase.dart';
 
 import 'http_recorder.dart';
