@@ -29,6 +29,14 @@ class _ServiceRecorder extends CmsHasuraService {
   }
 
   @override
+  Future<List<JsonMap>> insert(
+    GraphQLClient client, {
+    required CmsHasuraTable table,
+    required List<JsonMap> objects,
+    CmsGraphQLFields fields = const {},
+  }) async => [];
+
+  @override
   Future<JsonMap> deleteByPk(
     GraphQLClient client, {
     required CmsHasuraTable table,
@@ -60,7 +68,11 @@ void main() {
   const table = CmsHasuraDataTable('user');
   const archivedFilter = CmsFilterNotEquals('archived', true);
 
-  final client = GraphQLClient(link: HttpLink('http://localhost'), cache: GraphQLCache());
+  // Fails any request the recorder does not answer, instead of sending it.
+  final client = GraphQLClient(
+    link: Link.function((request, [forward]) => Stream.error(UnsupportedError('the recorder must answer'))),
+    cache: GraphQLCache(),
+  );
 
   late _ServiceRecorder service;
 
@@ -93,30 +105,23 @@ void main() {
       expect(subject.lastUpdate.$1, {'id': 7, 'archived': true});
     });
 
-    test('passes the row as it was before archiving as the old value', () async {
-      final subject = delegate(archivedFilter: archivedFilter);
-
-      await subject.delete({'id': 7, 'archived': false});
-
-      expect(subject.lastUpdate.$2, {'id': 7, 'archived': false});
-    });
-
-    test('leaves the row the table passed in untouched', () async {
-      final row = <String, dynamic>{'id': 7, 'archived': false};
-
-      await delegate(archivedFilter: archivedFilter).delete(row);
-
-      expect(row, {'id': 7, 'archived': false});
-    });
-
-    test('leaves a nested map of the row untouched for a dotted archived field', () async {
+    test('archives a dotted field on a copy, passing the untouched row as the old value', () async {
       final row = <String, dynamic>{
         'id': 7,
         'meta': {'archived': false},
       };
+      final subject = delegate(archivedFilter: const CmsFilterNotEquals('meta.archived', true));
 
-      await delegate(archivedFilter: const CmsFilterNotEquals('meta.archived', true)).delete(row);
+      await subject.delete(row);
 
+      expect(subject.lastUpdate.$1, {
+        'id': 7,
+        'meta': {'archived': true},
+      });
+      expect(subject.lastUpdate.$2, {
+        'id': 7,
+        'meta': {'archived': false},
+      });
       expect(row, {
         'id': 7,
         'meta': {'archived': false},
@@ -127,7 +132,7 @@ void main() {
   group('a failing backend', () {
     Future<void> loading() => delegate().get(paging: CmsFunctionsPagingParams(offset: 0, limit: 10));
 
-    test('surfaces a server error as a message naming the operation and the table', () async {
+    test('surfaces a raw server error from a custom service as a message naming the operation and the table', () async {
       service.queryFailure = OperationException(
         graphqlErrors: const [GraphQLError(message: 'permission denied for table "user"')],
       );
@@ -144,17 +149,11 @@ void main() {
       );
     });
 
-    test('surfaces a response that carries neither data nor errors the same way', () async {
-      service.queryFailure = StateError('GraphQL operation "user" returned no data and no errors.');
-
+    test('reports an insert that returned no row', () async {
       await expectLater(
-        loading(),
+        delegate().create({'name': 'ann'}),
         throwsA(
-          isA<CmsDelegateException>().having(
-            (it) => it.message,
-            'message',
-            'Could not load "user": GraphQL operation "user" returned no data and no errors.',
-          ),
+          isA<CmsDelegateException>().having((it) => it.message, 'message', 'Could not create "user": No element'),
         ),
       );
     });
