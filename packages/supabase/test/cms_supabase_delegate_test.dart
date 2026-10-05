@@ -107,14 +107,23 @@ void main() {
       expect(row, {'id': 7, 'archived': false});
     });
 
-    test('leaves a nested map of the row untouched for a dotted archived field', () async {
+    test('archives a dotted field on a copy, leaving a nested map of the row untouched', () async {
+      final subject = delegate(archivedFilter: const CmsFilterNotEquals('meta.archived', true));
       final row = <String, dynamic>{
         'id': 7,
         'meta': {'archived': false},
       };
 
-      await delegate(archivedFilter: const CmsFilterNotEquals('meta.archived', true)).delete(row);
+      await subject.delete(row);
 
+      expect(subject.lastUpdate.$1, {
+        'id': 7,
+        'meta': {'archived': true},
+      });
+      expect(subject.lastUpdate.$2, {
+        'id': 7,
+        'meta': {'archived': false},
+      });
       expect(row, {
         'id': 7,
         'meta': {'archived': false},
