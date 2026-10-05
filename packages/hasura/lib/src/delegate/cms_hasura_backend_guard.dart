@@ -1,6 +1,7 @@
 import 'package:graphql/client.dart';
 import 'package:utopia_cms/utopia_cms.dart';
 import 'package:utopia_cms_hasura/src/model/cms_hasura_table.dart';
+import 'package:utopia_cms_hasura/src/service/cms_hasura_no_rows_error.dart';
 
 /// Runs [call] as the delegate [operation] on [table], reporting a backend
 /// failure as a [CmsDelegateException] so the CMS shows it inline instead of
@@ -10,13 +11,14 @@ import 'package:utopia_cms_hasura/src/model/cms_hasura_table.dart';
 /// - [OperationException], which the `graphql` client raises both for errors the
 ///   server returned and for transport failures, which the query manager
 ///   translates into its `linkException`;
-/// - [StateError], which `insertOne` raises for an insert that returned no row.
+/// - [CmsHasuraNoRowsError], which `insertOne` raises for an insert that
+///   returned no row.
 ///
 /// `CmsGraphQLService` already reports its own failures, a response carrying
 /// neither data nor errors included, as a [CmsDelegateException], which passes
-/// through untouched. Everything else - [ArgumentError], [TypeError] and the
-/// like - is a bug in the delegate wiring rather than something the operator can
-/// act on, so it passes through untouched too.
+/// through untouched. Everything else - [ArgumentError], [TypeError], any other
+/// [StateError] and the like - is a bug in the delegate wiring rather than
+/// something the operator can act on, so it passes through untouched too.
 Future<T> guardHasuraCall<T>(
   Future<T> Function() call, {
   required String operation,
@@ -29,7 +31,7 @@ Future<T> guardHasuraCall<T>(
     // CmsDelegateException (which passes through untouched above); this clause
     // covers custom services that surface the raw client exception.
     throw CmsDelegateException(_message(operation, table, _describe(exception)));
-  } on StateError catch (error) {
+  } on CmsHasuraNoRowsError catch (error) {
     throw CmsDelegateException(_message(operation, table, error.message));
   }
 }

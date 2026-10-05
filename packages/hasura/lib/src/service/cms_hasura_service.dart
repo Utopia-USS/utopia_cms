@@ -4,6 +4,7 @@ import 'package:utopia_cms/utopia_cms.dart';
 import 'package:utopia_cms_graphql/utopia_cms_graphql.dart';
 import 'package:utopia_cms_hasura/src/model/cms_hasura_naming_convention.dart';
 import 'package:utopia_cms_hasura/src/model/cms_hasura_table.dart';
+import 'package:utopia_cms_hasura/src/service/cms_hasura_no_rows_error.dart';
 
 class CmsHasuraService {
   final CmsGraphQLService _graphQLService;
@@ -52,7 +53,11 @@ class CmsHasuraService {
     required CmsHasuraTable table,
     required JsonMap object,
     CmsGraphQLFields fields = const {},
-  }) async => (await insert(client, table: table, objects: [object], fields: fields)).first;
+  }) async {
+    final rows = await insert(client, table: table, objects: [object], fields: fields);
+    if (rows.isEmpty) throw CmsHasuraNoRowsError();
+    return rows.first;
+  }
 
   Future<JsonMap> updateByPk(
     GraphQLClient client, {

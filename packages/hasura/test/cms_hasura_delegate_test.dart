@@ -153,15 +153,21 @@ void main() {
       await expectLater(
         delegate().create({'name': 'ann'}),
         throwsA(
-          isA<CmsDelegateException>().having((it) => it.message, 'message', 'Could not create "user": No element'),
+          isA<CmsDelegateException>().having(
+            (it) => it.message,
+            'message',
+            'Could not create "user": Expected the inserted row back from Hasura, got none.',
+          ),
         ),
       );
     });
 
     test('lets a programmer error through unwrapped, since no operator can act on it', () async {
       service.queryFailure = ArgumentError('fields must not be empty');
-
       await expectLater(loading(), throwsArgumentError);
+
+      service.queryFailure = StateError('a bug, not a missing row');
+      await expectLater(loading(), throwsStateError);
     });
   });
 }
