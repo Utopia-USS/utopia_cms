@@ -7,7 +7,7 @@ class CmsSupabaseTable {
   const CmsSupabaseTable(this.name, {this.schema});
 
   @Deprecated('Schema is now selected via client.schema(); this produced an invalid PostgREST endpoint.')
-  String get fullName => '$schema.$name';
+  String get fullName => schema != null ? '$schema.$name' : name;
 }
 
 class CmsSupabaseDataTable extends CmsSupabaseTable {
