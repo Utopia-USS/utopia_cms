@@ -1,6 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:gql/language.dart';
 import 'package:graphql/client.dart';
 import 'package:utopia_cms/utopia_cms.dart';
 import 'package:utopia_cms_graphql/utopia_cms_graphql.dart';
@@ -12,6 +11,7 @@ class _ServiceRecorder extends CmsHasuraService {
   CmsFilter? queriedFilter;
   List<JsonMap>? insertedObjects;
   CmsFilter? deletedFilter;
+  final updatedObjects = <JsonMap>[];
 
   _ServiceRecorder() : super(const CmsGraphQLService(), namingConvention: CmsHasuraNamingConvention.hasura);
 
@@ -50,6 +50,17 @@ class _ServiceRecorder extends CmsHasuraService {
     deletedFilter = filter;
     return [];
   }
+
+  @override
+  Future<JsonMap> updateById(
+    GraphQLClient client, {
+    required CmsHasuraDataTable table,
+    required JsonMap object,
+    CmsGraphQLFields fields = const {},
+  }) async {
+    updatedObjects.add(object);
+    return {};
+  }
 }
 
 void main() {
@@ -61,7 +72,11 @@ void main() {
     foreignKey: 'role_id',
   );
 
-  final client = GraphQLClient(link: HttpLink('http://localhost'), cache: GraphQLCache());
+  // Fails any request the recorder does not answer, instead of sending it.
+  final client = GraphQLClient(
+    link: Link.function((request, [forward]) => Stream.error(UnsupportedError('the recorder must answer'))),
+    cache: GraphQLCache(),
+  );
 
   late _ServiceRecorder service;
 
@@ -77,19 +92,6 @@ void main() {
         archivedFilter: archivedFilter,
       );
 
-  /// The printed `where` argument the recorded filter would be sent as, asserted
-  /// to still parse as part of a document - printing is only correct if a server
-  /// can read it back.
-  String where() {
-    final printed = printNode(service.buildFilter(service.queriedFilter!));
-    expect(
-      () => parseString('query operation { result(where: $printed) }'),
-      returnsNormally,
-      reason: 'printed an unparseable filter: $printed',
-    );
-    return printed;
-  }
-
   group('get', () {
     test('queries the foreign table, not the association table', () async {
       await delegate().get(originId: 1);
@@ -100,13 +102,13 @@ void main() {
     test('walks the relationship named after the origin table by default', () async {
       await delegate().get(originId: 1);
 
-      expect(where(), '{_and: [{}, {user: {user_id: {_eq: 1}}}]}');
+      expect(service.queriedFilter, const CmsFilter.and([CmsFilter.all(), CmsFilter.equals('user.user_id', 1)]));
     });
 
     test('walks the given relationship instead when one is named', () async {
       await delegate(relationshipName: 'user_roles').get(originId: 1);
 
-      expect(where(), '{_and: [{}, {user_roles: {user_id: {_eq: 1}}}]}');
+      expect(service.queriedFilter, const CmsFilter.and([CmsFilter.all(), CmsFilter.equals('user_roles.user_id', 1)]));
     });
 
     test('keeps the caller filter and the archived filter alongside the relationship', () async {
@@ -116,15 +118,19 @@ void main() {
       ).get(originId: 1, filter: const CmsFilter.containsString('name', 'ad'));
 
       expect(
-        where(),
-        '{_and: [{archived: {_neq: true}}, {name: {_ilike: "%ad%"}}, {user_roles: {user_id: {_eq: 1}}}]}',
+        service.queriedFilter,
+        const CmsFilter.and([
+          CmsFilterNotEquals('archived', true),
+          CmsFilter.containsString('name', 'ad'),
+          CmsFilter.equals('user_roles.user_id', 1),
+        ]),
       );
     });
 
     test('leaves the relationship out entirely when there is no origin', () async {
       await delegate(relationshipName: 'user_roles').get();
 
-      expect(where(), '{}');
+      expect(service.queriedFilter, const CmsFilter.all());
     });
   });
 
@@ -152,5 +158,21 @@ void main() {
         ]),
       );
     });
+  });
+
+  test('one-to-many update points added rows at the origin and unlinks removed ones', () async {
+    await CmsHasuraOneToManyDelegate(
+      service,
+      client: client,
+      originTable: const CmsHasuraDataTable('user'),
+      foreignTable: const CmsHasuraDataTable('post'),
+      foreignFields: const {},
+      foreignKey: 'author_id',
+    ).update(originId: 1, addedForeignIds: {7}.lock, removedForeignIds: {8}.lock);
+
+    expect(service.updatedObjects, [
+      {'id': 7, 'author_id': 1},
+      {'id': 8, 'author_id': null},
+    ]);
   });
 }
