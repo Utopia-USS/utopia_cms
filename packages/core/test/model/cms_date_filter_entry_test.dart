@@ -9,45 +9,34 @@ void main() {
     String entryKey = 'from',
   }) => CmsFilterDateEntry(filterKeys: filterKeys, entryKey: entryKey, unit: unit, mode: mode);
 
-  final instant = DateTime.utc(2024, 1, 1, 12, 34, 56);
+  test('json sends a literal wire value per unit and reads it back', () {
+    final instant = DateTime.utc(2024, 1, 1, 12, 34, 56);
+    const wire = <CmsFilterDateEntryUnit, Object>{
+      CmsFilterDateEntryUnit.dateTime: '2024-01-01 12:34:56.000Z',
+      CmsFilterDateEntryUnit.secondsSinceEpoch: 1704112496,
+      CmsFilterDateEntryUnit.millisecondsSinceEpoch: 1704112496000,
+      CmsFilterDateEntryUnit.microsecondsSinceEpoch: 1704112496000000,
+    };
 
-  group('json', () {
-    test('dateTime unit round-trips the instant', () {
-      final entry = entryOf();
-      expect(entry.fromJson(entry.toJson(instant)), instant);
-    });
+    for (final unit in CmsFilterDateEntryUnit.values) {
+      final entry = entryOf(unit: unit);
+      final literal = wire[unit]!;
+      final json = entry.toJson(instant);
 
-    test('millisecondsSinceEpoch unit round-trips the instant', () {
-      final entry = entryOf(unit: CmsFilterDateEntryUnit.millisecondsSinceEpoch);
-      expect(entry.fromJson(entry.toJson(instant))!.isAtSameMomentAs(instant), isTrue);
-    });
+      expect(json, literal, reason: '$unit');
+      // 1704112496.0 == 1704112496, so only the type catches an epoch unit sending a double.
+      expect(json.runtimeType, literal.runtimeType, reason: '$unit');
+      expect(entry.fromJson(literal)!.toUtc(), instant, reason: '$unit');
+      // Initial filter values and JSON decoding can hand an epoch back as a double.
+      if (literal is int) expect(entry.fromJson(literal.toDouble())!.toUtc(), instant, reason: '$unit');
+      expect(entry.toJson(null), isNull, reason: '$unit');
+      expect(entry.fromJson(null), isNull, reason: '$unit');
+    }
 
-    test('microsecondsSinceEpoch unit round-trips the instant', () {
-      final entry = entryOf(unit: CmsFilterDateEntryUnit.microsecondsSinceEpoch);
-      expect(entry.fromJson(entry.toJson(instant))!.isAtSameMomentAs(instant), isTrue);
-    });
-
-    test('secondsSinceEpoch unit serializes to an int', () {
-      final entry = entryOf(unit: CmsFilterDateEntryUnit.secondsSinceEpoch);
-      expect(entry.toJson(instant), isA<int>());
-      expect(entry.toJson(instant), instant.millisecondsSinceEpoch ~/ 1000);
-    });
-
-    test('secondsSinceEpoch unit round-trips a second-aligned instant', () {
-      final entry = entryOf(unit: CmsFilterDateEntryUnit.secondsSinceEpoch);
-      expect(entry.fromJson(entry.toJson(instant))!.isAtSameMomentAs(instant), isTrue);
-    });
-
-    test('secondsSinceEpoch unit still reads a value stored as a double', () {
-      final entry = entryOf(unit: CmsFilterDateEntryUnit.secondsSinceEpoch);
-      expect(entry.fromJson(instant.millisecondsSinceEpoch / 1000)!.isAtSameMomentAs(instant), isTrue);
-    });
-
-    test('null passes through both directions', () {
-      final entry = entryOf();
-      expect(entry.toJson(null), isNull);
-      expect(entry.fromJson(null), isNull);
-    });
+    // CmsDatePicker emits a local midnight, which the dateTime unit currently
+    // sends as wall time without an offset.
+    expect(entryOf().toJson(DateTime(2024, 1, 15)), '2024-01-15 00:00:00.000');
+    expect(entryOf().fromJson('2024-01-15 00:00:00.000'), DateTime(2024, 1, 15));
   });
 
   group('filterFromValues', () {
@@ -62,10 +51,7 @@ void main() {
     });
 
     test('builds greaterOrEq for a single key in greater mode', () {
-      expect(
-        entryOf().filterFromValues({'from': serialized}),
-        const CmsFilterGreaterOrEq('createdAt', serialized),
-      );
+      expect(entryOf().filterFromValues({'from': serialized}), const CmsFilterGreaterOrEq('createdAt', serialized));
     });
 
     test('builds lesserOrEq for a single key in lesser mode', () {

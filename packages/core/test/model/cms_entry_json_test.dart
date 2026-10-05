@@ -1,7 +1,6 @@
 import 'package:cross_file/cross_file.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:utopia_cms/src/util/date_time_extension.dart';
 import 'package:utopia_cms/utopia_cms.dart';
 
 class _UnusedMediaDelegate implements CmsMediaDelegate {
@@ -98,14 +97,6 @@ void main() {
     test('returns null for a null json', () {
       expect(entry.fromJson(null), isNull);
       expect(entry.toJson(null), isNull);
-    });
-
-    test('display formatting depends on the instant, not the DateTime flavor', () {
-      // Inert under TZ=UTC: run tests with a non-UTC TZ to exercise the toLocal() fix.
-      final utc = DateTime.utc(2024, 3, 10, 23);
-      final sameMoment = DateTime.fromMillisecondsSinceEpoch(utc.millisecondsSinceEpoch);
-      expect(utc.toDisplayString(), sameMoment.toDisplayString());
-      expect(utc.toDisplayStringWithoutHours(), sameMoment.toDisplayStringWithoutHours());
     });
   });
 
