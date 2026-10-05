@@ -127,4 +127,19 @@ void main() {
       expect(await nextOffset(), 2);
     });
   });
+
+  test('a delete that resolves after the table is disposed still reports the deletion', () async {
+    await buildWith(['a']);
+
+    confirmations.add(true);
+    final deletion = context.value.onDeletePressed(row('a'), 0);
+    await delegate.untilDeleteCount(1);
+
+    // The row is gone on the backend either way; the table it belonged to must
+    // not be written to once it is unmounted.
+    context.dispose();
+    delegate.completeDelete(0);
+
+    expect(await deletion, true);
+  });
 }
