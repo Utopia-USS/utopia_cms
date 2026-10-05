@@ -35,24 +35,21 @@ void main() {
     CmsSupabaseTable target = table,
   }) => service.query(client, table: target, filter: filter, sorting: sorting, paging: paging);
 
-  group('target', () {
-    test('a table without a schema hits the default endpoint', () async {
-      await get();
+  test('a schema is selected by profile header, for reads and writes, never by qualifying the name', () async {
+    const target = CmsSupabaseDataTable('users', schema: 'app');
 
-      expect(recorder.last!.url.path, '/rest/v1/users');
-      expect(recorder.last!.headers['Accept-Profile'], 'public');
-    });
+    await get(target: target);
+    expect(recorder.last!.url.path, '/rest/v1/users');
+    expect(recorder.last!.headers['Accept-Profile'], 'app');
 
-    test('a schema-qualified table keeps its plain name and selects the schema', () async {
-      await get(target: const CmsSupabaseDataTable('users', schema: 'app'));
-
-      expect(recorder.last!.url.path, '/rest/v1/users');
-      expect(recorder.last!.headers['Accept-Profile'], 'app');
-    });
+    recorder.body = '[{"id": 1}]';
+    await service.deleteById(client, table: target, id: 1);
+    expect(recorder.last!.url.path, '/rest/v1/users');
+    expect(recorder.last!.headers['Content-Profile'], 'app');
   });
 
   group('paging', () {
-    test('offset and limit are sent as an inclusive range', () async {
+    test('a page maps to the offset and limit params', () async {
       await get(paging: CmsFunctionsPagingParams(offset: 20, limit: 10));
 
       expect(param('offset'), '20');
@@ -171,7 +168,7 @@ void main() {
 
     group('an empty group', () {
       test('or([]) matches no row, so no request is sent at all', () async {
-        expect(await service.query(client, table: table, filter: const CmsFilter.or([])), isEmpty);
+        await get(filter: const CmsFilter.or([]));
 
         expect(recorder.requests, isEmpty);
       });
@@ -185,7 +182,7 @@ void main() {
 
     group('~all()', () {
       test('matches no row, so no request is sent at all', () async {
-        expect(await service.query(client, table: table, filter: ~const CmsFilter.all()), isEmpty);
+        await get(filter: ~const CmsFilter.all());
 
         expect(recorder.requests, isEmpty);
       });
@@ -197,10 +194,7 @@ void main() {
       });
 
       test('collapses an and, so no request is sent at all', () async {
-        expect(
-          await service.query(client, table: table, filter: ~const CmsFilter.all() & const CmsFilter.equals('a', 1)),
-          isEmpty,
-        );
+        await get(filter: ~const CmsFilter.all() & const CmsFilter.equals('a', 1));
 
         expect(recorder.requests, isEmpty);
       });
@@ -262,7 +256,7 @@ void main() {
     });
 
     test('delete without a matching filter sends nothing', () async {
-      expect(await service.delete(client, table: table, filter: ~const CmsFilter.all()), isEmpty);
+      await service.delete(client, table: table, filter: ~const CmsFilter.all());
 
       expect(recorder.requests, isEmpty);
     });

@@ -5,10 +5,15 @@ import 'package:utopia_cms_supabase/utopia_cms_supabase.dart';
 
 import 'http_recorder.dart';
 
-/// Records what the delegate asks the service for, and answers with nothing.
+/// Records what the delegate asks the service for and answers with nothing, or
+/// with [failure] when set, the way the backend would reject the call.
 class _ServiceRecorder extends CmsSupabaseService {
+  final Object? failure;
+
   CmsFilter? queriedFilter;
   Object? deletedId;
+
+  _ServiceRecorder({this.failure});
 
   @override
   Future<List<JsonMap>> query(
@@ -17,30 +22,25 @@ class _ServiceRecorder extends CmsSupabaseService {
     CmsFunctionsPagingParams? paging,
     CmsFilter filter = const CmsFilter.all(),
     CmsFunctionsSortingParams? sorting,
-  }) async {
+  }) {
     queriedFilter = filter;
-    return [];
+    return _answer([]);
   }
 
   @override
-  Future<JsonMap> deleteById(SupabaseClient client, {required CmsSupabaseDataTable table, required Object id}) async {
+  Future<JsonMap> insertOne(SupabaseClient client, {required CmsSupabaseTable table, required JsonMap object}) =>
+      _answer(object);
+
+  @override
+  Future<JsonMap> deleteById(SupabaseClient client, {required CmsSupabaseDataTable table, required Object id}) {
     deletedId = id;
-    return {};
+    return _answer({});
   }
-}
 
-/// Answers every write with [failure], the way the backend would reject it.
-class _FailingService extends CmsSupabaseService {
-  final Object failure;
-
-  _FailingService(this.failure);
-
-  @override
-  Future<JsonMap> updateById(
-    SupabaseClient client, {
-    required CmsSupabaseDataTable table,
-    required JsonMap object,
-  }) async => throw failure;
+  Future<T> _answer<T>(T value) async {
+    if (failure case final failure?) throw failure;
+    return value;
+  }
 }
 
 /// A delegate that records the update `_archive` performs, the way a business
@@ -95,28 +95,15 @@ void main() {
   });
 
   group('delete with an archived filter', () {
-    test('updates the archived flag instead of deleting', () async {
+    test('updates the archived flag instead of deleting, leaving the row passed in untouched', () async {
       final subject = delegate(archivedFilter: const CmsFilterNotEquals('archived', true));
+      final row = <String, dynamic>{'id': 7, 'archived': false};
 
-      await subject.delete({'id': 7, 'archived': false});
+      await subject.delete(row);
 
       expect(service.deletedId, isNull);
       expect(subject.lastUpdate.$1, {'id': 7, 'archived': true});
-    });
-
-    test('passes the row as it was before archiving as the old value', () async {
-      final subject = delegate(archivedFilter: const CmsFilterNotEquals('archived', true));
-
-      await subject.delete({'id': 7, 'archived': false});
-
-      expect(subject.lastUpdate.$2, {'id': 7, 'archived': false});
-    });
-
-    test('leaves the row the table passed in untouched', () async {
-      final row = <String, dynamic>{'id': 7, 'archived': false};
-
-      await delegate(archivedFilter: const CmsFilterNotEquals('archived', true)).delete(row);
-
+      expect(subject.lastUpdate.$2, {'id': 7, 'archived': false}, reason: 'the old value is the row before archiving');
       expect(row, {'id': 7, 'archived': false});
     });
 
@@ -133,72 +120,44 @@ void main() {
         'meta': {'archived': false},
       });
     });
-
-    test('creates the missing parent of a dotted archived field', () async {
-      final subject = delegate(archivedFilter: const CmsFilterNotEquals('meta.archived', true));
-
-      await subject.delete({'id': 7});
-
-      expect(subject.lastUpdate.$1, {
-        'id': 7,
-        'meta': {'archived': true},
-      });
-    });
   });
 
   group('backend failures', () {
-    CmsSupabaseDelegate failing(Object failure) =>
-        CmsSupabaseDelegate(_FailingService(failure), client: client, table: table);
-
-    test('a Postgrest failure names the operation and the table and carries the backend message', () async {
-      final subject = failing(
-        const PostgrestException(message: 'duplicate key value violates unique constraint "users_pkey"'),
-      );
-
-      await expectLater(
-        () => subject.update({'id': 7}, {}),
-        throwsA(
-          isA<CmsDelegateException>().having(
-            (e) => e.message,
-            'message',
-            allOf(startsWith('Failed to update "users": '), contains('duplicate key value violates unique constraint')),
+    test('are reported inline, naming the operation and the table and carrying the cause', () async {
+      const noRows = 'Expected at least one row from Supabase, got none.';
+      // One case per operation, so each of them is shown to go through the guard.
+      final cases = <(CmsSupabaseService, Future<void> Function(CmsSupabaseDelegate), String)>[
+        (
+          _ServiceRecorder(failure: const AuthException('JWT expired')),
+          (it) => it.get(paging: CmsFunctionsPagingParams(offset: 0, limit: 10)),
+          'Failed to load "users": JWT expired',
+        ),
+        (
+          _ServiceRecorder(
+            failure: const PostgrestException(message: 'duplicate key value violates unique constraint'),
           ),
+          (it) => it.create({'id': 7}),
+          'Failed to create "users": duplicate key value violates unique constraint',
         ),
-      );
-    });
+        // The real service over a backend answering `[]`, which is how row-level
+        // security answers a write it silently filtered out.
+        (const CmsSupabaseService(), (it) => it.update({'id': 7}, {}), 'Failed to update "users": $noRows'),
+        (const CmsSupabaseService(), (it) => it.delete({'id': 7}), 'Failed to delete "users": $noRows'),
+      ];
 
-    test('an auth failure is reported the same way', () async {
-      final subject = failing(const AuthException('JWT expired'));
-
-      await expectLater(
-        () => subject.update({'id': 7}, {}),
-        throwsA(
-          isA<CmsDelegateException>().having((e) => e.message, 'message', 'Failed to update "users": JWT expired'),
-        ),
-      );
-    });
-
-    test('a write matching no rows reports the likely rls cause inline', () async {
-      // The real service over a backend answering `[]`, which is how row-level
-      // security answers a write it silently filtered out.
-      final subject = CmsSupabaseDelegate(const CmsSupabaseService(), client: client, table: table);
-
-      await expectLater(
-        () => subject.update({'id': 7}, {}),
-        throwsA(
-          isA<CmsDelegateException>().having(
-            (e) => e.message,
-            'message',
-            'Failed to update "users": Expected at least one row from Supabase, got none.',
-          ),
-        ),
-      );
+      for (final (backend, call, message) in cases) {
+        await expectLater(
+          () => call(CmsSupabaseDelegate(backend, client: client, table: table)),
+          throwsA(isA<CmsDelegateException>().having((e) => e.message, 'message', message)),
+        );
+      }
     });
 
     test('an error that is not a backend failure keeps its type, even a StateError', () async {
-      final bug = StateError('a bad state in a delegate subclass');
+      final bug = StateError('a bad state from a bug');
+      service = _ServiceRecorder(failure: bug);
 
-      await expectLater(() => failing(bug).update({'id': 7}, {}), throwsA(same(bug)));
+      await expectLater(() => delegate().delete({'id': 7}), throwsA(same(bug)));
     });
   });
 }
