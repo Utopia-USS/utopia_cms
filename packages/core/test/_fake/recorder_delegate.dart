@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter_test/flutter_test.dart';
 import 'package:utopia_cms/utopia_cms.dart';
 
 /// One recorded [RecordingCmsDelegate.get] call, resolved by the test.
@@ -15,15 +16,14 @@ class RecordedGet {
   void complete(List<JsonMap> rows) => _completer.complete(rows);
 }
 
-/// Records every [CmsDelegate] call and lets the test resolve each one, so the
+/// Records every [get] and [delete] and lets the test resolve each one, so the
 /// order of concurrent operations is decided by the test, not by a scheduler.
-class RecordingCmsDelegate implements CmsDelegate {
+/// Any other call throws.
+class RecordingCmsDelegate extends Fake implements CmsDelegate {
   @override
   final String idKey;
 
   final gets = <RecordedGet>[];
-  final creates = <JsonMap>[];
-  final updates = <({JsonMap value, JsonMap oldValue})>[];
   final deletes = <JsonMap>[];
 
   final _getWaiters = <int, Completer<void>>{};
@@ -53,18 +53,6 @@ class RecordingCmsDelegate implements CmsDelegate {
     gets.add(call);
     _getWaiters.remove(gets.length)?.complete();
     return call._completer.future;
-  }
-
-  @override
-  Future<JsonMap> create(JsonMap value) async {
-    creates.add(value);
-    return {...value, idKey: 'created-${creates.length}'};
-  }
-
-  @override
-  Future<JsonMap> update(JsonMap value, JsonMap oldValue) async {
-    updates.add((value: value, oldValue: oldValue));
-    return value;
   }
 
   @override

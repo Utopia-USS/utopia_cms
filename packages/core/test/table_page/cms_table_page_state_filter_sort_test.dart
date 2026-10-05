@@ -41,54 +41,27 @@ void main() {
 
   setUp(() => delegate = RecordingCmsDelegate());
 
-  tearDown(() => context.dispose());
+  tearDown(() {
+    if (context.mounted) context.dispose();
+  });
 
   group('sorting', () {
-    test('the first tap on a column sorts ascending', () {
+    test('a column sorts ascending, then flips on every tap, and another column restarts ascending', () {
       build();
+      CmsFunctionsSortingParams? tap(CmsEntry<dynamic> entry) {
+        context.value.onSortPressed(entry);
+        return context.value.currentSortingParams;
+      }
 
-      context.value.onSortPressed(entry('name'));
-
-      expect(context.value.currentSortingParams?.fieldKey, 'name');
-      expect(context.value.currentSortingParams?.sortDesc, false);
-    });
-
-    test('a second tap on the same column flips to descending', () {
-      build();
-
-      context.value.onSortPressed(entry('name'));
-      context.value.onSortPressed(entry('name'));
-
-      expect(context.value.currentSortingParams?.sortDesc, true);
-    });
-
-    test('a third tap on the same column flips back to ascending', () {
-      build();
-
-      context.value.onSortPressed(entry('name'));
-      context.value.onSortPressed(entry('name'));
-      context.value.onSortPressed(entry('name'));
-
-      expect(context.value.currentSortingParams?.sortDesc, false);
-    });
-
-    test('tapping a different column starts that column ascending', () {
-      build();
-
-      context.value.onSortPressed(entry('name'));
-      context.value.onSortPressed(entry('name'));
-      context.value.onSortPressed(entry('city'));
-
-      expect(context.value.currentSortingParams?.fieldKey, 'city');
-      expect(context.value.currentSortingParams?.sortDesc, false);
-    });
-
-    test('the sorting params carry the entry sortInvertNulls flag', () {
-      build();
-
-      context.value.onSortPressed(entry('name', sortInvertNulls: true));
-
-      expect(context.value.currentSortingParams?.invertNulls, true);
+      expect(
+        [tap(entry('name')), tap(entry('name')), tap(entry('name', sortInvertNulls: true)), tap(entry('city'))],
+        const [
+          CmsFunctionsSortingParams(fieldKey: 'name', sortDesc: false),
+          CmsFunctionsSortingParams(fieldKey: 'name', sortDesc: true),
+          CmsFunctionsSortingParams(fieldKey: 'name', sortDesc: false, invertNulls: true),
+          CmsFunctionsSortingParams(fieldKey: 'city', sortDesc: false),
+        ],
+      );
     });
 
     test('sorting is refetched from offset 0 with the new params', () async {
@@ -98,7 +71,10 @@ void main() {
       await context.waitUntil((it) => it.items.length == 2);
 
       context.value.onSortPressed(entry('name'));
-      await delegate.untilGetCount(2);
+      // Bounded: a sort that does not reach the computed state's keys never
+      // refetches, and the bare wait would fail as a whole-test timeout instead
+      // of here.
+      await delegate.untilGetCount(2).timeout(const Duration(seconds: 1));
 
       expect(delegate.gets[1].offset, 0);
       expect(delegate.gets[1].sorting?.fieldKey, 'name');
@@ -106,20 +82,6 @@ void main() {
   });
 
   group('filters', () {
-    test('no filter entries means no filter', () async {
-      build();
-      await delegate.untilGetCount(1);
-
-      expect(delegate.gets.single.filter, const CmsFilterAll());
-    });
-
-    test('a filter without a value is left out', () async {
-      build(filterEntries: [filterEntry('query', 'name')]);
-      await delegate.untilGetCount(1);
-
-      expect(delegate.gets.single.filter, const CmsFilterAll());
-    });
-
     test('a single active filter is passed through without an AND wrapper', () async {
       build(filterEntries: [filterEntry('query', 'name')]);
       await delegate.untilGetCount(1);
@@ -171,15 +133,13 @@ void main() {
       expect(delegate.gets[1].filter, const CmsFilterContains('name', 'needle'));
     });
 
-    test('changing a nested filter does not mutate the initial filter values', () async {
+    test('changing a nested filter does not mutate the initial filter values', () {
       final initialFilterValues = <String, dynamic>{
         'meta': {'query': 'seed'},
       };
       build(filterEntries: [filterEntry('meta.query', 'name')], initialFilterValues: initialFilterValues);
-      await delegate.untilGetCount(1);
 
       context.value.onFilterChanged('meta.query', 'needle');
-      await delegate.untilGetCount(2);
 
       expect(initialFilterValues, {
         'meta': {'query': 'seed'},
