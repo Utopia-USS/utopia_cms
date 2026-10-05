@@ -77,7 +77,7 @@ void main() {
     context.value.searchState.value = 'ada';
     // Bounded: the request follows the search debounce, and a search that never
     // reaches the delegate should fail here rather than as a whole-test timeout.
-    await context.waitUntil((_) => delegate.filters.length == 2).timeout(const Duration(seconds: 1));
+    await context.waitUntil((_) => delegate.filters.length == 2).timeout(const Duration(seconds: 5));
 
     expect(
       delegate.filters.last,

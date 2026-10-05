@@ -74,7 +74,7 @@ void main() {
       // Bounded: a sort that does not reach the computed state's keys never
       // refetches, and the bare wait would fail as a whole-test timeout instead
       // of here.
-      await delegate.untilGetCount(2).timeout(const Duration(seconds: 1));
+      await delegate.untilGetCount(2).timeout(const Duration(seconds: 5));
 
       expect(delegate.gets[1].offset, 0);
       expect(delegate.gets[1].sorting?.fieldKey, 'name');

@@ -14,18 +14,16 @@ void main() {
 
   /// [deleteItem] mirrors the table's contract: it reports whether the deletion
   /// actually ran, so a dismissed confirmation is distinguishable from a delete.
-  SimpleHookContext<CmsItemManagementState> build({Future<bool> Function()? deleteItem}) {
+  SimpleHookContext<CmsItemManagementState> build({required Future<bool> Function() deleteItem}) {
     return context = SimpleHookContext(
       () => useCmsItemManagementState(
         args: CmsManagementArgs(
           initialValue: const {'id': '1', 'name': 'Ada'},
           uploadChanges: (newJson, _) async => newJson,
-          deleteItem: deleteItem == null
-              ? null
-              : () {
-                  deleteCallCount++;
-                  return deleteItem();
-                },
+          deleteItem: () {
+            deleteCallCount++;
+            return deleteItem();
+          },
           params: CmsTableParams.defaultParams,
           entries: <CmsEntry<dynamic>>[].lock,
           sectionEntries: const [],

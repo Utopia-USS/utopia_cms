@@ -129,24 +129,31 @@ void main() {
   });
 
   test('isButtonAvailable before and after one change', () {
-    (bool, bool) availability(List<CmsEntry<dynamic>> entries, String key, Object? value, {JsonMap? initialValue}) {
+    /// (available before, available after, change recorded)
+    (bool, bool, bool) availability(
+      List<CmsEntry<dynamic>> entries,
+      String key,
+      Object? value, {
+      JsonMap? initialValue,
+    }) {
       build(initialValue: initialValue, entries: entries);
       final before = context.value.isButtonAvailable;
       context.value.onValueChanged(key, value);
       final after = context.value.isButtonAvailable;
+      final changed = context.value.hasChanges;
       context.dispose();
-      return (before, after);
+      return (before, after, changed);
     }
 
     // create: a required entry blocks until it is filled, an optional one never does
-    expect(availability([entry('name'), entry('nickname', required: false)], 'name', 'Ada'), (false, true));
+    expect(availability([entry('name'), entry('nickname', required: false)], 'name', 'Ada'), (false, true, true));
     // create: a required entry that is initializable but not editable is rendered, so it blocks
-    expect(availability([entry('email', editable: false)], 'email', 'ada@example.com'), (false, true));
+    expect(availability([entry('email', editable: false)], 'email', 'ada@example.com'), (false, true, true));
     // create: a required entry that create does not render never blocks
-    expect(availability([entry('slug', initializable: false)], 'slug', null), (true, true));
+    expect(availability([entry('slug', initializable: false)], 'slug', null), (true, true, true));
     // edit: filled values still wait for a change
-    expect(availability([entry('name')], 'name', 'Grace', initialValue: {'name': 'Ada'}), (false, true));
-    // edit: emptying a required editable entry blocks
-    expect(availability([entry('name')], 'name', null, initialValue: {'name': 'Ada'}), (false, false));
+    expect(availability([entry('name')], 'name', 'Grace', initialValue: {'name': 'Ada'}), (false, true, true));
+    // edit: emptying a required editable entry blocks, although the change is recorded
+    expect(availability([entry('name')], 'name', null, initialValue: {'name': 'Ada'}), (false, false, true));
   });
 }
