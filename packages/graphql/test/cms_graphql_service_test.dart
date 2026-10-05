@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gql/ast.dart';
 import 'package:gql/language.dart';
@@ -31,35 +29,32 @@ void main() {
 
   setUp(() {
     link = _RecorderLink();
+    // The policies CmsGraphQLClientService.createClient ships with.
     client = GraphQLClient(
       link: link,
       cache: GraphQLCache(),
-      defaultPolicies: DefaultPolicies(
-        query: Policies(fetch: FetchPolicy.noCache),
-        mutate: Policies(fetch: FetchPolicy.noCache),
-      ),
+      defaultPolicies: DefaultPolicies(query: Policies(fetch: FetchPolicy.noCache)),
     );
   });
 
-  /// The document the service last sent, asserted to still parse - printing is
-  /// only correct if the server can read the result back.
-  String lastDocument() {
-    final printed = printNode(link.documents.last);
-    expect(() => parseString(printed), returnsNormally, reason: 'printed an unparseable document: $printed');
-    return printed.trim();
-  }
+  /// Compares the document the service last sent with [expected], both printed
+  /// by gql, so only their structure counts and not how [expected] is laid out.
+  void expectSent(String expected) => expect(printNode(link.documents.last), printNode(parseString(expected)));
+
+  Matcher throwsDelegateException(Object message) =>
+      throwsA(isA<CmsDelegateException>().having((it) => it.message, 'message', message));
 
   group('document', () {
     test('aliases the root field to result', () async {
       await service.query(client, name: 'users', fields: const {CmsGraphQLField('id')});
 
-      expect(lastDocument(), 'query operation {\n  result: users {\n    id\n  }\n}');
+      expectSent('query operation { result: users { id } }');
     });
 
     test('falls back to __typename for an empty field set', () async {
       await service.query(client, name: 'users', fields: const {});
 
-      expect(lastDocument(), contains('__typename'));
+      expectSent('query operation { result: users { __typename } }');
     });
 
     test('prints nested selection sets', () async {
@@ -71,7 +66,7 @@ void main() {
         },
       );
 
-      expect(lastDocument(), contains('author {\n      name\n    }'));
+      expectSent('query operation { result: users { author { name } } }');
     });
 
     test('prints arguments from their value nodes', () async {
@@ -85,25 +80,28 @@ void main() {
         },
       );
 
-      expect(lastDocument(), contains('users(limit: 10, where: {id: 1})'));
-    });
-
-    test('escapes quotes, backslashes and control characters in string arguments', () async {
-      await service.query(
-        client,
-        name: 'users',
-        fields: const {CmsGraphQLField('id')},
-        arguments: {'where': 'say "hi"\\ok\nbye\t.'.toValueNodeUnsafe()},
-      );
-
-      expect(lastDocument(), contains(r'users(where: "say \"hi\"\\ok\nbye\t.")'));
+      expectSent('query operation { result: users(limit: 10, where: {id: 1}) { id } }');
     });
 
     test('omits the selection set when a mutation asks for no fields', () async {
       await service.mutate(client, name: 'deleteUser', arguments: {'id': 1.toValueNodeUnsafe()});
 
-      expect(lastDocument(), 'mutation operation {\n  result: deleteUser(id: 1)\n}');
+      expectSent('mutation operation { result: deleteUser(id: 1) }');
     });
+  });
+
+  test('a string value reads back on the server as the string it was built from', () {
+    /// [value] printed inside a document and parsed back the way a server reads it.
+    String readBack(StringValueNode value) {
+      final document = parseString('{ f(a: ${printNode(value)}) }');
+      final field = (document.definitions.single as OperationDefinitionNode).selectionSet.selections.single;
+      return ((field as FieldNode).arguments.single.value as StringValueNode).value;
+    }
+
+    const values = ['say "hi"', r'C:\temp', 'x\r\ny', 'a\tb', '\b\f', '\x01\x1f', 'zażółć 🙂'];
+    for (final value in values) {
+      expect(readBack(value.toValueNode()), value, reason: 'printed as ${printNode(value.toValueNode())}');
+    }
   });
 
   group('result', () {
@@ -130,62 +128,32 @@ void main() {
         response: {},
       );
 
-      expect(
-        () => service.query(client, name: 'users', fields: const {CmsGraphQLField('id')}),
-        throwsA(
-          isA<CmsDelegateException>().having(
-            (it) => it.message,
-            'message',
-            'Failed to run GraphQL query "users": permission denied',
-          ),
-        ),
+      await expectLater(
+        service.query(client, name: 'users', fields: const {CmsGraphQLField('id')}),
+        throwsDelegateException('Failed to run GraphQL query "users": permission denied'),
       );
-    });
-
-    test('a mutation names itself as a mutation', () async {
-      link.response = const Response(
-        errors: [GraphQLError(message: 'permission denied')],
-        response: {},
-      );
-
-      expect(
-        () => service.mutate(client, name: 'deleteUser'),
-        throwsA(
-          isA<CmsDelegateException>().having(
-            (it) => it.message,
-            'message',
-            startsWith('Failed to run GraphQL mutation "deleteUser": '),
-          ),
-        ),
+      await expectLater(
+        service.mutate(client, name: 'deleteUser'),
+        throwsDelegateException('Failed to run GraphQL mutation "deleteUser": permission denied'),
       );
     });
 
     test('a link failure is described by its cause, without the stack trace its own toString carries', () async {
-      link.failure = const ServerException(originalException: SocketException('Connection refused'), statusCode: 503);
+      link.failure = ServerException(originalException: Exception('Connection refused'), statusCode: 503);
 
-      expect(
-        () => service.query(client, name: 'users', fields: const {CmsGraphQLField('id')}),
-        throwsA(
-          isA<CmsDelegateException>().having(
-            (it) => it.message,
-            'message',
-            allOf(contains('Connection refused'), isNot(contains('ServerException('))),
-          ),
-        ),
+      await expectLater(
+        service.query(client, name: 'users', fields: const {CmsGraphQLField('id')}),
+        throwsDelegateException(allOf(contains('Connection refused'), isNot(contains('ServerException(')))),
       );
     });
 
     test('reports a described failure when there is neither data nor errors', () async {
       link.response = const Response(response: {});
 
-      expect(
-        () => service.query(client, name: 'users', fields: const {CmsGraphQLField('id')}),
-        throwsA(
-          isA<CmsDelegateException>().having(
-            (it) => it.message,
-            'message',
-            allOf(startsWith('Failed to run GraphQL query "users": '), contains('no data and no errors')),
-          ),
+      await expectLater(
+        service.query(client, name: 'users', fields: const {CmsGraphQLField('id')}),
+        throwsDelegateException(
+          allOf(startsWith('Failed to run GraphQL query "users": '), contains('no data and no errors')),
         ),
       );
     });
@@ -197,9 +165,9 @@ void main() {
         cache: GraphQLCache(),
       );
 
-      expect(
-        () => service.query(throwing, name: 'users', fields: const {CmsGraphQLField('id')}),
-        throwsA(isA<ArgumentError>()),
+      await expectLater(
+        service.query(throwing, name: 'users', fields: const {CmsGraphQLField('id')}),
+        throwsArgumentError,
       );
     });
   });
