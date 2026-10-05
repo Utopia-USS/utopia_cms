@@ -68,12 +68,6 @@ void main() {
   group('query', () {
     setUp(() => graphQL.response = <JsonMap>[]);
 
-    test('names the root field through the naming convention, which is a no-op for snake', () async {
-      await service().query(client, table: table, fields: const {});
-
-      expect(graphQL.last.name, 'user_profile');
-    });
-
     test('sends limit and offset from paging', () async {
       await service().query(
         client,
@@ -82,6 +76,7 @@ void main() {
         paging: CmsFunctionsPagingParams(offset: 20, limit: 10),
       );
 
+      expect(graphQL.last.name, 'user_profile');
       expect(argument('limit'), '10');
       expect(argument('offset'), '20');
     });
@@ -97,22 +92,21 @@ void main() {
       expect(argument('limit'), 'null');
     });
 
-    test('orders descending, and desc_nulls_last when nulls are inverted', () async {
-      await service().query(
-        client,
-        table: table,
-        fields: const {},
-        sorting: const CmsFunctionsSortingParams(fieldKey: 'name', sortDesc: true),
-      );
-      expect(argument('order_by'), '{name: desc}');
+    test('maps each sort direction to its order_by value', () async {
+      Future<String> orderBy({required bool sortDesc, bool invertNulls = false}) async {
+        await service().query(
+          client,
+          table: table,
+          fields: const {},
+          sorting: CmsFunctionsSortingParams(fieldKey: 'name', sortDesc: sortDesc, invertNulls: invertNulls),
+        );
+        return argument('order_by');
+      }
 
-      await service().query(
-        client,
-        table: table,
-        fields: const {},
-        sorting: const CmsFunctionsSortingParams(fieldKey: 'name', sortDesc: true, invertNulls: true),
-      );
-      expect(argument('order_by'), '{name: desc_nulls_last}');
+      expect(await orderBy(sortDesc: false), '{name: asc}');
+      expect(await orderBy(sortDesc: false, invertNulls: true), '{name: asc_nulls_first}');
+      expect(await orderBy(sortDesc: true), '{name: desc}');
+      expect(await orderBy(sortDesc: true, invertNulls: true), '{name: desc_nulls_last}');
     });
   });
 
@@ -142,17 +136,15 @@ void main() {
   group('updateById', () {
     setUp(() => graphQL.response = <String, dynamic>{'id': 1});
 
-    test('addresses the row through pk_columns', () async {
-      await service().updateById(client, table: table, object: {'id': 1, 'name': 'ann'});
+    test('addresses the row through pk_columns and keeps the key out of _set', () async {
+      final object = <String, dynamic>{'id': 1, 'name': 'ann'};
+
+      await service().updateById(client, table: table, object: object);
 
       expect(graphQL.last.name, 'update_user_profile_by_pk');
       expect(argument('pk_columns'), '{id: 1}');
-    });
-
-    test('keeps the primary key out of _set', () async {
-      await service().updateById(client, table: table, object: {'id': 1, 'name': 'ann'});
-
       expect(argument('_set'), '{name: "ann"}');
+      expect(object, {'id': 1, 'name': 'ann'}, reason: 'the object it was given stays untouched');
     });
 
     test('sends nothing when only the primary key was given, since _set may not be empty', () async {
@@ -160,14 +152,6 @@ void main() {
 
       expect(graphQL.calls, isEmpty);
       expect(result, {'id': 1});
-    });
-
-    test('leaves the object it was given untouched', () async {
-      final object = <String, dynamic>{'id': 1, 'name': 'ann'};
-
-      await service().updateById(client, table: table, object: object);
-
-      expect(object, {'id': 1, 'name': 'ann'});
     });
   });
 
@@ -178,5 +162,25 @@ void main() {
 
     expect(graphQL.last.name, 'delete_user_profile_by_pk');
     expect(argument('id'), '1');
+  });
+
+  test('the graphql convention camel-cases names and arguments and upper-cases enum values', () async {
+    const table = CmsHasuraDataTable('userProfile');
+    final camelService = CmsHasuraService(graphQL, namingConvention: CmsHasuraNamingConvention.graphql);
+
+    graphQL.response = <String, dynamic>{'id': 1};
+    await camelService.updateById(client, table: table, object: {'id': 1, 'name': 'ann'});
+    expect(graphQL.last.name, 'updateUserProfileByPk');
+    expect(graphQL.last.arguments.keys, ['pkColumns', '_set']);
+
+    graphQL.response = <JsonMap>[];
+    await camelService.query(
+      client,
+      table: table,
+      fields: const {},
+      sorting: const CmsFunctionsSortingParams(fieldKey: 'name', sortDesc: true, invertNulls: true),
+    );
+    expect(graphQL.last.name, 'userProfile');
+    expect(argument('orderBy'), '{name: DESC_NULLS_LAST}');
   });
 }
