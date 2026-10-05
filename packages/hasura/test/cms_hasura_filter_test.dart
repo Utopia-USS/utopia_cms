@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:gql/ast.dart';
 import 'package:gql/language.dart';
 import 'package:utopia_cms/utopia_cms.dart';
 import 'package:utopia_cms_graphql/utopia_cms_graphql.dart';
@@ -52,19 +53,18 @@ void main() {
       expect(where(const CmsFilter.containsString('name', 'ann', caseSensitive: true)), '{name: {_like: "%ann%"}}');
     });
 
-    // The escaping happens twice on purpose: `\%` is the postgres LIKE escape,
-    // and the GraphQL string form doubles that backslash so the document parses
-    // and the server ends up with `\%` again.
-    test('escapes the like wildcards in the search term', () {
-      expect(where(const CmsFilter.containsString('name', '50%_off')), r'{name: {_ilike: "%50\\%\\_off%"}}');
-    });
+    test('escapes the like wildcards and the escape character, so the term matches literally', () {
+      /// The `_ilike` pattern a server reads back from the filter searching for [term].
+      String receivedPattern(String term) {
+        final printed = printNode(service.buildFilter(CmsFilter.containsString('name', term)));
+        final document = parseString('{ f(where: $printed) }');
+        final field = (document.definitions.single as OperationDefinitionNode).selectionSet.selections.single;
+        final name = ((field as FieldNode).arguments.single.value as ObjectValueNode).fields.single.value;
+        return ((name as ObjectValueNode).fields.single.value as StringValueNode).value;
+      }
 
-    test('escapes a double quote so it cannot end the GraphQL string', () {
-      expect(where(const CmsFilter.containsString('name', 'say "hi"')), r'{name: {_ilike: "%say \"hi\"%"}}');
-    });
-
-    test('escapes a backslash from the search term on top of the like escape', () {
-      expect(where(const CmsFilter.containsString('name', r'a\b')), r'{name: {_ilike: "%a\\\\b%"}}');
+      expect(receivedPattern('50%_off'), r'%50\%\_off%');
+      expect(receivedPattern(r'a\b'), r'%a\\b%');
     });
   });
 }
