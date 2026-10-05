@@ -56,7 +56,9 @@ abstract class CmsEntry<T> {
   /// It provides context, current [value] and [onChanged] method.
   /// It is recommended to wrap it in [CmsFieldWrapper].
   ///
-  /// This function has access to state using [Provider]. It can use it to register onSaved.
+  /// This function has access to the management state using [Provider]. It can
+  /// use it to register a post-save hook through
+  /// `CmsManagementBaseState.addOnSavedCallback`.
   Widget buildEditField({required BuildContext context, required T value, required void Function(T) onChanged});
 
   /// Preview of the value shown in the [CmsTable]
@@ -86,5 +88,23 @@ abstract class CmsEntry<T> {
 
   bool get expanded => modifier.expanded;
 
+  /// Whether the management flow renders this entry as a writable field: create
+  /// writes the initializable entries, edit the editable ones.
+  ///
+  /// The single source of that rule - the field list and the submit-button
+  /// validation must agree on it, or a required entry one of them hides becomes
+  /// unsatisfiable.
+  bool isWritable({required bool isCreate}) => isCreate ? initializable : editable;
+
+  /// Vestigial: nothing ever calls this, so an override runs no code.
+  ///
+  /// It cannot be wired faithfully either - it takes no arguments, while a
+  /// post-save hook needs the row that was written, and a [CmsEntry] is one
+  /// shared column object rather than a per-row one. Register the hook where
+  /// the row is available instead: `buildEditField` can reach
+  /// `CmsManagementBaseState` through [Provider] and call `addOnSavedCallback`,
+  /// which the management flow awaits with the saved row once the write
+  /// commits.
+  @Deprecated('Never invoked; register a hook with CmsManagementBaseState.addOnSavedCallback instead')
   Future<void> onSaved() async {}
 }

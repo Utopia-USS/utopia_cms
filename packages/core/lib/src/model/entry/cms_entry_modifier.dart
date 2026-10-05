@@ -20,8 +20,8 @@ class CmsEntryModifier {
 
   ///  Defines whether the entry is editable.
   ///
-  ///  If false field will be read only in the management flow and not visible in the create flow
-  ///  e.g. id of an item shouldn't be editable.
+  ///  If false the field is read only in the edit flow, e.g. the id of an item
+  ///  shouldn't be editable. Create-flow membership is decided by [initializable].
   final bool editable;
 
   ///  Defines whether the entry appears in the create flow.

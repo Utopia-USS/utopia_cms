@@ -53,11 +53,15 @@ class CmsHasura {
     );
   }
 
+  /// Pass [relationshipName] when the Hasura relationship from the foreign table
+  /// to the association table is not named after the origin table - see
+  /// [CmsHasuraManyToManyDelegate.relationshipName].
   CmsHasuraManyToManyDelegate manyToManyDelegate({
     required GraphQLClient client,
     required CmsHasuraAssociationTable associationTable,
     required CmsGraphQLFields foreignFields,
     CmsFilterNotEquals? archivedFilter,
+    String? relationshipName,
   }) {
     return CmsHasuraManyToManyDelegate(
       service,
@@ -65,6 +69,7 @@ class CmsHasura {
       associationTable: associationTable,
       foreignFields: foreignFields,
       archivedFilter: archivedFilter,
+      relationshipName: relationshipName,
     );
   }
 }

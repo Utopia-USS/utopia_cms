@@ -44,9 +44,14 @@ class CmsItemManagementState implements CmsManagementBaseState {
   bool get canCreate => !isEdit || params.canEdit;
 
   bool get isButtonAvailable {
+    // Validate exactly the entries the flow renders as writable, through the
+    // same `CmsEntry.isWritable` rule `EntriesExtensions.editable` applies. The
+    // old `required && editable` filter both skipped a required
+    // initializable-only entry and demanded a value for a required
+    // editable-only entry that create never shows.
     final requiredFieldsFilled = !entries
-        .where((e) => e.required && e.editable)
-        .any((element) => values.getAtPath(element.key) == null);
+        .where((e) => e.required && e.isWritable(isCreate: !isEdit))
+        .any((e) => values.getAtPath(e.key) == null);
     if (!requiredFieldsFilled) return false;
     if (!isEdit) return true;
     return hasChanges;
@@ -74,11 +79,14 @@ CmsItemManagementState useCmsItemManagementState({
   // ignore: avoid_positional_boolean_parameters
   required void Function(bool) moveBack,
 }) {
-  final state = useState<JsonMap>({...?args.initialValue});
+  // Deep copies, because `setAtPath` mutates the parent map in place: with a
+  // shallow copy a dotted-key edit would reach into the live table row and
+  // would also hide itself from the old/new diff `uploadChanges` receives.
+  final state = useState<JsonMap>(args.initialValue?.deepCopy() ?? <String, dynamic>{});
   final hasChangesState = useState(false);
 
   void onValueChanged(String key, Object? value) {
-    final newMap = Map.fromEntries(state.value.entries);
+    final newMap = state.value.deepCopy();
     newMap.setAtPath(key, value);
     state.value = newMap;
     hasChangesState.value = true;
@@ -89,14 +97,25 @@ CmsItemManagementState useCmsItemManagementState({
 
   final uploadSubmitState = useSubmitState();
   Future<void> onSubmit() async {
+    var isCommitted = false;
     await uploadSubmitState.runSimple<void, String>(
+      // A second tap must not write a second row.
+      skipIfInProgress: true,
+      beforeSubmit: () => errorMessageState.value = null,
       submit: () async {
-        errorMessageState.value = null;
         final result = await args.uploadChanges(state.value, args.initialValue);
-        await Future.wait([for (final callback in onSavedCallbacksState.value) callback(result)]);
-        moveBack(true);
+        // From here on the row is written. A post-save callback that throws must
+        // not send the user back to retry the write - that would create a
+        // duplicate - so the overlay closes either way and the failure travels
+        // out of `runSimple` to the app error handler instead of `errorMessage`.
+        isCommitted = true;
+        try {
+          await Future.wait([for (final callback in onSavedCallbacksState.value) callback(result)]);
+        } finally {
+          moveBack(true);
+        }
       },
-      mapError: (exception) => exception is CmsDelegateException ? exception.message : null,
+      mapError: (exception) => !isCommitted && exception is CmsDelegateException ? exception.message : null,
       afterKnownError: (errorMessage) => errorMessageState.value = errorMessage,
     );
   }
@@ -104,13 +123,21 @@ CmsItemManagementState useCmsItemManagementState({
   final deleteSubmitState = useSubmitState();
 
   Future<void> onDelete() async {
-    await deleteSubmitState.run(() async {
-      await args.deleteItem?.call();
-      moveBack(true);
-    });
+    await deleteSubmitState.runSimple<void, String>(
+      skipIfInProgress: true,
+      beforeSubmit: () => errorMessageState.value = null,
+      submit: () async {
+        // `deleteItem` reports whether the deletion actually ran: a cancelled
+        // confirmation must leave the overlay - and its unsaved edits - open.
+        final isDeleted = await args.deleteItem?.call() ?? false;
+        if (isDeleted) moveBack(true);
+      },
+      mapError: (exception) => exception is CmsDelegateException ? exception.message : null,
+      afterKnownError: (errorMessage) => errorMessageState.value = errorMessage,
+    );
   }
 
-  final scrollController = useMemoized(ScrollController.new);
+  final scrollController = useMemoized(ScrollController.new, const [], (it) => it.dispose());
 
   return CmsItemManagementState(
     onDelete: onDelete,

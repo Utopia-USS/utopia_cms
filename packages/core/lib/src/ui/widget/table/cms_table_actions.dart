@@ -29,9 +29,14 @@ class CmsTableActionsButton extends HookWidget {
             return PopupMenuItem(
               onTap: () async {
                 loadingState.value = true;
-                final result = await e.onPressed(value);
-                if (result != null && e.shouldUpdateTable) onUpdate(result);
-                loadingState.value = false;
+                try {
+                  final result = await e.onPressed(value);
+                  if (result != null && e.shouldUpdateTable) onUpdate(result);
+                } finally {
+                  // Without the `finally` a throwing action leaves the row
+                  // spinner-locked behind `IgnorePointer` for good.
+                  loadingState.setIfMounted(false);
+                }
               },
               child: Text(e.label, style: style),
             );

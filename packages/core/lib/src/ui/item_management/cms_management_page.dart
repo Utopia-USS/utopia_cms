@@ -13,7 +13,10 @@ class CmsManagementArgs {
   final JsonMap? initialValue;
   final List<CmsManagementSectionEntry> sectionEntries;
   final Future<JsonMap> Function(JsonMap newJson, JsonMap? oldJson) uploadChanges;
-  final Future<void> Function()? deleteItem;
+
+  /// Deletes the edited item, returning whether the deletion actually ran -
+  /// `false` when the user dismissed the confirmation, so the overlay stays open.
+  final Future<bool> Function()? deleteItem;
   final CmsTableParams params;
   final IList<CmsEntry<dynamic>> entries;
 

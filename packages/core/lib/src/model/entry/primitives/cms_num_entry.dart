@@ -44,6 +44,21 @@ class CmsNumEntry extends CmsEntry<num?> {
   @override
   final CmsEntryModifier modifier;
 
+  /// Reads a [num] or the text form of one, so a backend that stores numbers as
+  /// strings still renders.
+  ///
+  /// The inherited [CmsEntry.fromJson] is a raw cast, so `"12.5"` took the whole
+  /// table down with a [TypeError] thrown from inside the row builder - far from
+  /// the column that caused it. A value that is not a number throws a described
+  /// [FormatException] instead.
+  @override
+  num? fromJson(Object? json) => switch (json) {
+    null => null,
+    final num value => value,
+    final String value => num.tryParse(value) ?? (throw FormatException('Expected a number', value)),
+    _ => throw FormatException('Expected a number', json),
+  };
+
   @override
   Widget buildPreview(BuildContext context, num? value) =>
       CmsTablePreviewText(previewBuilder?.call(value) ?? value?.toString());

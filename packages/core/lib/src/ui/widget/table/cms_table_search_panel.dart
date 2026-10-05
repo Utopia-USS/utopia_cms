@@ -6,6 +6,7 @@ import 'package:utopia_cms/src/ui/widget/layout/cms_breakpoints.dart';
 import 'package:utopia_cms/src/ui/widget/text_field/cms_search_field.dart';
 import 'package:utopia_cms/src/util/foundation.dart';
 import 'package:utopia_cms/src/util/json_map.dart';
+import 'package:utopia_cms/src/util/map_extensions.dart';
 
 /// The main panel at the top of the table card: a prominent search bar, a
 /// refresh control, the "+" create button, and any remaining (non-search)
@@ -139,7 +140,9 @@ class CmsTableSearchPanel extends StatelessWidget {
       height: _controlHeight,
       child: entry.buildField(
         context: context,
-        value: entry.fromJson(filterValues[entry.entryKey]),
+        // Values are written with `setAtPath`, so a dotted `entryKey` only reads
+        // back through `getAtPath`.
+        value: entry.fromJson(filterValues.getAtPath(entry.entryKey)),
         onChanged: (value) => onFilterChanged(entry.entryKey, entry.toJson(value)),
       ),
     );

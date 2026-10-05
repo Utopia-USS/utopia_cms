@@ -1,7 +1,6 @@
 import 'package:cross_file/cross_file.dart';
 import 'package:flutter/material.dart';
 import 'package:utopia_cms/src/ui/widget/table/cms_table_preview_media.dart';
-import 'package:utopia_cms/src/util/string_extensions.dart';
 import 'package:utopia_cms/utopia_cms.dart';
 
 /// Single-file variant of [CmsMediaEntry].
@@ -71,7 +70,7 @@ class CmsSingleMediaEntry extends CmsEntry<dynamic> {
     required void Function(dynamic value) onChanged,
   }) {
     return CmsMediaField(
-      label: (label ?? key).modifyRequired(modifier.required),
+      label: fixedLabelRequired,
       delegate: delegate,
       onChanged: (values) {
         final list = values?.toList();

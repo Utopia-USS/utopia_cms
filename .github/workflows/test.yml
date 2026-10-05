@@ -1,0 +1,35 @@
+name: test
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  analyze-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.44.0
+          channel: stable
+          cache: true
+
+      - run: flutter pub get
+
+      - run: flutter analyze
+
+      # The `test` script shells out to `melos exec`, so melos has to be on PATH,
+      # not just runnable through `dart run`. Keep the version in step with pubspec.lock.
+      - name: Activate melos
+        run: |
+          dart pub global activate melos 7.8.2
+          echo "${PUB_CACHE:-$HOME/.pub-cache}/bin" >> "$GITHUB_PATH"
+
+      - name: Run every package test suite
+        # The workspace config points sdkPath at .fvm/flutter_sdk, which does not exist on CI.
+        env:
+          MELOS_SDK_PATH: ${{ env.FLUTTER_ROOT }}
+        run: melos run test

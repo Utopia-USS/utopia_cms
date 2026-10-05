@@ -15,8 +15,12 @@ environment:
   sdk: ^3.11.0
 
 dependencies:
-  utopia_cms: ^0.2.3
+  utopia_cms: ^0.4.0
 
   gql: ^1.0.1
   graphql: ^5.2.4
   utopia_arch: ^0.5.1+28
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter

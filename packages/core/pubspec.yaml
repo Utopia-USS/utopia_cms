@@ -1,5 +1,5 @@
 name: utopia_cms
-version: 0.2.3
+version: 0.4.0
 resolution: workspace
 description: Flutter CMS and admin panel toolkit - sortable, filterable CRUD tables and per-row actions over Firebase, Supabase, Hasura or any GraphQL backend.
 homepage: https://github.com/Utopia-USS/utopia-cms-workspace
@@ -40,5 +40,7 @@ dependencies:
 
 dev_dependencies:
   build_runner: ^2.3.3
+  flutter_test:
+    sdk: flutter
   freezed: ^3.2.3
   utopia_lints: ^0.0.3+1

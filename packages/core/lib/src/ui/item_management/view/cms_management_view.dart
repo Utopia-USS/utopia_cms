@@ -94,14 +94,19 @@ class CmsManagementView extends HookWidget {
         final readOnlyExpanded = useMemoized(
           () => state.entries.readOnly(isPageEditable: state.params.canEdit).where((e) => e.isExpanded).toIList(),
         );
+        // Each flow is gated by its own permission: the create overlay is only
+        // reachable behind `canCreate`, so reading `canEdit` for it rendered no
+        // fields at all under `canCreate: true, canEdit: false` - the Create
+        // button was shown while its required entries could never be filled.
+        final isPageEditable = state.isEdit ? state.params.canEdit : state.params.canCreate;
         final editableShort = useMemoized(
           () => state.entries
-              .editable(isCreate: !state.isEdit, isPageEditable: state.params.canEdit)
+              .editable(isCreate: !state.isEdit, isPageEditable: isPageEditable)
               .where((e) => !e.isExpanded),
         ).toIList();
         final editableExpanded = useMemoized(
           () => state.entries
-              .editable(isCreate: !state.isEdit, isPageEditable: state.params.canEdit)
+              .editable(isCreate: !state.isEdit, isPageEditable: isPageEditable)
               .where((e) => e.isExpanded)
               .toIList(),
         );

@@ -15,7 +15,11 @@ environment:
   sdk: ^3.11.0
 
 dependencies:
-  utopia_cms: ^0.2.3
+  utopia_cms: ^0.4.0
 
   cloud_firestore: ^6.6.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
 

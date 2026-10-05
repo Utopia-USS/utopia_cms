@@ -23,6 +23,10 @@ melos:
     build_runner:watch: dart run build_runner watch --delete-conflicting-outputs --workspace
     build_runner:clean: dart run build_runner clean --workspace
 
+    test:
+      description: Run every package test suite (TZ pinned non-UTC so date display tests stay meaningful)
+      run: TZ=Europe/Warsaw melos exec --dir-exists=test --fail-fast -- flutter test
+
     run:example:
       description: Run the Libs & Skills example app on Chrome (hot reload works)
       run: cd packages/core/example && fvm flutter run -d chrome

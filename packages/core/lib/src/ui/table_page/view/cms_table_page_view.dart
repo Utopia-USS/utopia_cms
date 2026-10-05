@@ -15,6 +15,7 @@ import 'package:utopia_cms/src/ui/widget/table/cms_table_search_panel.dart';
 import 'package:utopia_cms/src/util/context_extensions.dart';
 import 'package:utopia_cms/src/util/entries_extensions.dart';
 import 'package:utopia_cms/src/util/foundation.dart';
+import 'package:utopia_cms/src/util/map_extensions.dart';
 
 class CmsTablePageView extends HookWidget {
   final CmsTablePageState state;
@@ -112,7 +113,7 @@ class CmsTablePageView extends HookWidget {
     return CmsTableSearchPanel(
       searchEntry: search,
       searchHint: _searchHint(search),
-      searchValue: search == null ? null : state.filterValues[search.entryKey] as String?,
+      searchValue: search == null ? null : state.filterValues.getAtPath(search.entryKey) as String?,
       otherFilters: filterEntries.where((e) => e is! CmsFilterSearchEntry).toIList(),
       filterValues: state.filterValues,
       onFilterChanged: state.onFilterChanged,

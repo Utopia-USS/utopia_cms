@@ -18,7 +18,7 @@ class CmsMediaPreviewPageState {
 }
 
 CmsMediaPreviewPageState useCmsMediaPreviewPageState({required int initialIndex, required Iterable<dynamic> items}) {
-  final controller = useMemoized(() => PageController(initialPage: initialIndex));
+  final controller = useMemoized(() => PageController(initialPage: initialIndex), const [], (it) => it.dispose());
   useListenable(controller);
   Future<void> animateTo(int index) async {
     await controller.animateToPage(index, duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
