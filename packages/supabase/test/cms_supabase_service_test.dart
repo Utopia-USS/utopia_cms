@@ -1,40 +1,21 @@
-import 'dart:convert';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:utopia_cms/utopia_cms.dart';
+import 'package:utopia_cms_supabase/src/util/cms_supabase_guard.dart';
 import 'package:utopia_cms_supabase/utopia_cms_supabase.dart';
 
-/// Records every request postgrest builds and answers it with [body].
-class _Recorder extends http.BaseClient {
-  final requests = <http.BaseRequest>[];
-
-  String body = '[]';
-
-  http.BaseRequest? get last => requests.isEmpty ? null : requests.last;
-
-  @override
-  Future<http.StreamedResponse> send(http.BaseRequest request) async {
-    requests.add(request);
-    return http.StreamedResponse(
-      Stream.value(utf8.encode(body)),
-      200,
-      request: request,
-      headers: {'content-type': 'application/json'},
-    );
-  }
-}
+import 'http_recorder.dart';
 
 void main() {
   const service = CmsSupabaseService();
   const table = CmsSupabaseDataTable('users');
 
-  late _Recorder recorder;
+  late HttpRecorder recorder;
   late SupabaseClient client;
 
   setUp(() {
-    recorder = _Recorder();
+    recorder = HttpRecorder();
     client = SupabaseClient('https://project.supabase.co', 'anon-key', httpClient: recorder);
   });
 
@@ -268,6 +249,16 @@ void main() {
 
       expect(recorder.last!.method, 'DELETE');
       expect(param('uuid'), 'eq.x');
+    });
+
+    test('a write matching no rows throws the error the delegate reports inline', () async {
+      recorder.body = '[]';
+
+      await expectLater(
+        service.updateById(client, table: table, object: {'id': 1}),
+        throwsA(isA<CmsSupabaseNoRowsError>()),
+      );
+      await expectLater(service.deleteById(client, table: table, id: 1), throwsA(isA<CmsSupabaseNoRowsError>()));
     });
 
     test('delete without a matching filter sends nothing', () async {

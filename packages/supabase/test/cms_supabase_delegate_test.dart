@@ -3,6 +3,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:utopia_cms/utopia_cms.dart';
 import 'package:utopia_cms_supabase/utopia_cms_supabase.dart';
 
+import 'http_recorder.dart';
+
 /// Records what the delegate asks the service for, and answers with nothing.
 class _ServiceRecorder extends CmsSupabaseService {
   CmsFilter? queriedFilter;
@@ -65,7 +67,8 @@ void main() {
 
   setUp(() {
     service = _ServiceRecorder();
-    client = SupabaseClient('https://project.supabase.co', 'anon-key');
+    // Anything that reaches the backend gets an empty answer.
+    client = SupabaseClient('https://project.supabase.co', 'anon-key', httpClient: HttpRecorder());
   });
 
   tearDown(() => client.dispose());
@@ -176,7 +179,9 @@ void main() {
     });
 
     test('a write matching no rows reports the likely rls cause inline', () async {
-      final subject = failing(StateError('Expected at least one row from Supabase, got none.'));
+      // The real service over a backend answering `[]`, which is how row-level
+      // security answers a write it silently filtered out.
+      final subject = CmsSupabaseDelegate(const CmsSupabaseService(), client: client, table: table);
 
       await expectLater(
         () => subject.update({'id': 7}, {}),
@@ -190,10 +195,10 @@ void main() {
       );
     });
 
-    test('an exception that is not a backend failure keeps its type', () async {
-      final subject = failing(ArgumentError('called with a malformed row'));
+    test('an error that is not a backend failure keeps its type, even a StateError', () async {
+      final bug = StateError('a bad state in a delegate subclass');
 
-      await expectLater(() => subject.update({'id': 7}, {}), throwsA(isA<ArgumentError>()));
+      await expectLater(() => failing(bug).update({'id': 7}, {}), throwsA(same(bug)));
     });
   });
 }

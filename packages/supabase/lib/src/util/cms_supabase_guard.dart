@@ -1,17 +1,30 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:utopia_cms/utopia_cms.dart';
 
+/// Thrown by `CmsSupabaseService` when a write that should come back with the
+/// affected row comes back empty. In practice that is usually row-level
+/// security silently filtering the target row out.
+///
+/// It stays a [StateError] for direct callers of the service, but has a type of
+/// its own so [guardSupabaseCall] can report it without also swallowing every
+/// other bad state.
+class CmsSupabaseNoRowsError extends StateError {
+  CmsSupabaseNoRowsError() : super('Expected at least one row from Supabase, got none.');
+}
+
 /// Runs [run], reporting a Supabase failure as a [CmsDelegateException] so the
 /// CMS can show it inline instead of crashing on an exception type it does not
 /// know.
 ///
 /// [description] names the operation in domain terms, e.g. `update "users"`.
 ///
-/// Only exceptions the backend throws are wrapped. A programmer error - a bad
-/// argument, a missing id, an exception a delegate subclass raises - keeps its
-/// type so it still surfaces as the bug it is. The original stack trace is kept
-/// either way: [CmsDelegateException] has nowhere to carry a cause, so the
-/// backend message goes into the message and the trace is rethrown as is.
+/// Only failures the backend causes are wrapped: the exceptions it throws and a
+/// [CmsSupabaseNoRowsError] for a write it matched to no rows. A programmer
+/// error - a bad argument, a missing id, any other [StateError], an exception a
+/// delegate subclass raises - keeps its type so it still surfaces as the bug it
+/// is. The original stack trace is kept either way: [CmsDelegateException] has
+/// nowhere to carry a cause, so the backend message goes into the message and
+/// the trace is rethrown as is.
 Future<T> guardSupabaseCall<T>(String description, Future<T> Function() run) async {
   try {
     return await run();
@@ -19,9 +32,7 @@ Future<T> guardSupabaseCall<T>(String description, Future<T> Function() run) asy
     Error.throwWithStackTrace(CmsDelegateException('Failed to $description: ${e.message}'), stackTrace);
   } on AuthException catch (e, stackTrace) {
     Error.throwWithStackTrace(CmsDelegateException('Failed to $description: ${e.message}'), stackTrace);
-  } on StateError catch (e, stackTrace) {
-    // The service raises this when a write matches no rows, which in practice
-    // is usually row-level security silently filtering the target row.
+  } on CmsSupabaseNoRowsError catch (e, stackTrace) {
     Error.throwWithStackTrace(CmsDelegateException('Failed to $description: ${e.message}'), stackTrace);
   }
 }

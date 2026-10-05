@@ -1,6 +1,7 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:utopia_cms/utopia_cms.dart';
 import 'package:utopia_cms_supabase/src/model/cms_supabase_table.dart';
+import 'package:utopia_cms_supabase/src/util/cms_supabase_guard.dart';
 
 typedef _Query = PostgrestTransformBuilder<PostgrestList>;
 
@@ -225,9 +226,7 @@ class CmsSupabaseService {
 
   JsonMap _asFirstJsonMap(PostgrestList response) {
     final list = _asJsonMapList(response);
-    if (list.isEmpty) {
-      throw StateError('Expected at least one row from Supabase, got none.');
-    }
+    if (list.isEmpty) throw CmsSupabaseNoRowsError();
     return list.first;
   }
 
