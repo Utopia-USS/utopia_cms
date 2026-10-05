@@ -12,6 +12,8 @@ extension JsonMapExtensions on JsonMap {
     return value;
   }
 
+  /// Sets [value] at the dot-separated [path], creating missing parent maps.
+  /// An intermediate value that is not a map is replaced by a new map.
   // ignore: avoid_annotating_with_dynamic
   void setAtPath(String path, dynamic value) {
     assert(path.isNotEmpty);

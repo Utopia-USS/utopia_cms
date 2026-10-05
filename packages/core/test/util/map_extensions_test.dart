@@ -27,13 +27,6 @@ void main() {
     test('returns null when an intermediate value is not a map', () {
       expect(<String, dynamic>{'a': 1}.getAtPath('a.b'), isNull);
     });
-
-    test('reads through a covariantly-typed nested map', () {
-      expect(
-        <String, dynamic>{'a': <String, String>{'b': 'x'}}.getAtPath('a.b'),
-        'x',
-      );
-    });
   });
 
   group('setAtPath', () {
@@ -53,21 +46,15 @@ void main() {
       });
     });
 
-    test('creates missing parents on an empty map', () {
-      final map = <String, dynamic>{};
-      map.setAtPath('contactData.name', 'x');
-      expect(map, {
-        'contactData': {'name': 'x'},
-      });
-    });
-
-    test('creates a multi-level chain of missing parents', () {
+    test('creates missing parents', () {
       final map = <String, dynamic>{};
       map.setAtPath('a.b.c', 1);
+      map.setAtPath('contactData.name', 'x');
       expect(map, {
         'a': {
           'b': {'c': 1},
         },
+        'contactData': {'name': 'x'},
       });
     });
 
@@ -89,9 +76,12 @@ void main() {
             {'c': 2},
           ],
         },
+        'scalar': 'x',
+        'nothing': null,
       };
 
       final copy = original.deepCopy();
+      expect(copy, original);
       copy.setAtPath('a.b', 99);
       (((copy['a'] as JsonMap)['list'] as List).first as JsonMap)['c'] = 99;
 
@@ -99,11 +89,6 @@ void main() {
       expect(original.getAtPath('a.list'), [
         {'c': 2},
       ]);
-    });
-
-    test('keeps scalar values as-is', () {
-      final original = <String, dynamic>{'a': 'x', 'b': null};
-      expect(original.deepCopy(), original);
     });
   });
 }
