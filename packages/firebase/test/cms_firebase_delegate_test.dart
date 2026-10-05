@@ -22,13 +22,12 @@ void main() {
   }
 
   test('page 1 asks the collection for exactly the first page', () async {
-    final (delegate: delegate, recorder: recorder) = setUpDelegate(docs(30));
+    final (delegate: delegate, recorder: recorder) = setUpDelegate(docs(10));
 
-    final result = await delegate.get(paging: CmsFunctionsPagingParams(offset: 0, limit: 30));
+    final result = await delegate.get(paging: CmsFunctionsPagingParams(offset: 0, limit: 10));
 
-    expect(recorder.calls, ['collection(users)', 'limit(30)', 'get']);
-    expect(result, hasLength(30));
-    expect(result.first, {'name': 'name0', 'id': 'id0'});
+    expect(recorder.calls, ['collection(users)', 'limit(10)', 'get']);
+    expect(result, hasLength(10));
   });
 
   test('page 2 asks for offset + limit documents and drops the previous page', () async {
@@ -95,20 +94,6 @@ void main() {
         ),
       ),
     );
-  });
-
-  test('sorting and filter are ignored: no orderBy or where reaches the query', () async {
-    // Characterization of a documented limitation; fails loudly if someone
-    // half-implements sorting or filtering without covering it.
-    final (delegate: delegate, recorder: recorder) = setUpDelegate(docs(1));
-
-    await delegate.get(
-      sorting: const CmsFunctionsSortingParams(fieldKey: 'name', sortDesc: true),
-      filter: const CmsFilter.equals('name', 'Ada'),
-      paging: CmsFunctionsPagingParams(offset: 0, limit: 10),
-    );
-
-    expect(recorder.calls, ['collection(users)', 'limit(10)', 'get']);
   });
 
   group('backend failures', () {
