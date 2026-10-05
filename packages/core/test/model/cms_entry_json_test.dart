@@ -1,7 +1,8 @@
 import 'package:cross_file/cross_file.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:utopia_cms/utopia_cms.dart';
+
+import '../_fake/stub_build_context.dart';
 
 class _UnusedMediaDelegate implements CmsMediaDelegate {
   @override
@@ -13,91 +14,46 @@ class _UnusedMediaDelegate implements CmsMediaDelegate {
 
 CmsMediaType _alwaysImage(dynamic object) => CmsMediaType.image;
 
-Future<BuildContext> _pumpContext(WidgetTester tester) async {
-  late BuildContext result;
-  await tester.pumpWidget(
-    Builder(
-      builder: (context) {
-        result = context;
-        return const SizedBox();
-      },
-    ),
-  );
-  return result;
-}
-
 void main() {
-  group('label', () {
-    test('falls back to the last segment of a dotted key', () {
-      expect(CmsTextEntry(key: 'user.contactData.name').fixedLabel, 'name');
-    });
-
-    test('prefers an explicit label', () {
-      expect(CmsTextEntry(key: 'user.contactData.name', label: 'Full name').fixedLabel, 'Full name');
-    });
-
-    test('appends an asterisk only when the entry is required', () {
-      expect(CmsTextEntry(key: 'name').fixedLabelRequired, 'name*');
-      expect(
-        CmsTextEntry(key: 'name', modifier: const CmsEntryModifier(required: false)).fixedLabelRequired,
-        'name',
-      );
-    });
+  test('label falls back to the last key segment and marks required entries', () {
+    expect(CmsTextEntry(key: 'user.contactData.name').fixedLabel, 'name');
+    expect(CmsTextEntry(key: 'user.contactData.name', label: 'Full name').fixedLabel, 'Full name');
+    expect(CmsTextEntry(key: 'name').fixedLabelRequired, 'name*');
+    expect(CmsTextEntry(key: 'name', modifier: const CmsEntryModifier(required: false)).fixedLabelRequired, 'name');
   });
 
-  group('media entry label', () {
+  test('media fields use the shared label instead of the dotted key', () {
     final delegate = _UnusedMediaDelegate();
+    CmsMediaField fieldOf(CmsEntry<dynamic> entry) =>
+        entry.buildEditField(context: StubBuildContext(), value: null, onChanged: (_) {}) as CmsMediaField;
 
-    testWidgets('media entry field uses the shared label logic', (tester) async {
-      final entry = CmsMediaEntry(
-        key: 'assets.cover',
-        delegate: delegate,
-        supportedMedia: const [CmsMediaType.image],
-        mediaTypeBuilder: _alwaysImage,
-      );
-      final context = await _pumpContext(tester);
-      final field = entry.buildEditField(context: context, value: null, onChanged: (_) {}) as CmsMediaField;
-      expect(field.label, 'cover*');
-    });
+    final media = CmsMediaEntry(
+      key: 'assets.cover',
+      delegate: delegate,
+      supportedMedia: const [CmsMediaType.image],
+      mediaTypeBuilder: _alwaysImage,
+    );
+    final singleMedia = CmsSingleMediaEntry(
+      key: 'assets.cover',
+      delegate: delegate,
+      supportedMedia: const [CmsMediaType.image],
+      mediaTypeBuilder: _alwaysImage,
+      modifier: const CmsEntryModifier(required: false),
+    );
 
-    testWidgets('single media entry field uses the shared label logic', (tester) async {
-      final entry = CmsSingleMediaEntry(
-        key: 'assets.cover',
-        delegate: delegate,
-        supportedMedia: const [CmsMediaType.image],
-        mediaTypeBuilder: _alwaysImage,
-        modifier: const CmsEntryModifier(required: false),
-      );
-      final context = await _pumpContext(tester);
-      final field = entry.buildEditField(context: context, value: null, onChanged: (_) {}) as CmsMediaField;
-      expect(field.label, 'cover');
-    });
+    expect(fieldOf(media).label, 'cover*');
+    expect(fieldOf(singleMedia).label, 'cover');
   });
 
-  group('date entry', () {
+  test('date entry stores DateTime.toString and reads DateTime.parse', () {
     final entry = CmsDateEntry(key: 'createdAt');
 
-    test('round-trips a local date', () {
-      final value = DateTime(2024, 3, 11, 8, 30);
-      expect(entry.fromJson(entry.toJson(value)), value);
-    });
-
-    test('keeps a stored utc instant through a read and a write', () {
-      const stored = '2024-03-10T23:00:00.000Z';
-      final parsed = entry.fromJson(stored)!;
-      expect(parsed.isUtc, isTrue);
-      expect(DateTime.parse(entry.toJson(parsed)!).isAtSameMomentAs(DateTime.parse(stored)), isTrue);
-    });
-
-    test('serializes with the DateTime.toString format', () {
-      expect(entry.toJson(DateTime.utc(2024, 3, 10, 23)), '2024-03-10 23:00:00.000Z');
-      expect(entry.toJson(DateTime(2024, 3, 11)), '2024-03-11 00:00:00.000');
-    });
-
-    test('returns null for a null json', () {
-      expect(entry.fromJson(null), isNull);
-      expect(entry.toJson(null), isNull);
-    });
+    expect(entry.toJson(DateTime.utc(2024, 3, 10, 23)), '2024-03-10 23:00:00.000Z');
+    expect(entry.toJson(DateTime(2024, 3, 11, 8, 30)), '2024-03-11 08:30:00.000');
+    expect(entry.fromJson('2024-03-10T23:00:00.000Z'), DateTime.utc(2024, 3, 10, 23));
+    expect(entry.fromJson('2024-03-11 08:30:00.000'), DateTime(2024, 3, 11, 8, 30));
+    expect(entry.toJson(null), isNull);
+    expect(entry.fromJson(null), isNull);
   });
 
   group('primitive fromJson', () {

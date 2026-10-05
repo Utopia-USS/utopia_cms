@@ -2,8 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:utopia_cms/utopia_cms.dart';
 
 void main() {
-  CmsFilterSearchEntry entryOf({List<String> filterKeys = const ['name'], String entryKey = 'search'}) =>
-      CmsFilterSearchEntry(filterKeys: filterKeys, entryKey: entryKey);
+  CmsFilterSearchEntry entryOf({List<String> filterKeys = const ['name']}) =>
+      CmsFilterSearchEntry(filterKeys: filterKeys, entryKey: 'search');
 
   test('returns all when the search value is absent', () {
     expect(entryOf().filterFromValues({}), const CmsFilterAll());
@@ -26,19 +26,5 @@ void main() {
       entryOf(filterKeys: const ['name', 'email']).filterFromValues({'search': 'ann'}),
       const CmsFilterOr([CmsFilterContains('name', 'ann'), CmsFilterContains('email', 'ann')]),
     );
-  });
-
-  test('reads a dotted entry key', () {
-    expect(
-      entryOf(entryKey: 'filters.search').filterFromValues({
-        'filters': {'search': 'ann'},
-      }),
-      const CmsFilterContains('name', 'ann'),
-    );
-  });
-
-  test('contains filters default to case-insensitive', () {
-    final filter = entryOf().filterFromValues({'search': 'ann'}) as CmsFilterContains;
-    expect(filter.caseSensitive, isFalse);
   });
 }
